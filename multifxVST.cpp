@@ -31,12 +31,12 @@ extern bool oome;
 
 #include "stockeffet.h"
 #include "CCVSThost.h"
-#include "GratomaticDlg.h"
+#include "ChainDlg.h"
 #include "multifxVSTEditor.h"
 //#include "vsthost/smpvsthost.h"
 #include "effectwnd.h"
 #include "effeditwnd.h"
-#include "gratomaticdlg.h"
+#include "Chaindlg.h"
 #include "maindlg.h"
 #include "controleurlst.h"
 
@@ -170,7 +170,7 @@ void multifxVST::resume ()
 void multifxVST::suspend ()
 {
   /*AFX_MANAGE_STATE(AfxGetStaticModuleState());
-  CGratOmaTicApp * theApp =(CGratOmaTicApp *) AfxGetApp();*/
+  CChainApp * theApp =(CChainApp *) AfxGetApp();*/
   APP.chaine_eff->suspend(APP.current_chaine);
 
 	/*if (editor)
@@ -225,7 +225,7 @@ bool multifxVST::string2parameter (long index, char* text)
 void multifxVST::setBlockSize (long size)
 {
   /*AFX_MANAGE_STATE(AfxGetStaticModuleState());
-  CGratOmaTicApp * theApp =(CGratOmaTicApp *) AfxGetApp();*/
+  CChainApp * theApp =(CChainApp *) AfxGetApp();*/
   //theApp->chaine_eff.setBlockSize(theApp->current_chaine,size);
 
   //AF                  AF             AF       chaine_eff->set..
@@ -238,7 +238,7 @@ void multifxVST::setBlockSize (long size)
 void multifxVST::setSampleRate(float sampleRate)
 {
   /*AFX_MANAGE_STATE(AfxGetStaticModuleState());
-  CGratOmaTicApp * theApp =(CGratOmaTicApp *) AfxGetApp();*/
+  CChainApp * theApp =(CChainApp *) AfxGetApp();*/
   //theApp->chaine_eff.setBlockSize(theApp->current_chaine,size);
 	APP.chaine_eff->SetSampleRate(sampleRate);
   AudioEffect::setSampleRate (sampleRate);
@@ -339,7 +339,7 @@ void multifxVST::getParameterName (long index, char *text)
 void multifxVST::process (float **inputs, float **outputs, long sampleFrames)
 {
   /*AFX_MANAGE_STATE(AfxGetStaticModuleState());
-  CGratOmaTicApp * theApp =(CGratOmaTicApp *) AfxGetApp();*/
+  CChainApp * theApp =(CChainApp *) AfxGetApp();*/
   
   APP.chaine_eff->process(APP.current_chaine,inputs,outputs,sampleFrames);
 	//outputs = outputs;
@@ -349,7 +349,7 @@ void multifxVST::process (float **inputs, float **outputs, long sampleFrames)
 void multifxVST::processReplacing (float **inputs, float **outputs, long sampleFrames)
 {
   /*AFX_MANAGE_STATE(AfxGetStaticModuleState());
-  CGratOmaTicApp * theApp =(CGratOmaTicApp *) AfxGetApp();*/
+  CChainApp * theApp =(CChainApp *) AfxGetApp();*/
   APP.chaine_eff->processReplace (APP.current_chaine,inputs,outputs,sampleFrames);
 }
 

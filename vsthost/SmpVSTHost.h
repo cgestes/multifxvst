@@ -15,7 +15,7 @@
 /* CSmpEffect class declaration                                              */
 /*****************************************************************************/
 
-class CEffEditDlg;
+class CEffectTxTDlg;
 class CEffectWnd;
 class CAppPointer;
 class CSmpEffect : public CEffect  
@@ -33,7 +33,7 @@ public:
 	virtual long EffDispatch(long opCode, long index=0, long value=0, void *ptr=0, float opt=0.);
 	virtual void OnSizeEditorWindow(long width, long height);
     void SetEditWnd(CEffectWnd  *pEWnd = 0) { pEditWnd = pEWnd; }
-    void SetParmWnd(CEffEditDlg *pPWnd = 0) { pParmWnd = pPWnd; }
+    void SetParmWnd(CEffectTxTDlg *pPWnd = 0) { pParmWnd = pPWnd; }
     unsigned short GetChnMask() { return wChnMask; }
     void SetChnMask(unsigned short mask) { wChnMask = mask; }
     bool OnSetParameterAutomated(long index, float value);
@@ -45,7 +45,7 @@ public:
    CAppPointer * APP; //c'est pas un vrai pointeur APP, ne pas s'en servir
 
    CEffectWnd * pEditWnd;
-   CEffEditDlg * pParmWnd;
+   CEffectTxTDlg * pParmWnd;
 protected:
 	unsigned short wChnMask;
 	//int nAllocatedOutbufs;
@@ -57,7 +57,7 @@ protected:
 	//float ** outBufs;
 	//float ** inBufs;
 	/*CEffectWnd * pEditWnd;
-	CEffEditDlg * pParmWnd;*/
+	CEffectTxTDlg * pParmWnd;*/
    CString sChunkFile;
    CString sChunkFilePreset;
 };

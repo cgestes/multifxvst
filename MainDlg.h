@@ -2,6 +2,7 @@
 #include "resource.h"
 #include "skin\hoverbutton.h"
 #include "skin\hoverbutton.h"
+#include "e:\ctaf\multifxvst - c3\multilocal\skin\hoverbutton.h"
 
 // Boîte de dialogue CMainDlg
 class CAppPointer;
@@ -93,4 +94,7 @@ public:
   afx_msg void OnBnDoubleclickedBtneffdown();
   afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
   afx_msg void OnBnDoubleclickedButton2();
+  afx_msg void OnBnHotItemChangeButton3(NMHDR *pNMHDR, LRESULT *pResult);
+  afx_msg void OnBnClickedBtneffecttxt();
+  CHoverButton m_btneffect2;
 };

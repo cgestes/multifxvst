@@ -25,8 +25,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-extern class CGratOmaTicApp theApp; 
-#define GetApp()  (&theApp)/*((CGratOmaTicApp *)AfxGetApp())*/
+extern class CChainApp theApp; 
+#define GetApp()  (&theApp)/*((CChainApp *)AfxGetApp())*/
 
 /*===========================================================================*/
 /* CEffectWnd class members                                                  */

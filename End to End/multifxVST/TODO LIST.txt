@@ -3,7 +3,16 @@ MultiFXVST - CTAF Audio - version 0.6.3
 //####################################################################
 //########### HISTORY ################################################
 //####################################################################
-//-- 10/05/2004
+//-- 14/05/2004
+     - improve : interface
+     - improve : CControleurLst / CControleurStk
+     - ajout : come back du deuxieme bouton effet (effect2)!!!!
+     - ajout : choix du controleur dans la fenetre d'effet générique
+     
+//-- 11/05/2004 
+     - improve : interface pour l'ajout d'un controleur midi
+     
+//-- 10/05/2004 : (version 0.6.3)
      - bug : synchro (HostCanDo("SendVSTtimeInfo") retourne true maintenant)
      - bug : destructeur CControleurLst
      - improve : amélioration de la fenetre générique (Controleur #,...)
@@ -11,9 +20,9 @@ MultiFXVST - CTAF Audio - version 0.6.3
 //-- 09/05/2004
      - improve : amélioration de la fenetre générique (changement de CListBox en CSkinListCtrl)
 
-//-- 08/05/2004 :
+//-- 08/05/2004
      - improve : fichier d'aide
-     - ajout : définition des controleurs et de leurs fonctionnements
+     - ajout : définition des controleurs et de leurs fonctionnements (CControleurLst,CControleurStk,CControleurDlg)
 
 //-- 06/05/2004 : (version 0.6.2)
      - improve : passage du projet sous SVN (facilité de maintenance des versions)
@@ -131,6 +140,12 @@ MultiFXVST - CTAF Audio - version 0.6.3
 // - qd on ajoute un plug-ins déja utilisé il ne met pas les paramètres par défault du plug mais ceux de la dernier config utilisé
 // bug resize (l'un dans l'autre dans l'un dans...)
 
+
+
+
+
+
+// - GetBlockSize/GetSampleRate (retourne une constante)
 
 //####################################################################
 //########### TODO LIST ##############################################

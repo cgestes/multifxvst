@@ -52,7 +52,7 @@ END
 // Dialog
 //
 
-IDD_GRATOMATIC DIALOGEX 0, 0, 400, 240
+IDD_Chain DIALOGEX 0, 0, 400, 240
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_VISIBLE
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
@@ -62,7 +62,7 @@ BEGIN
                     WS_TABSTOP,284,18,52,9
     CONTROL         "Add",IDC_BTNADD,"Button",BS_OWNERDRAW | BS_FLAT | 
                     WS_TABSTOP,284,29,52,9
-    CONTROL         "Suppr",IDC_BTNSUPPR,"Button",BS_OWNERDRAW | BS_FLAT | 
+    CONTROL         "Del",IDC_BTNSUPPR,"Button",BS_OWNERDRAW | BS_FLAT | 
                     WS_TABSTOP,284,40,52,9
     CONTROL         "Save All",IDC_BTNSAVE,"Button",BS_OWNERDRAW | BS_FLAT | 
                     WS_TABSTOP,342,17,52,9
@@ -75,7 +75,7 @@ BEGIN
     CONTROL         "",IDC_LISTVST,"SysListView32",LVS_REPORT | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | 
                     WS_TABSTOP,7,7,260,215
-    CONTROL         10001,IDC_STATIC,"Static",SS_BITMAP,312,202,82,31
+    CONTROL         10001,IDC_STATIC,"Static",SS_BITMAP,284,150,82,31
     CONTROL         "Copy chain",IDC_BTNCOPIETO,"Button",BS_OWNERDRAW | 
                     BS_FLAT | WS_TABSTOP,342,69,52,9
     CONTROL         "Clear chain",IDC_BTNCLRCHAIN,"Button",BS_OWNERDRAW | 
@@ -86,6 +86,8 @@ BEGIN
                     BS_FLAT | WS_TABSTOP,342,81,52,9
     LTEXT           "Copied chain :",IDC_STATIC,284,121,52,10,SS_SUNKEN
     LTEXT           "",IDC_TXTCOPIED,342,121,52,10,SS_SUNKEN
+    LTEXT           "MultifxVST version 0.6.3\nCTAF Audio - Cédric GESTES\nctaf.bob@laposte.net\nGO TO: http://www.ctaf.free.fr",
+                    IDC_TXTINFOCTAF,284,195,110,33,SS_NOTIFY | NOT WS_GROUP
 END
 
 IDD_PARMS DIALOGEX 0, 0, 400, 240
@@ -94,12 +96,16 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     CONTROL         "Slider1",IDC_PARMVAL,"msctls_trackbar32",TBS_VERT | 
                     TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,371,7,15,212
-    LTEXT           "Current Parameter Text",IDC_PARMTEXT,7,225,276,12,
+    LTEXT           "Current Parameter Text",IDC_PARMTEXT,7,224,241,13,
                     SS_CENTERIMAGE | SS_SUNKEN
-    CTEXT           "Value",IDC_RVALUE,362,226,32,8,WS_DISABLED
+    CTEXT           "Value",IDC_RVALUE,362,224,32,13,SS_CENTERIMAGE | 
+                    WS_DISABLED
     CONTROL         "",IDC_LISTPARMS,"SysListView32",LVS_REPORT | 
-                    LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | WS_BORDER | 
-                    WS_TABSTOP,7,7,350,204
+                    LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | WS_TABSTOP,7,7,350,
+                    204
+    COMBOBOX        IDC_COMBO1,297,224,53,149,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Controler #:",IDC_STATIC,255,224,42,13,SS_CENTERIMAGE
 END
 
 IDD_CONTROLER DIALOGEX 0, 0, 400, 240
@@ -108,64 +114,69 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     CONTROL         "",IDC_LSTCONTROLER,"SysListView32",LVS_REPORT | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | 
-                    WS_TABSTOP,7,7,317,178
-    PUSHBUTTON      "Validate",IDC_BTNVALIDATE,341,175,52,9,BS_FLAT
-    COMBOBOX        IDC_CBCHANNEL,7,214,44,179,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP,7,7,319,165
+    PUSHBUTTON      "Validate",IDC_BTNVALIDATE,341,164,52,9,BS_FLAT
+    COMBOBOX        IDC_CBCHANNEL,7,195,44,179,CBS_DROPDOWNLIST | WS_VSCROLL | 
                     WS_TABSTOP
-    LTEXT           "Midi Channel",IDC_STATIC,7,198,44,10,SS_SUNKEN | 
-                    SS_PATHELLIPSIS
-    LTEXT           "Controleur/Note 1/2",IDC_STATIC,54,198,69,10,SS_SUNKEN | 
-                    SS_PATHELLIPSIS
-    LTEXT           "Action",IDC_STATIC,126,198,86,10,SS_SUNKEN | 
-                    SS_PATHELLIPSIS
-    EDITTEXT        IDC_TXTCONTROLEUR_NOTE,54,214,33,12,ES_AUTOHSCROLL
-    COMBOBOX        IDC_CBACTION,126,214,86,202,CBS_DROPDOWNLIST | 
-                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Midi Channel",IDC_STATIC1,7,182,44,10,SS_SUNKEN | 
+                    SS_PATHELLIPSIS | NOT WS_GROUP
+    LTEXT           "Controleur/Note 1/2",IDC_TXTDESC1,198,182,86,10,
+                    SS_SUNKEN | SS_PATHELLIPSIS | NOT WS_GROUP
+    LTEXT           "Action",IDC_STATIC2,53,182,86,10,SS_SUNKEN | 
+                    SS_PATHELLIPSIS | NOT WS_GROUP
+    COMBOBOX        IDC_CBACTION,53,195,86,202,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
     PUSHBUTTON      "Load",IDC_BTNLOADMIDI,341,7,52,9,BS_FLAT
     PUSHBUTTON      "save",IDC_BTNSAVE,341,20,52,9,BS_FLAT
-    CONTROL         "Simple On/Off",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | 
-                    BS_FLAT | WS_TABSTOP,324,198,58,9
-    LTEXT           "Increment",IDC_STATIC,215,198,63,10,SS_SUNKEN | 
-                    SS_PATHELLIPSIS
-    EDITTEXT        IDC_TXTINCREMENT,215,214,63,12,ES_AUTOHSCROLL
-    EDITTEXT        IDC_TXTCONTROLEUR_NOTE2,90,214,33,12,ES_AUTOHSCROLL
+    CONTROL         "Simple On/Off",IDC_CKSIMPLE,"Button",BS_AUTOCHECKBOX | 
+                    BS_FLAT | WS_TABSTOP,295,182,98,9
+    EDITTEXT        IDC_TXTINCREMENT,344,195,49,13,ES_AUTOHSCROLL
+    LTEXT           "Description",IDC_TXTDESC3,7,211,386,23,SS_SUNKEN
+    PUSHBUTTON      "Add",IDC_BTNLOADMIDI2,341,65,52,9,BS_FLAT
+    PUSHBUTTON      "Del",IDC_BTNSAVE3,341,79,52,9,BS_FLAT
+    COMBOBOX        IDC_CBNOTE,198,195,86,202,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Controleur #:",IDC_STATIC3,141,182,55,10,SS_SUNKEN | 
+                    SS_PATHELLIPSIS | NOT WS_GROUP
+    COMBOBOX        IDC_CB_CONTROLEUR,141,195,55,86,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    SCROLLBAR       IDC_SCROLLBAR1,381,116,12,12,SBS_VERT
+    EDITTEXT        IDC_EDIT1,342,117,40,12,ES_AUTOHSCROLL
+    LTEXT           "NB Controler",IDC_STATIC,342,106,51,9
+    LTEXT           "Value:",IDC_DESC2,296,195,45,13,SS_SUNKEN | 
+                    SS_PATHELLIPSIS | NOT WS_GROUP
 END
 
-IDD_AJOUTCONTROLER DIALOGEX 0, 0, 271, 190
-STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    PUSHBUTTON      "Valider",IDOK,208,172,56,11,BS_FLAT
-END
-
-IDD_MAIN DIALOGEX 0, 0, 379, 231
+IDD_MAIN DIALOGEX 0, 0, 400, 68
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_VISIBLE
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    CONTROL         "Chaine",IDC_BUTTON1,"Button",BS_OWNERDRAW | BS_FLAT | 
+    CONTROL         "Chain",IDC_BUTTON1,"Button",BS_OWNERDRAW | BS_FLAT | 
                     WS_TABSTOP,7,2,39,9
-    CONTROL         "Controleur",IDC_BUTTON2,"Button",BS_OWNERDRAW | BS_FLAT | 
+    CONTROL         "Controler",IDC_BUTTON2,"Button",BS_OWNERDRAW | BS_FLAT | 
                     WS_TABSTOP,49,2,39,9
-    CONTROL         "Effet",IDC_BUTTON3,"Button",BS_OWNERDRAW | BS_FLAT | 
+    CONTROL         "Effect",IDC_BUTTON3,"Button",BS_OWNERDRAW | BS_FLAT | 
                     WS_TABSTOP,91,2,39,9
-    LTEXT           "Effect",IDC_TXTEFF,187,14,145,9,SS_SUNKEN | 
+    LTEXT           "Effect",IDC_TXTEFF,206,14,145,9,SS_SUNKEN | 
                     SS_WORDELLIPSIS
     CONTROL         "<<",IDC_BTNEFFUP,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,335,14,17,9
+                    WS_TABSTOP,356,14,17,9
     CONTROL         ">>",IDC_BTNEFFDOWN,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,355,14,17,9
+                    WS_TABSTOP,376,14,17,9
     CONTROL         "Preset",IDC_BUTTON5,"Button",BS_OWNERDRAW | BS_FLAT | 
                     WS_TABSTOP,7,14,39,9
     CONTROL         "",IDC_SLDCHAINE,"msctls_trackbar32",TBS_AUTOTICKS | 
-                    TBS_TOOLTIPS | WS_TABSTOP,187,2,126,9,WS_EX_TRANSPARENT
-    LTEXT           "Static",IDC_TXTCHAINE,313,2,19,9,SS_SUNKEN,
+                    TBS_TOOLTIPS | WS_TABSTOP,204,2,126,9,WS_EX_TRANSPARENT
+    LTEXT           "Static",IDC_TXTCHAINE,332,2,19,9,SS_SUNKEN,
                     WS_EX_TRANSPARENT
     CONTROL         "<<",IDC_BTNCHMOINS,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,335,2,17,9
+                    WS_TABSTOP,356,2,17,9
     CONTROL         ">>",IDC_BTNCHPLUS,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,355,2,17,9
+                    WS_TABSTOP,376,2,17,9
     CONTROL         "Bypass",IDC_BTNBYPASS,"Button",BS_OWNERDRAW | BS_FLAT | 
                     WS_TABSTOP,49,14,39,9
+    CONTROL         "Effect 2",IDC_BTNEFFECTTXT,"Button",BS_OWNERDRAW | 
+                    BS_FLAT | WS_TABSTOP,133,2,39,9
 END
 
 
@@ -177,7 +188,7 @@ END
 #ifdef APSTUDIO_INVOKED
 GUIDELINES DESIGNINFO 
 BEGIN
-    IDD_GRATOMATIC, DIALOG
+    IDD_Chain, DIALOG
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 394
@@ -187,48 +198,41 @@ BEGIN
         BOTTOMMARGIN, 233
         HORZGUIDE, 7
         HORZGUIDE, 222
+        HORZGUIDE, 228
     END
 
     IDD_PARMS, DIALOG
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 394
-        VERTGUIDE, 283
+        VERTGUIDE, 297
         TOPMARGIN, 7
         BOTTOMMARGIN, 237
         HORZGUIDE, 219
-        HORZGUIDE, 226
+        HORZGUIDE, 224
     END
 
     IDD_CONTROLER, DIALOG
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 393
-        VERTGUIDE, 54
-        VERTGUIDE, 126
-        VERTGUIDE, 215
+        VERTGUIDE, 53
+        VERTGUIDE, 141
+        VERTGUIDE, 198
         TOPMARGIN, 7
-        BOTTOMMARGIN, 233
-        HORZGUIDE, 198
-        HORZGUIDE, 214
-    END
-
-    IDD_AJOUTCONTROLER, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 264
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 183
+        BOTTOMMARGIN, 234
+        HORZGUIDE, 182
+        HORZGUIDE, 195
     END
 
     IDD_MAIN, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 372
-        VERTGUIDE, 332
-        VERTGUIDE, 335
+        RIGHTMARGIN, 393
+        VERTGUIDE, 351
+        VERTGUIDE, 356
         TOPMARGIN, 2
-        BOTTOMMARGIN, 224
+        BOTTOMMARGIN, 61
         HORZGUIDE, 14
     END
 END
@@ -349,6 +353,21 @@ BEGIN
     IDC_CBACTION, 0x403, 12, 0
 0x6f4e, 0x6574, 0x5420, 0x676f, 0x6c67, 0x0065, 
     IDC_CBACTION, 0x403, 15, 0
+0x7250, 0x676f, 0x6172, 0x206d, 0x6843, 0x6e61, 0x6567, "\000" 
+    IDC_CBNOTE, 0x403, 15, 0
+0x6f43, 0x746e, 0x6f72, 0x656c, 0x7275, 0x5320, 0x7465, "\000" 
+    IDC_CBNOTE, 0x403, 15, 0
+0x6f43, 0x746e, 0x6f72, 0x656c, 0x7275, 0x2b20, 0x2d2f, "\000" 
+    IDC_CBNOTE, 0x403, 18, 0
+0x6f43, 0x746e, 0x6f72, 0x656c, 0x7275, 0x5420, 0x676f, 0x6c67, 0x0065, 
+
+    IDC_CBNOTE, 0x403, 9, 0
+0x6f4e, 0x6574, 0x5320, 0x7465, "\000" 
+    IDC_CBNOTE, 0x403, 9, 0
+0x6f4e, 0x6574, 0x2b20, 0x2d2f, "\000" 
+    IDC_CBNOTE, 0x403, 12, 0
+0x6f4e, 0x6574, 0x5420, 0x676f, 0x6c67, 0x0065, 
+    IDC_CBNOTE, 0x403, 15, 0
 0x7250, 0x676f, 0x6172, 0x206d, 0x6843, 0x6e61, 0x6567, "\000" 
     0
 END

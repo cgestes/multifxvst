@@ -54,6 +54,7 @@ public :
   char   * chunk;
   bool   ischunk;
   long   length;
+  int    nbcontroleur;
 };
 
 //#include

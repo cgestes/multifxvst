@@ -14,7 +14,7 @@
 #endif
 
 
-//class CGratomaticDlg; 
+//class CChainDlg; 
 //class CStockEffetLst;
 //class CCVSTHost;
 class CMainDlg;
@@ -60,7 +60,7 @@ private:
 	// others
   CAppPointer     * APP;
   
-  /*CGratomaticDlg  * dlg;
+  /*CChainDlg  * dlg;
   CMainDlg        * maindlg;
   CStockEffetLst  * chaine_eff;
   CCVSTHost       * host;*/

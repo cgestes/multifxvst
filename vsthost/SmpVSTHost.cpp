@@ -97,7 +97,7 @@ int CSmpEffect::EvalException(int n_except)
 {
 TRACE0("Ouch! Ouch! Effect just died and wants to take us with it! OUCH!\n");
 
-//((CGratOmaTicApp *)AfxGetApp())->FullStop();
+//((CChainApp *)AfxGetApp())->FullStop();
 return EXCEPTION_CONTINUE_SEARCH;       /* go to next handler                */
 }
 

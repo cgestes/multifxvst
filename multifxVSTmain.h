@@ -17,17 +17,17 @@
 
 extern void* hInstance;
 
-extern class CGratOmaTicApp theApp;
+extern class CChainApp theApp;
 //#include "vsthost/cvsthost.h"
 
 
 #include "CCVSTHost.h"
 
 //juste pour initialiser hInstance
-class CGratOmaTicApp : public CWinApp
+class CChainApp : public CWinApp
 {
 public:
-	CGratOmaTicApp(){return;}
+	CChainApp(){return;}
   
 
 // Overrides

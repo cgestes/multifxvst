@@ -23,7 +23,7 @@
 #include "multifxVST.h"
 #endif
 
-#include "gratomaticdlg.h"
+#include "Chaindlg.h"
 #include "MainDlg.h"
 #include "controleurdlg.h"
 
@@ -231,8 +231,8 @@ void multifxVSTEditor::setParameter (long index, float value)
   case kSliderHTag:
     {
       //on notifie la fenetre que les params ont changées
-      if(APP->pGratomatic)
-//       APP->pGratomatic->SetNewNumChaine();
+      if(APP->pChain)
+//       APP->pChain->SetNewNumChaine();
 
      break;
     }

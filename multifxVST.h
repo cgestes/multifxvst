@@ -28,11 +28,11 @@ enum
 class CStockEffetLst;
 class CCVSTHost;
 class CEffectWnd;
-class CEffEditDlg;
+class CEffectTxTDlg;
 class CStockEffetLst;
 class CCVSTHost;
 class CMainDlg;
-class CGratomaticDlg;
+class CChainDlg;
 class multifxVSTEditor;
 class multifxVST;
 class CControleurDlg;
@@ -45,7 +45,7 @@ public :
   CAppPointer(){
     chaine_eff     = 0;
     host           = 0;
-    pGratomatic    = 0;
+    pChain    = 0;
     pEffEditDlg    = 0;
     pEffParmDlg    = 0;
     pMainDlg       = 0;
@@ -57,11 +57,11 @@ public :
 
   CStockEffetLst   * chaine_eff;
   CCVSTHost        * host;
-  CGratomaticDlg   * pGratomatic;
+  CChainDlg   * pChain;
   CControleurDlg   * pControleur;
   CControleurLst   * controleur;
   CEffectWnd       * pEffEditDlg;
-  CEffEditDlg      * pEffParmDlg;
+  CEffectTxTDlg      * pEffParmDlg;
   CMainDlg         * pMainDlg;
   multifxVSTEditor * editor; 
   multifxVST       * effect; 

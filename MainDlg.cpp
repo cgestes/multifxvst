@@ -11,12 +11,12 @@
 //#include "multifxVSTmain.h"
 #include "stockeffet.h"
 #include "CCVSThost.h"
-#include "GratomaticDlg.h"
+#include "ChainDlg.h"
 #include "multifxVSTEditor.h"
 #include "vsthost/smpvsthost.h"
 #include "effectwnd.h"
 #include "effeditwnd.h"
-#include "gratomaticdlg.h"
+#include "Chaindlg.h"
 // Boîte de dialogue CMainDlg
 #include "controleurdlg.h"
 
@@ -38,9 +38,9 @@ void CMainDlg::ChangeChaine(int chaine,BOOL paramAutom)
   if(!VCH(chaine))return ;
 
   APP->pMainDlg->KillEffect();
-  ChildNotify(APP->pGratomatic);
+  ChildNotify(APP->pChain);
   //on affiche la nouvelle chaine
-  APP->chaine_eff->ViewChaine(APP->current_chaine,APP->pGratomatic->m_listvst,0);
+  APP->chaine_eff->ViewChaine(APP->current_chaine,APP->pChain->m_listvst,0);
  
 
   UpdateData();
@@ -72,6 +72,7 @@ void CMainDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_BTNCHMOINS, m_btnchmoins);
   DDX_Control(pDX, IDC_BUTTON5, m_btnpreset);
   DDX_Control(pDX, IDC_BTNBYPASS, m_btnbypass);
+  DDX_Control(pDX, IDC_BTNEFFECTTXT, m_btneffect2);
 }
 
 
@@ -103,6 +104,8 @@ ON_BN_DOUBLECLICKED(IDC_BTNEFFUP, OnBnDoubleclickedBtneffup)
 ON_BN_DOUBLECLICKED(IDC_BTNEFFDOWN, OnBnDoubleclickedBtneffdown)
 ON_WM_SHOWWINDOW()
 ON_BN_DOUBLECLICKED(IDC_BUTTON2, OnBnDoubleclickedButton2)
+
+ON_BN_CLICKED(IDC_BTNEFFECTTXT, OnBnClickedBtneffecttxt)
 END_MESSAGE_MAP()
 
 
@@ -237,9 +240,9 @@ void CMainDlg::Init()
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
   //crée la fenetre du listing des effets
-  APP->pGratomatic = new CGratomaticDlg(this);
-  ASSERT(APP->pGratomatic);
-  BOOL b = APP->pGratomatic->Create((UINT)CGratomaticDlg::IDD ,this);
+  APP->pChain = new CChainDlg(this);
+  ASSERT(APP->pChain);
+  BOOL b = APP->pChain->Create((UINT)CChainDlg::IDD ,this);
   ASSERT(b);
 
   APP->pControleur = new CControleurDlg(this);
@@ -249,20 +252,20 @@ void CMainDlg::Init()
 
   APP->pControleur->SetAPP(APP);
 
-  APP->pGratomatic->SetAPP(APP);
+  APP->pChain->SetAPP(APP);
   APP->pMainDlg->ChangeChaine(float2NBChaine( APP->effect->getParameter(0)),FALSE);
   APP->pControleur->Update();
 
 
-  APP->pGratomatic->ShowWindow(SW_SHOW);
-  ChildNotify(APP->pGratomatic);
+  APP->pChain->ShowWindow(SW_SHOW);
+  ChildNotify(APP->pChain);
 }
 
 void CMainDlg::CloseAll()
 {
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
-  if(APP->pGratomatic)
-    APP->pGratomatic->ShowWindow(SW_HIDE);
+  if(APP->pChain)
+    APP->pChain->ShowWindow(SW_HIDE);
 
   if(APP->pControleur)
     APP->pControleur->ShowWindow(SW_HIDE);
@@ -291,11 +294,11 @@ void CMainDlg::KillAll()
     APP->pEffEditDlg->DestroyWindow();
     APP->pEffEditDlg = NULL;
   }
-  if(APP->pGratomatic)
+  if(APP->pChain)
   {
-    APP->pGratomatic->ShowWindow(SW_HIDE);
-    APP->pGratomatic->DestroyWindow();
-    APP->pGratomatic = NULL;
+    APP->pChain->ShowWindow(SW_HIDE);
+    APP->pChain->DestroyWindow();
+    APP->pChain = NULL;
   }
 
   if(APP->pControleur)
@@ -349,6 +352,10 @@ BOOL CMainDlg::OnInitDialog()
   m_btneff.LoadBitmap(IDB_HOVERBUTTON);
   text=_T("Affiche l'effet");
   m_btneff.SetToolTipText(&text);
+
+  m_btneffect2.LoadBitmap(IDB_HOVERBUTTON);
+  text=_T("Affiche l'effet en mode texte");
+  m_btneffect2.SetToolTipText(&text);
 
   m_btnbypass.LoadBitmap(IDB_HOVERBUTTON);
   text=_T("Bypass un effet");
@@ -496,7 +503,7 @@ void CMainDlg::OpenEffectTxT(int chaine,int nbeffectstk)
 
   {
 
-    CEffEditDlg  *pWnd = (CEffEditDlg *) new CEffEditDlg(this,APP);
+    CEffectTxTDlg  *pWnd = (CEffectTxTDlg *) new CEffectTxTDlg(this,APP);
     if(!pWnd->Create(this))
     {TRACE("ERREUR EFFEDITDLG->CREATEINDIRECT (OnbtnE2)");
     return;
@@ -523,7 +530,7 @@ void CMainDlg::OpenEffectTxT(int chaine,int nbeffectstk)
 
 void CMainDlg::OnBnClickedButton1()
 {
-  APP->pMainDlg->ChildNotify(APP->pGratomatic);
+  APP->pMainDlg->ChildNotify(APP->pChain);
   // TODO : ajoutez ici le code de votre gestionnaire de notification de contrôle
 }
 
@@ -537,9 +544,17 @@ void CMainDlg::OnBnClickedButton2()
 
 void CMainDlg::OnBnClickedButton3()
 {
-  OpenEffect(APP->current_chaine,nbeff);  
+ /* if(APP->pMainDlg->pActiv == APP->pEffEditDlg)
+    OpenEffectTxT(APP->current_chaine,nbeff); 
+  else*/
+    OpenEffect(APP->current_chaine,nbeff);  
 }
 
+void CMainDlg::OnBnClickedBtneffecttxt()
+{
+  OpenEffectTxT(APP->current_chaine,nbeff); 
+  // TODO : ajoutez ici le code de votre gestionnaire de notification de contrôle
+}
 
 void CMainDlg::PostNcDestroy()
 {
@@ -589,8 +604,8 @@ void CMainDlg::OnBnClickedBtneffup()
 
   //met a jour la list d'effet (la selection)
   //la selection => met a jour le text dans main
-  APP->pGratomatic->m_listvst.EnsureVisible(nbeff,TRUE);
-  APP->pGratomatic->m_listvst.SetItemState(nbeff,LVIS_SELECTED,LVIS_SELECTED);
+  APP->pChain->m_listvst.EnsureVisible(nbeff,TRUE);
+  APP->pChain->m_listvst.SetItemState(nbeff,LVIS_SELECTED,LVIS_SELECTED);
   
   //SetEffect(nbeff);
 
@@ -610,8 +625,8 @@ void CMainDlg::OnBnClickedBtneffdown()
 
   //met a jour la list d'effet (la selection)
   //la selection => met a jour le text dans main
-  APP->pGratomatic->m_listvst.EnsureVisible(nbeff,TRUE);
-  APP->pGratomatic->m_listvst.SetItemState(nbeff,LVIS_SELECTED,LVIS_SELECTED);
+  APP->pChain->m_listvst.EnsureVisible(nbeff,TRUE);
+  APP->pChain->m_listvst.SetItemState(nbeff,LVIS_SELECTED,LVIS_SELECTED);
   //SetEffect(nbeff);
 
   if(APP->pEffEditDlg == pActiv || APP->pEffParmDlg == pActiv)
@@ -970,7 +985,8 @@ void CMainDlg::OnSize(UINT nType, int cx, int cy)
 
 void CMainDlg::OnBnDoubleclickedButton3()
 {
-  OpenEffectTxT(APP->current_chaine,nbeff);  
+  
+  //OpenEffectTxT(APP->current_chaine,nbeff);  
 }
 
 void CMainDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
@@ -1042,3 +1058,6 @@ void CMainDlg::OnBnDoubleclickedButton2()
 {
   // TODO : ajoutez ici le code de votre gestionnaire de notification de contrôle
 }
+
+
+

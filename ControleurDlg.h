@@ -2,6 +2,7 @@
 
 #include "resource.h"
 #include "skin\skinlistctrl.h"
+#include "afxwin.h"
 
 
 // Boîte de dialogue CControleurDlg
@@ -34,7 +35,19 @@ public:
 //  afx_msg void OnLvnItemchangedLstcontroler(NMHDR *pNMHDR, LRESULT *pResult);
   afx_msg void OnNMClickLstcontroler(NMHDR *pNMHDR, LRESULT *pResult);
   int m_channel;
-  long m_controleur;
   int m_action;
   int nbsel;
+  bool initialied;
+  CString m_txtdesc1;
+  CString m_txtdesc2;
+  BOOL m_cksimple;
+  CString m_txtdesc3;
+  afx_msg void OnBnClickedCksimple();
+  CComboBox m_cbnote;
+  int m_controleur;
+  afx_msg void OnCbnSelchangeCombo2();
+  long m_value1;
+  CComboBox m_cbcontroleur;
+  afx_msg void OnBnClickedBtnloadmidi2();
+  afx_msg void OnBnClickedBtnsave3();
 };

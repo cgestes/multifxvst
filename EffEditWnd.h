@@ -13,24 +13,24 @@
 #include "resource.h"
 #include "skin\skinlistctrl.h"
 /*****************************************************************************/
-/* CEffEditDlg dialog                                                        */
+/* CEffectTxTDlg dialog                                                        */
 /*****************************************************************************/
 class CCVSTHost;
 class CAppPointer;
-class CEffEditDlg : public CDialog
+class CEffectTxTDlg : public CDialog
 {
-  DECLARE_DYNAMIC(CEffEditDlg)
+  DECLARE_DYNAMIC(CEffectTxTDlg)
 // Construction
 public:
-  CEffEditDlg(CWnd* pParent = NULL,CAppPointer * m_app = NULL);
-  virtual ~CEffEditDlg(){CString buf;buf.Format("DESTROY :: CEffEditDlg(%d) \n", this);TRACE(buf);}
+  CEffectTxTDlg(CWnd* pParent = NULL,CAppPointer * m_app = NULL);
+  virtual ~CEffectTxTDlg(){CString buf;buf.Format("DESTROY :: CEffectTxTDlg(%d) \n", this);TRACE(buf);}
   virtual BOOL Create(CWnd *pParentWnd=NULL);
 
   bool OnSetParameterAutomated(long index, float value);
 	int nEffect;
 
 // Dialog Data
-	//{{AFX_DATA(CEffEditDlg)
+	//{{AFX_DATA(CEffectTxTDlg)
 	enum { IDD = IDD_PARMS };
 	CSliderCtrl	slParmval;
 	CStatic	stParmtext;

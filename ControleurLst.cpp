@@ -9,11 +9,13 @@ CString long2Action(long action)
   CString retval;
   switch(action)
   {
-    case ACTION_C_SET: retval = "Controleur Set";break;
-    case ACTION_C_PLUS: retval = "Controleur Plus";break;
-    case ACTION_C_MOINS: retval = "Controleur Moins";break;
-    case ACTION_N_ON_OFF: retval = "Note On/Off";break;
+    case ACTION_C_SET: retval = "Controler Set";break;
+    case ACTION_C_PM: retval = "Controler +/-";break;
+    case ACTION_C_TOGGLE: retval = "Controler Button";break;
+    case ACTION_N_SET: retval = "Note Set";break;
+    case ACTION_N_PM: retval = "Note +/-";break;
     case ACTION_N_TOGGLE: retval = "Note Toggle";break;
+    case ACTION_PGCH: retval = "Program Change";break;
     default: retval = "Ouhla!";break;
   }
   return retval;
@@ -54,17 +56,14 @@ CControleurStk::CControleurStk(CControleurStk & controleur)
   action = controleur.action;
   value1 = controleur.value1;
   invert = controleur.invert;
-  min = controleur.min;
-  max = controleur.max;
-  controleur_value = controleur.controleur_value;
+  this->controleur = controleur.controleur;
 }
 
 //affiche l'ensemble des controleurs dans une liste
 void CControleurStk::ViewControleur(CListCtrl & lst,int pos)
 {
-
   CString buf;
-  buf.Format("%d",pos);
+  buf.Format("%d",controleur);
   int nItem = lst.InsertItem(pos,buf);
   buf = long2Channel(midi_channel);
   lst.SetItemText(pos,1,buf);
@@ -76,14 +75,6 @@ void CControleurStk::ViewControleur(CListCtrl & lst,int pos)
   lst.SetItemText(pos,4,buf);
   buf.Format("%d",invert);
   lst.SetItemText(pos,5,buf);
-  buf.Format("%d",min);
-  lst.SetItemText(pos,6,buf);
-  buf.Format("%d",max);
-  lst.SetItemText(pos,7,buf);
-  buf.Format("%d",controleur_value);
-  lst.SetItemText(pos,8,buf);
-
-
 }
 
 void CControleurStk::operator=(CControleurStk & controleur)
@@ -108,9 +99,10 @@ CControleurLst::~CControleurLst(void)
 }
 void CControleurLst::Init(int nbcontroleur)
 {
-  m_lstcontroleur.SetSize(nbcontroleur);
+  //m_lstcontroleur.SetSize(nbcontroleur);
   nb_controleur = nbcontroleur;
 }
+
 
 void CControleurLst::Load()
 {
@@ -160,12 +152,14 @@ CControleurStk * CControleurLst::Get(int n)
   return &m_lstcontroleur[n];
 
 }
-void CControleurLst::Add(int chaine,int index)
+int CControleurLst::Add(CControleurStk & CParam)
 {
-  return;
+  return m_lstcontroleur.Add(CParam);
+
 }
 
-void CControleurLst::Suppr(int chaine,int index)
+void CControleurLst::Suppr(int index)
 {
+  m_lstcontroleur.RemoveAt(index);
   return;
 }

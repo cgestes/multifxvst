@@ -3,7 +3,7 @@
 // Used by multifxVST.rc
 //
 #define IDD_DIALOG1                     101
-#define IDD_GRATOMATIC                  101
+#define IDD_Chain                  101
 #define IDB_BITMAP1                     102
 #define IDB_HOVERBUTTON                 121
 #define IDB_COLUMNHEADER_END            122
@@ -28,7 +28,6 @@
 #define ID_PLUG_PROGRAMS                139
 #define IDC_CURSOR_HAND                 140
 #define IDD_CONTROLER                   141
-#define IDD_AJOUTCONTROLER              142
 #define IDD_DIALOG2                     143
 #define IDD_MAIN                        143
 #define IDB_BITMAP2                     145
@@ -49,7 +48,7 @@
 #define IDC_BTNSAVE                     1011
 #define IDC_BUTTON2                     1012
 #define IDC_BTNLOAD                     1012
-#define IDC_TXTCONTROLEUR_NOTE2         1012
+#define IDC_BTNSAVE3                    1012
 #define IDC_BTNSAVE2                    1013
 #define IDC_BTNLOAD2                    1014
 #define IDC_LISTVST                     1015
@@ -63,6 +62,8 @@
 #define IDC_BTNCHMOINS                  1020
 #define IDC_COMBO1                      1021
 #define IDC_CBCHANNEL                   1021
+#define IDC_BUTTON7                     1022
+#define IDC_BTNEFFECTTXT                1022
 #define IDC_BTNEFFUP                    1024
 #define IDC_BTNEFFDOWN                  1025
 #define IDC_TXTEFF                      1026
@@ -75,9 +76,19 @@
 #define IDC_BTNVALIDATE                 1030
 #define IDC_CBACTION                    1033
 #define IDC_BTNLOADMIDI                 1034
-#define IDC_CHECK1                      1035
-#define IDC_LIST1                       1036
+#define IDC_CKSIMPLE                    1035
 #define IDC_LISTPARMS                   1036
+#define IDC_BTNLOADMIDI2                1036
+#define IDC_CBNOTE                      1037
+#define IDC_TXTDESC1                    1039
+#define IDC_TXTDESC3                    1041
+#define IDC_TXTINFOCTAF                 1043
+#define IDC_CB_CONTROLEUR               1044
+#define IDC_SCROLLBAR1                  1046
+#define IDC_STATIC1                     1048
+#define IDC_STATIC2                     1049
+#define IDC_STATIC3                     1050
+#define IDC_DESC2                       1051
 #define IDC_PARMLIST                    1100
 #define IDC_PARMVAL                     1101
 #define IDC_PARMTEXT                    1102
@@ -100,7 +111,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        146
 #define _APS_NEXT_COMMAND_VALUE         40012
-#define _APS_NEXT_CONTROL_VALUE         1037
+#define _APS_NEXT_CONTROL_VALUE         1051
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

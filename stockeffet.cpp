@@ -21,6 +21,7 @@ CEffectStk::CEffectStk()
   chunk = NULL;
   ischunk = false;
   length = 0;
+  nbcontroleur = -1;
   CString buf;buf.Format("CREATE :: CEffectStk(%d) \n", this);  TRACE(buf);
 
 }
@@ -42,6 +43,7 @@ CEffectStk::CEffectStk(CEffectStk & eff)
   bankname = eff.bankname;
   ischunk = eff.ischunk;
   length = eff.length;
+  nbcontroleur = eff.nbcontroleur;
 
   if(eff.ischunk)
   {
@@ -71,7 +73,7 @@ void CEffectStk::save(CArchive &ar)
   ar << bankname;
   ar << ischunk;
   ar << length;
-
+  ar << nbcontroleur;
   if(ischunk)
   {
     ar.Write(chunk,length);
@@ -92,10 +94,12 @@ void CEffectStk::save(CArchive &ar)
 void CEffectStk::load(CArchive &ar)
 {
   //ar >> effect_nb;
+
   ar >> effect_name;
   ar >> bankname;
   ar >> ischunk;
   ar >> length;
+  ar >> nbcontroleur;
   if(ischunk)
   {
     chunk = new char[length];
@@ -254,7 +258,7 @@ CString CStockEffetLst::Get_Name(int chaine,int nb)
 
     eff = (CEffect *)host->GetAt(nbc);
     ASSERT(eff);
-    if (!eff->EffGetProductString(sFile.GetBufferSetLength(256)))/* if V2 plugin                      */
+    if (!eff->EffGetProductString(sFile.GetBuffer(256)))/* if V2 plugin                      */
       { sFile.ReleaseBuffer();
         sFile = "";                         /* use plugin info                   */
       }else
@@ -682,6 +686,7 @@ void CStockEffetLst::Set(CAppPointer * m_app)
 //charge une liste d'effet
 void CStockEffetLst::load(CArchive &ar)
 {
+
   for (int k = 0; k < MAX_CHAINE; k ++)
   {
     int i =0,j =0;
@@ -758,9 +763,6 @@ void CStockEffetLst::resume(int chaine)
     m_processing = TRUE;
 }
 
-
-//fait un process de la chaine (additionne le resultat a outputs)
-//CTAFFLEMARDISE suppose que ts le monde a un processreplace
 
 //suivant la parité du nombre d'effet on affecte out1 et out2
 //de maniere a avoir processbuffer en sortie de chaine a chaque fois et pas processbufferreplace!

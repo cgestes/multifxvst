@@ -5,7 +5,7 @@
 #endif
 
 #include "stockeffet.h"
-#include "gratomaticdlg.h"
+#include "Chaindlg.h"
 
 
 
@@ -40,24 +40,24 @@ bool oome = false;
 }
 
 
-CGratOmaTicApp theApp;
+CChainApp theApp;
 void* hInstance =  NULL;
 
-BOOL CGratOmaTicApp::InitInstance()
+BOOL CChainApp::InitInstance()
 	{
  	  CWinApp::InitInstance();
     //Enable3dControls();
 
     /*AfxEnableControlContainer();
     CoInitialize(NULL);//ole init*/
-    TRACE("CGratOmaTicApp::InitInstance()\n");
+    TRACE("CChainApp::InitInstance()\n");
 	  hInstance = m_hInstance;
 
 	  return TRUE;//continue running
 }
 
-int CGratOmaTicApp::ExitInstance()
+int CChainApp::ExitInstance()
 {
-  TRACE("CGratOmaTicApp::ExitInstance()\n");
+  TRACE("CChainApp::ExitInstance()\n");
   return CWinApp::ExitInstance();
 }
