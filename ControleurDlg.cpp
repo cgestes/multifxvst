@@ -140,15 +140,15 @@ BOOL CControleurDlg::OnInitDialog()
   // EXCEPTION : les pages de propriétés OCX devraient retourner FALSE
 }
 
-static CBrush brush(RGB(230,220,12));
-static CBrush brush2(RGB(230,185,70));
+static CBrush brush(RGB(204,204,255));
+static CBrush brush2(RGB(132,121,247));
 HBRUSH CControleurDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 {
   HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
 
   // TODO :  Modifier ici les attributs du DC
 	pDC->SetBkMode(TRANSPARENT);
-  pDC->SetBkColor(RGB(230,185,70));
+  pDC->SetBkColor(RGB(132,121,247));
   if(pWnd == this || pWnd->GetDlgCtrlID() == IDC_STATIC || pWnd->GetDlgCtrlID() == IDC_CKSIMPLE)
   {
     return brush;

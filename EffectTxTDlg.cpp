@@ -362,7 +362,7 @@ void CEffectTxTDlg::OnDestroy()
 }
 
 
-static CBrush brush(RGB(110,220,120));
+static CBrush brush(RGB(204,204,255));
 HBRUSH CEffectTxTDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 {
   HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);

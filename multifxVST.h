@@ -1,8 +1,7 @@
 //------------------------------------------------------//
 //- CopyLeft : CTAF
 //-
-//- gestion du VST (communication avec l'host)     
-//- TODO : transmettre les params aux chaines plugins             
+//- gestion du VST (communication avec l'host)                
 //-                                                   
 //------------------------------------------------------//
 

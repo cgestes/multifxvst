@@ -2,6 +2,8 @@
 #include "resource.h"
 #include "skin\hoverbutton.h"
 
+#include "skin\WithoutSliderCtrl\WithoutSliderCtrl.h"
+
 
 // Boîte de dialogue CMainDlg
 class CAppPointer;
@@ -76,8 +78,8 @@ public:
   void SavePreset(CString sName);
   afx_msg void OnSize(UINT nType, int cx, int cy);
 //  afx_msg void OnNMReleasedcaptureSldchaine(NMHDR *pNMHDR, LRESULT *pResult);
-  CString       m_txtchaine;
-  CSliderCtrl m_sld;//pas encore skiné :-(
+  //CString       m_txtchaine;
+  CWithoutSliderCtrl m_sld;
   int           m_sldchaine;
   afx_msg void OnBnDoubleclickedButton3();
   afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
@@ -97,5 +99,12 @@ public:
   afx_msg void OnBnHotItemChangeButton3(NMHDR *pNMHDR, LRESULT *pResult);
   afx_msg void OnBnClickedBtneffecttxt();
   CHoverButton m_btneffect2;
+protected :
+  ::CBitmap mybitmap;//fond
+  BOOL LoadBitmap(UINT bitmapid);
 //  afx_msg void OnEffectsShellplug();
+public:
+  CHoverButton m_btnabout;
+  afx_msg void OnNMCustomdrawSldchaine(NMHDR *pNMHDR, LRESULT *pResult);
+  afx_msg LRESULT OnBoutonUserMsg( WPARAM wParam ,LPARAM lParam);
 };

@@ -21,7 +21,8 @@ public:
 	CHoverButton();
 	void SetToolTipText(CString* spText, BOOL bActivate = TRUE);
 	void SetToolTipText(int nId, BOOL bActivate = TRUE);
-
+  void SetValue(bool val){m_value = val;RedrawWindow();}
+  bool GetValue(){return m_value ;}
 // Attributes
 protected:
 	void ActivateTooltip(BOOL bActivate = TRUE);
@@ -40,12 +41,14 @@ protected:
 
 // Implementation
 public:
-	BOOL LoadBitmap(UINT bitmapid);
+	BOOL LoadBitmap(UINT bitmapid,bool OnOff = false);
 	virtual ~CHoverButton();
 
 	// Generated message map functions
 protected:
 	CToolTipCtrl m_ToolTip;
+  bool OnOff;
+  bool m_value;
 	void InitToolTip();
 	//{{AFX_MSG(CHoverButton)
 	afx_msg void OnMouseMove(UINT nFlags, ::CPoint point);
@@ -54,6 +57,9 @@ protected:
 	//}}AFX_MSG
 
 	DECLARE_MESSAGE_MAP()
+public:
+//  afx_msg void OnLButtonDown(UINT nFlags, ::CPoint point);
+  afx_msg void OnLButtonUp(UINT nFlags, ::CPoint point);
 };
 
 /////////////////////////////////////////////////////////////////////////////

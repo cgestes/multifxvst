@@ -25,7 +25,7 @@ CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CMainDlg::IDD, pParent)
   , m_txteff(_T(""))
 {
-    m_txtchaine = "0";
+  // m_txtchaine = "0";
     APP            = 0;
     pActiv         = NULL;
     nbeff          = -1;
@@ -48,7 +48,7 @@ void CMainDlg::ChangeChaine(int chaine,BOOL paramAutom)
   //update le splider
   m_sldchaine = APP->current_chaine;
   //update le txt
-  m_txtchaine.Format("%d", m_sldchaine);
+//  m_txtchaine.Format("%d", m_sldchaine);
   UpdateData(FALSE);
 }
 
@@ -61,7 +61,7 @@ void CMainDlg::DoDataExchange(CDataExchange* pDX)
   CDialog::DoDataExchange(pDX);
   DDX_Slider(pDX, IDC_SLDCHAINE, m_sldchaine);
   DDX_Control(pDX, IDC_SLDCHAINE, m_sld);
-  DDX_Text(pDX, IDC_TXTCHAINE, m_txtchaine);
+//  DDX_Text(pDX, IDC_TXTCHAINE, m_txtchaine);
 
   DDX_Control(pDX, IDC_BUTTON1, m_btnchaine);
   DDX_Control(pDX, IDC_BUTTON2, m_btncontroleur);
@@ -74,6 +74,7 @@ void CMainDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_BUTTON5, m_btnpreset);
   DDX_Control(pDX, IDC_BTNBYPASS, m_btnbypass);
   DDX_Control(pDX, IDC_BTNEFFECTTXT, m_btneffect2);
+  DDX_Control(pDX, IDC_BTNEFFECTTXT2, m_btnabout);
 }
 
 
@@ -108,6 +109,8 @@ ON_BN_DOUBLECLICKED(IDC_BUTTON2, OnBnDoubleclickedButton2)
 
 ON_BN_CLICKED(IDC_BTNEFFECTTXT, OnBnClickedBtneffecttxt)
 //ON_COMMAND(ID_EFFECTS_SHELLPLUG, OnEffectsShellplug)
+ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLDCHAINE, OnNMCustomdrawSldchaine)
+ON_MESSAGE(WM_USER+ 200,OnBoutonUserMsg)
 END_MESSAGE_MAP()
 
 
@@ -139,7 +142,7 @@ if (pEffect)
 //}
 
 //place la fenetre a sa place,redimentionne decoupe cisaille tronconne etc...
-static const OFFSETY = 40;
+static const OFFSETY =64;
 void CMainDlg::ChildNotify(CWnd * child,bool bAlwaisResize)
 {
 
@@ -260,6 +263,7 @@ void CMainDlg::Init()
 
 
   APP->pChain->ShowWindow(SW_SHOW);
+  LoadBitmap(IDB_MAIN);
   ChildNotify(APP->pChain);
 }
 
@@ -343,31 +347,40 @@ BOOL CMainDlg::OnInitDialog()
 {
   CDialog::OnInitDialog();
 
-  m_btnchaine.LoadBitmap(IDB_HOVERBUTTON);
+  m_btnchaine.LoadBitmap(IDB_WINDOWS_BUTTON,true);
   CString text=_T("Gestion des chaines");
   m_btnchaine.SetToolTipText(&text);
 
-  m_btncontroleur.LoadBitmap(IDB_HOVERBUTTON);
+
+  m_btncontroleur.LoadBitmap(IDB_WINDOWS_BUTTON,true);
   text=_T("Gestion des controleurs");
   m_btncontroleur.SetToolTipText(&text);
 
-  m_btneff.LoadBitmap(IDB_HOVERBUTTON);
+
+  m_btneff.LoadBitmap(IDB_WINDOWS_BUTTON,true);
   text=_T("Affiche l'effet");
   m_btneff.SetToolTipText(&text);
 
-  m_btneffect2.LoadBitmap(IDB_HOVERBUTTON);
+
+  m_btneffect2.LoadBitmap(IDB_WINDOWS_BUTTON,true);
   text=_T("Affiche l'effet en mode texte");
   m_btneffect2.SetToolTipText(&text);
 
-  m_btnbypass.LoadBitmap(IDB_HOVERBUTTON);
+
+  m_btnabout.LoadBitmap(IDB_WINDOWS_BUTTON,true);
+  text=_T("Affiche la fenetre à propos");
+  m_btnabout.SetToolTipText(&text);
+
+
+  m_btnbypass.LoadBitmap(IDB_BYPASS);
   text=_T("Bypass un effet");
   m_btnbypass.SetToolTipText(&text);
 
-  m_btneffup.LoadBitmap(IDB_HOVERBUTTON);
+  m_btneffup.LoadBitmap(IDB_LEFT_ARROW_EFFECT);
   text=_T("Sélectionne l'effet suivant dans la chaine actuelle");
   m_btneffup.SetToolTipText(&text);
 
-  m_btneffdown.LoadBitmap(IDB_HOVERBUTTON);
+  m_btneffdown.LoadBitmap(IDB_RIGHT_ARROW_EFFECT);
   text=_T("Sélectionne l'effet précédent dans la chaine actuelle");
   m_btneffdown.SetToolTipText(&text);
 
@@ -379,7 +392,7 @@ BOOL CMainDlg::OnInitDialog()
   text=_T("Sélectionne la chaine précédente");
   m_btnchmoins.SetToolTipText(&text);
 
-  m_btnpreset.LoadBitmap(IDB_HOVERBUTTON);
+  m_btnpreset.LoadBitmap(IDB_PRESET);
   text=_T("Configuration de l'effet");
   m_btnpreset.SetToolTipText(&text);
 
@@ -563,7 +576,7 @@ void CMainDlg::PostNcDestroy()
 
 
 static CBrush brush(RGB(110,220,120));
-static CBrush brush2(RGB(255,128,128));
+static CBrush brush2(RGB(221,221,221));
 HBRUSH CMainDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 {
   HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
@@ -583,13 +596,47 @@ BOOL CMainDlg::DestroyWindow()
   KillAll();  //  :-)
   return CDialog::DestroyWindow();
 }
+// Load a bitmap from the resources in the button, the bitmap has to have 3 buttonsstates next to each other: Up/Down/Hover
+BOOL CMainDlg::LoadBitmap(UINT bitmapid)
+{
+	mybitmap.Attach(::LoadImage(::AfxGetInstanceHandle(),MAKEINTRESOURCE(bitmapid), IMAGE_BITMAP,0,0,LR_LOADMAP3DCOLORS));
+	BITMAP	bitmapbits;
+	mybitmap.GetBitmap(&bitmapbits);
+	return TRUE;
+}
 
 BOOL CMainDlg::OnEraseBkgnd(CDC* pDC)
 {
+	CDC * pMemDC = new CDC;
+	pMemDC -> CreateCompatibleDC(pDC);
+  
+  //CRect r;
+	//GetClientRect(&r);
 
-  pDC->FillSolidRect(0,0,WinRect.Width(),OFFSETY>>1,RGB(110,220,120));
-  pDC->FillSolidRect(0,OFFSETY>>1,WinRect.Width(),OFFSETY>>1,RGB(255,128,128));
-  pDC->FillSolidRect(0,OFFSETY,WinRect.Width(),WinRect.Height()-OFFSETY,RGB(230,220,12));
+
+
+  ::CBitmap * pOldBitmap;
+	pOldBitmap = pMemDC -> SelectObject(&mybitmap);
+	
+  BITMAP	bitmapbits;
+	mybitmap.GetBitmap(&bitmapbits);
+
+	//CPoint point(0,0);	
+	pDC->SetStretchBltMode(HALFTONE);
+  pDC->BitBlt(0,0,bitmapbits.bmWidth/* getWidth()*/,bitmapbits.bmHeight,pMemDC,0,0,SRCCOPY);
+
+
+	// clean up
+	pMemDC -> SelectObject(pOldBitmap);
+	delete pMemDC;
+
+  if(WinRect.Width() > bitmapbits.bmWidth)
+  {
+    pDC->FillSolidRect(bitmapbits.bmWidth,0,WinRect.Width()-bitmapbits.bmWidth,27,RGB(255,153,0));
+    pDC->FillSolidRect(bitmapbits.bmWidth,27,WinRect.Width()-bitmapbits.bmWidth,18,RGB(239,205,69));
+    pDC->FillSolidRect(bitmapbits.bmWidth,45,WinRect.Width()-bitmapbits.bmWidth,19,RGB(113,153,175));
+  }
+  pDC->FillSolidRect(0,OFFSETY,WinRect.Width(),WinRect.Height()-OFFSETY,RGB(204,204,255));
   return TRUE;
 
 }
@@ -1070,3 +1117,52 @@ void CMainDlg::OnBnDoubleclickedButton2()
 //{
 //  // TODO : ajoutez ici le code de votre gestionnaire de commande
 //}
+
+void CMainDlg::OnNMCustomdrawSldchaine(NMHDR *pNMHDR, LRESULT *pResult)
+{
+  LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+  // TODO : ajoutez ici le code de votre gestionnaire de notification de contrôle
+  *pResult = 0;
+}
+
+LRESULT CMainDlg::OnBoutonUserMsg(WPARAM wParam ,LPARAM lParam)
+{
+ if(wParam == 1)
+ {
+   if(((CHoverButton *) lParam) == &m_btncontroleur)
+   { m_btncontroleur.SetValue(true);
+     m_btnchaine.SetValue(false);
+     m_btneffect2.SetValue(false);
+     m_btneff.SetValue(false);
+     m_btnabout.SetValue(false);
+   }else if(((CHoverButton *) lParam) == &m_btnchaine)
+   { m_btnchaine.SetValue(true);
+     m_btncontroleur.SetValue(false);
+     m_btneffect2.SetValue(false);
+     m_btneff.SetValue(false);
+     m_btnabout.SetValue(false);
+   }else if(((CHoverButton *) lParam) == &m_btneffect2)
+   { m_btneffect2.SetValue(true);
+     m_btncontroleur.SetValue(false);
+     m_btnchaine.SetValue(false);
+     m_btneff.SetValue(false);
+     m_btnabout.SetValue(false);
+   }else if(((CHoverButton *) lParam) == &m_btneff)
+   { m_btneff.SetValue(true);
+     m_btncontroleur.SetValue(false);
+     m_btnchaine.SetValue(false);
+     m_btneffect2.SetValue(false);
+     m_btnabout.SetValue(false);
+   }else  if(((CHoverButton *) lParam) == &m_btnabout)
+   { m_btnabout.SetValue(true);
+     m_btncontroleur.SetValue(false);
+     m_btnchaine.SetValue(false);
+     m_btneffect2.SetValue(false);
+     m_btneff.SetValue(false);
+   }
+
+ }
+  // TODO : ajoutez ici le code de votre gestionnaire de messages et/ou les paramètres par défaut des appels
+  return 0;
+ 
+}

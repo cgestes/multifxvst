@@ -519,7 +519,8 @@ if (dlg.DoModal() == IDOK)
   }
 }
 
-static CBrush brush(RGB(230,220,12));
+//static CBrush brush(RGB(230,220,12));
+static CBrush brush(RGB(204,204,255));
 HBRUSH CChainDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 {
 	HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);

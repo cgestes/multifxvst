@@ -3,6 +3,9 @@ MultiFXVST - CTAF Audio - version 0.7.4
 //####################################################################
 //########### HISTORY ################################################
 //####################################################################
+//-- 04/08/2004
+     - ajout : skin de l'interface graphique (MainDlg pour l'instant)
+     
 //-- 02/08/2004
      - bug : en changeant de chaine si la chaine est vide,le nom de l'effet affichié et celui de la chaine précedente
      

@@ -57,11 +57,16 @@ public :
 	CString effect_name; //path et nom de la dll
 	CString bankname;    //path et nom de la bank d'effet utilis?
   
-  float  * tabval;
-  char   * chunk;
-  char   * tabcontroleur;
-  bool   ischunk;
-  long   length;
+
+  float  * tabval;          //tableau de valeur des parametres
+  bool   ischunk;          //sioui
+  char   * chunk;         //chunk du plug-ins
+  char   * tabcontroleur;//tableau contenant pour chaque parametre le controleur associé
+
+  long   length; //taille du chunk
+  bool   bypass;
+  float  bypass_fade_value; //0 -> 1
+  bool   fade;
   //int    nbcontroleur;
 };
 
@@ -135,12 +140,19 @@ public:
 	void process(int chaine,float **inputs, float **outputs, long sampleFrames);
   void CopyBuffer(float ** dest,float ** source,long size);
   void AddBuffer(float ** dest,float ** source,long size);
+  //fait un fondu de afondre avec source dans dest 
+  void FonduBuffer(float ** dest,float ** source,float ** afondre,long size,float start,float end);
 	void processReplace(int chaine,float **inputs, float **outputs, long sampleFrames);
   void suspend(int chaine);
   void resume(int chaine);
   void SetBlockSize(long size);
   void SetSampleRate(float size);
   long CalculDelay(int chaine);
+
+
+  void SetByPass(int chaine,int nbeffstk,bool bypass);
+  bool GetByPass(int chaine,int nbeffstk);
+
   //###VST Implementation###
 
   //pour changer de chaine et se souvenir des param des plugs

@@ -22,6 +22,10 @@ CEffectStk::CEffectStk()
   chunk = NULL;
   ischunk = false;
   length = 0;
+  
+  bypass = false;
+  bypass_fade_value = 1.0; //0 -> 1
+  fade = false;
 
 }
 int CEffectStk::Get_Controleur(int nb){
@@ -69,6 +73,12 @@ CEffectStk::CEffectStk(CEffectStk & eff)
   bankname = eff.bankname;
   ischunk = eff.ischunk;
   length = eff.length;
+
+  bypass= eff.bypass;
+  bypass_fade_value= eff.bypass_fade_value; //0 -> 1
+  fade= eff.fade;
+
+
   if(eff.tabcontroleur)
   {
     tabcontroleur = new char[(int)eff.tabcontroleur[0]+1];
@@ -892,7 +902,7 @@ void CStockEffetLst::resume(int chaine)
 void CStockEffetLst::process(int chaine,float **inputs, float **outputs, long sampleFrames)
 {
     if(!VCH(chaine))return ;
-    int i =0,j = get_count(chaine);
+    int i =0,j = get_count(chaine);//get_count_withoutbypass
     CEffectStk * effst;
     float ** out1,** out2;
 
@@ -937,7 +947,6 @@ void CStockEffetLst::process(int chaine,float **inputs, float **outputs, long sa
 
 
 //remplace outputs
-//CTAFFLEMARDISE suppose que ts le monde a un processreplace
 
 //suivant la parité du nombre d'effet on affecte out1 et out2
 //de maniere a avoir outputs en sortie de chaine a chaque fois et pas processbuffer
@@ -1005,6 +1014,47 @@ void CStockEffetLst::AddBuffer(float ** dest,float ** source,long size)
     dest[0][i] += source[0][i];
     dest[1][i] += source[1][i];
   }
+}
+
+#define OPERATION_SCIENTIFIQUE(x,y,coef) ((y*coef) + (x*1.0f - coef))
+//on voit l'algo direct! (vive l'assembleur!)
+//on realise un fondu de afondre avec source
+void CStockEffetLst::FonduBuffer(float ** dest,float ** source,float ** afondre,long size,float start,float end)
+{
+  float val = start;
+  float inc = (end - start) / float(size);
+
+  for (int i = 0; i< size; i++)
+  {
+    if(val < 0)val = 0;
+    if(val > 1)val = 1;
+    dest[0][i] += OPERATION_SCIENTIFIQUE(source[0][i],afondre[1][i],val) ;
+    dest[1][i] += OPERATION_SCIENTIFIQUE(source[1][i],afondre[1][i],val);
+    val += inc;
+    
+  }
+}
+void CStockEffetLst::SetByPass(int chaine,int nbeffstk,bool bypass)
+{
+  CEffectStk * eff;
+  eff = get(chaine,nbeffstk);
+  if(eff == NULL)return;
+
+  eff->bypass = bypass;
+  eff->fade = true;
+  if(bypass)
+    eff->bypass_fade_value = 1;
+  else
+    eff->bypass_fade_value = 0;
+}
+
+bool CStockEffetLst::GetByPass(int chaine,int nbeffstk)
+{
+  CEffectStk * eff;
+  eff = get(chaine,nbeffstk);
+  if(eff == NULL)return false;
+
+  return eff->bypass;
 }
 
 void CStockEffetLst::SetSampleRate(float sample)

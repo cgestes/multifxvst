@@ -1,8 +1,7 @@
 //------------------------------------------------------//
 //- CopyLeft : CTAF
 //-
-//- gestion du VST (affichage dans l'host)     
-//- TODO : un bel affichage            
+//- gestion du VST (affichage dans l'host)             
 //-                                                   
 //------------------------------------------------------//
 

@@ -148,35 +148,35 @@ BEGIN
 END
 
 IDD_MAIN DIALOGEX 0, 0, 400, 68
-STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_VISIBLE
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     CONTROL         "Chain",IDC_BUTTON1,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,7,2,39,9
+                    WS_TABSTOP,0,28,80,11
     CONTROL         "Controler",IDC_BUTTON2,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,49,2,39,9
+                    WS_TABSTOP,80,28,80,11
     CONTROL         "Effect",IDC_BUTTON3,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,91,2,39,9
-    LTEXT           "Effect",IDC_TXTEFF,206,14,145,9,SS_SUNKEN | 
-                    SS_WORDELLIPSIS
-    CONTROL         "<<",IDC_BTNEFFUP,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,356,14,17,9
-    CONTROL         ">>",IDC_BTNEFFDOWN,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,376,14,17,9
-    CONTROL         "Preset",IDC_BUTTON5,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,7,14,39,9
-    CONTROL         "",IDC_SLDCHAINE,"msctls_trackbar32",TBS_AUTOTICKS | 
-                    TBS_TOOLTIPS | WS_TABSTOP,204,2,126,9,WS_EX_TRANSPARENT
-    LTEXT           "Static",IDC_TXTCHAINE,332,2,19,9,SS_SUNKEN,
-                    WS_EX_TRANSPARENT
-    CONTROL         "<<",IDC_BTNCHMOINS,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,356,2,17,9
-    CONTROL         ">>",IDC_BTNCHPLUS,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,376,2,17,9
-    CONTROL         "Bypass",IDC_BTNBYPASS,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,49,14,39,9
+                    WS_TABSTOP,160,28,80,11
+    CONTROL         "Effect",IDC_TXTEFF,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_ENDELLIPSIS | WS_GROUP,82,18,95,8,WS_EX_TRANSPARENT
+    CONTROL         "",IDC_BTNEFFUP,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,72,17,8,10
+    CONTROL         "",IDC_BTNEFFDOWN,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,179,17,8,10
+    CONTROL         "",IDC_BUTTON5,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,332,18,47,10
+    CONTROL         "",IDC_SLDCHAINE,"msctls_trackbar32",TBS_TOOLTIPS | 
+                    WS_TABSTOP,79,4,16,8,WS_EX_TRANSPARENT
+    CONTROL         "<",IDC_BTNCHMOINS,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,63,4,9,9
+    CONTROL         ">",IDC_BTNCHPLUS,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,100,4,9,9
+    CONTROL         "",IDC_BTNBYPASS,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,5,18,12,10
     CONTROL         "Effect 2",IDC_BTNEFFECTTXT,"Button",BS_OWNERDRAW | 
-                    BS_FLAT | WS_TABSTOP,133,2,39,9
+                    BS_FLAT | WS_TABSTOP,240,28,80,11
+    CONTROL         "About",IDC_BTNEFFECTTXT2,"Button",BS_OWNERDRAW | 
+                    BS_FLAT | WS_TABSTOP,320,28,80,11
 END
 
 
@@ -228,13 +228,8 @@ BEGIN
 
     IDD_MAIN, DIALOG
     BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 393
-        VERTGUIDE, 351
-        VERTGUIDE, 356
-        TOPMARGIN, 2
+        TOPMARGIN, 4
         BOTTOMMARGIN, 60
-        HORZGUIDE, 14
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -263,6 +258,12 @@ IDB_CBN                 BITMAP                  "skinslider\\track_ticksel.bmp"
 IDB_CBH                 BITMAP                  "skinslider\\track_tick.bmp"
 IDB_CBBAR               BITMAP                  "skinslider\\track_back.bmp"
 10001                   BITMAP                  "res\\bmp10001.bmp"
+IDB_WINDOWS_BUTTON      BITMAP                  "Artwork\\windows_button.bmp"
+IDB_MAIN                BITMAP                  "Artwork\\main.bmp"
+IDB_BYPASS              BITMAP                  "Artwork\\bypass.bmp"
+IDB_PRESET              BITMAP                  "Artwork\\preset_button.bmp"
+IDB_RIGHT_ARROW_EFFECT  BITMAP                  "Artwork\\right_fleche_effet.bmp"
+IDB_LEFT_ARROW_EFFECT   BITMAP                  "Artwork\\left_fleche_effet.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

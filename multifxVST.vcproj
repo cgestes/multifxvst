@@ -578,6 +578,16 @@
 			<File
 				RelativePath=".\skinslider\ZipSliderCtl.h">
 			</File>
+			<Filter
+				Name="WithoutSliderCtrl"
+				Filter="">
+				<File
+					RelativePath=".\Skin\WithoutSliderCtrl\WithoutSliderCtrl.cpp">
+				</File>
+				<File
+					RelativePath=".\Skin\WithoutSliderCtrl\WithoutSliderCtrl.h">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="MultifxVST"
@@ -738,6 +748,24 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath=".\Artwork\bypass.bmp">
+		</File>
+		<File
+			RelativePath=".\Artwork\left_fleche_effet.bmp">
+		</File>
+		<File
+			RelativePath=".\Artwork\main.bmp">
+		</File>
+		<File
+			RelativePath=".\Artwork\preset_button.bmp">
+		</File>
+		<File
+			RelativePath=".\Artwork\right_fleche_effet.bmp">
+		</File>
+		<File
+			RelativePath=".\Artwork\windows_button.bmp">
+		</File>
 	</Files>
 	<Globals>
 		<Global

@@ -32,6 +32,13 @@
 #define IDB_BITMAP16                    128
 #define IDM_VSTMNU                      130
 #define IDR_MNUEFFECTS                  131
+#define IDB_WINDOWS_BUTTON              132
+#define IDB_MAIN                        133
+#define IDB_BYPASS                      134
+#define IDB_PRESET                      135
+#define IDB_RIGHT_ARROW_EFFECT          136
+#define IDB_BITMAP4                     137
+#define IDB_LEFT_ARROW_EFFECT           137
 #define IDC_CURSOR_HAND                 140
 #define IDC_LSTPLUG                     141
 #define IDC_BTNUP                       142
@@ -72,6 +79,7 @@
 #define IDC_BUTTON5                     177
 #define IDC_BTNCHPLUS                   178
 #define IDC_TXTUSED                     179
+#define IDC_BTNEFFECTTXT2               179
 #define IDC_BUTTON6                     180
 #define IDC_BTNBYPASS                   181
 #define IDC_TXTCOPIED                   182
@@ -115,7 +123,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        132
+#define _APS_NEXT_RESOURCE_VALUE        138
 #define _APS_NEXT_COMMAND_VALUE         32785
 #define _APS_NEXT_CONTROL_VALUE         204
 #define _APS_NEXT_SYMED_VALUE           303

@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "HoverButton.h"
+#include ".\hoverbutton.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -17,7 +18,8 @@ CHoverButton::CHoverButton()
 {
 	m_bHover = FALSE;
 	m_bTracking = FALSE;
-
+  OnOff = false;
+  m_value = false;
 }
 
 CHoverButton::~CHoverButton()
@@ -31,6 +33,8 @@ BEGIN_MESSAGE_MAP(CHoverButton, CBitmapButton)
 ON_MESSAGE(WM_MOUSELEAVE, OnMouseLeave)
 ON_MESSAGE(WM_MOUSEHOVER, OnMouseHover)
 	//}}AFX_MSG_MAP
+//  ON_WM_LBUTTONDOWN()
+  ON_WM_LBUTTONUP()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////
@@ -140,24 +144,48 @@ void CHoverButton::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	mydc->SetStretchBltMode(HALFTONE);
 	if(lpDrawItemStruct->itemState & ODS_SELECTED)
 	{
-	
-		mydc->StretchBlt(0,0,r.right,r.bottom,pMemDC,m_ButtonSize.cx*2,0,m_ButtonSize.cx,m_ButtonSize.cy,SRCCOPY);
-		//mydc->BitBlt(0,0,r.right,r.bottom/*m_ButtonSize.cx,m_ButtonSize.cy*/,pMemDC,m_ButtonSize.cx,0,SRCCOPY);
-	}
+      mydc->BitBlt(0,0,/*r.right,r.bottom*/m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx*2,0,SRCCOPY);
+		//mydc->StretchBlt(0,0,r.right,r.bottom,pMemDC,m_ButtonSize.cx*2,0,m_ButtonSize.cx,m_ButtonSize.cy,SRCCOPY);
+
+  }
 	else
 	{
 		if(m_bHover)
 		{
-			mydc->StretchBlt(0,0,r.right,r.bottom,pMemDC,m_ButtonSize.cx,0,m_ButtonSize.cx,m_ButtonSize.cy,SRCCOPY);
-			//mydc->BitBlt(0,0,r.right,r.bottom/*m_ButtonSize.cx,m_ButtonSize.cy*/,pMemDC,m_ButtonSize.cx*2,0,SRCCOPY);
+      if(OnOff)
+      {
+        if(m_value)
+			    mydc->BitBlt(0,0,/*r.right,r.bottom*/m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx,0,SRCCOPY);
+        else
+			    mydc->BitBlt(0,0,/*r.right,r.bottom*/m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx*3,0,SRCCOPY);
+      }
+      else
+      {
+			  mydc->BitBlt(0,0,/*r.right,r.bottom*/m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx,0,SRCCOPY);
+      }
+			//mydc->StretchBlt(0,0,r.right,r.bottom,pMemDC,m_ButtonSize.cx,0,m_ButtonSize.cx,m_ButtonSize.cy,SRCCOPY);
 		}else
 		{
-			mydc->StretchBlt(0,0,r.right,r.bottom,pMemDC,0,0,m_ButtonSize.cx,m_ButtonSize.cy,SRCCOPY);
-			//mydc->BitBlt(0,0,r.right,r.bottom/*m_ButtonSize.cx,m_ButtonSize.cy*/,pMemDC,0,0,SRCCOPY);
-		}	
+      if(OnOff)
+      {
+        if(m_value)
+          mydc->BitBlt(0,0,/*r.right,r.bottom*/m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx*2,0,SRCCOPY);
+        else
+          mydc->BitBlt(0,0,/*r.right,r.bottom*/m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,0,0,SRCCOPY);
+      }
+      else
+      {
+			   mydc->BitBlt(0,0,/*r.right,r.bottom*/m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,0,0,SRCCOPY);
+      }
+    }	
 	}
 	CString txt;
 	GetWindowText(txt);
+  if(m_bHover)
+    mydc->SetTextColor(RGB(250,10,10));
+  else
+    mydc->SetTextColor(RGB(0,0,0));
+
 	mydc->SetBkMode(TRANSPARENT );
     mydc->DrawText(txt,CRect(0,0,r.right,r.bottom),DT_VCENTER|DT_CENTER|DT_SINGLELINE  );
 	// clean up
@@ -166,13 +194,17 @@ void CHoverButton::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 }
 
 // Load a bitmap from the resources in the button, the bitmap has to have 3 buttonsstates next to each other: Up/Down/Hover
-BOOL CHoverButton::LoadBitmap(UINT bitmapid)
+BOOL CHoverButton::LoadBitmap(UINT bitmapid,bool OnOff)
 {
 	mybitmap.Attach(::LoadImage(::AfxGetInstanceHandle(),MAKEINTRESOURCE(bitmapid), IMAGE_BITMAP,0,0,LR_LOADMAP3DCOLORS));
 	BITMAP	bitmapbits;
 	mybitmap.GetBitmap(&bitmapbits);
 	m_ButtonSize.cy=bitmapbits.bmHeight;
-	m_ButtonSize.cx=bitmapbits.bmWidth/3;
+  this->OnOff = OnOff;
+  if(OnOff)
+    m_ButtonSize.cx=bitmapbits.bmWidth/4;
+  else
+	  m_ButtonSize.cx=bitmapbits.bmWidth/3;
 	//SetWindowPos( NULL, 0,0, m_ButtonSize.cx,m_ButtonSize.cy,SWP_NOMOVE   |SWP_NOOWNERZORDER   );
 	return TRUE;
 }
@@ -191,7 +223,40 @@ LRESULT CHoverButton::OnMouseHover(WPARAM wparam, LPARAM lparam)
 LRESULT CHoverButton::OnMouseLeave(WPARAM wparam, LPARAM lparam)
 {
 	m_bTracking = FALSE;
+
 	m_bHover=FALSE;
 	Invalidate();
 	return 0;
+}
+
+//void CHoverButton::OnLButtonDown(UINT nFlags, CPoint point)
+//{
+//  ::CRect rc;
+//  // TODO : ajoutez ici le code de votre gestionnaire de messages et/ou les paramètres par défaut des appels
+//  GetWindowRect(&rc);
+//
+//  if(rc.PtInRect(point))
+//    m_value = ! m_value; 
+//  CBitmapButton::OnLButtonDown(nFlags, point);
+//}
+
+void CHoverButton::OnLButtonUp(UINT nFlags, CPoint point)
+{
+  if(OnOff)
+  {
+    ::CRect rc;
+    GetClientRect(&rc);
+
+    if(rc.PtInRect(point))
+    {
+      m_value = ! m_value; 
+      GetParent()->PostMessage(WM_USER + 200,DWORD(m_value),LPARAM(this));
+        
+    }
+  }
+
+  
+
+
+  CBitmapButton::OnLButtonUp(nFlags, point);
 }
