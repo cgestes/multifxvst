@@ -137,6 +137,7 @@ MultiFXVST - CTAF Audio - version 0.6.2
 // - sauvegarder autant de program que nécessaire pour chaque chaine
 // - midi
 // - mute (avec controleur)
+// - midi learn / parameter learn
 
 //######### General ##################################################
 // - Automation de tous les params
