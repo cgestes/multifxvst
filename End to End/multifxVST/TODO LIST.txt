@@ -91,7 +91,7 @@ MultiFXVST - CTAF Audio - version 0.6.3
 
 //-- 16/05/2004
      - improve : multithread,setsamplerate / setblocksize entre différentes threads
-     - bug : OnSetParameterAutomated => EffeditWnd (setparm) (synchro des current_chaine)
+     - bug : OnSetParameterAutomated => EffectTxTDlg (setparm) (synchro des current_chaine)
      - improve : processreplacing (avant tous les plugs avait la mm input et le mm outputs!!)
      - improve : process (avant tous les plugs avait la mm input et le mm outputs!!)
      - bug : synchro des current_chaine (recursion à l'infini)

@@ -299,6 +299,12 @@
 				RelativePath=".\CCVSTHost.h">
 			</File>
 			<File
+				RelativePath=".\ChainDlg.cpp">
+			</File>
+			<File
+				RelativePath=".\ChainDlg.h">
+			</File>
+			<File
 				RelativePath=".\ControleurDlg.cpp">
 			</File>
 			<File
@@ -309,24 +315,6 @@
 			</File>
 			<File
 				RelativePath=".\ControleurLst.h">
-			</File>
-			<File
-				RelativePath=".\GratomaticDlg.cpp">
-				<FileConfiguration
-					Name="Debug Dyn|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug Stat|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\GratomaticDlg.h">
 			</File>
 			<File
 				RelativePath=".\MainDlg.cpp">
@@ -487,6 +475,12 @@
 			Name="Fenetre VST"
 			Filter="">
 			<File
+				RelativePath=".\EffectTxTDlg.cpp">
+			</File>
+			<File
+				RelativePath=".\EffectTxTDlg.h">
+			</File>
+			<File
 				RelativePath=".\EffectWnd.cpp">
 				<FileConfiguration
 					Name="Debug Dyn|Win32">
@@ -503,24 +497,6 @@
 			</File>
 			<File
 				RelativePath=".\EffectWnd.h">
-			</File>
-			<File
-				RelativePath=".\EffEditWnd.cpp">
-				<FileConfiguration
-					Name="Debug Dyn|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug Stat|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\EffEditWnd.h">
 			</File>
 		</Filter>
 		<Filter

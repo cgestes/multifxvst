@@ -5,7 +5,7 @@
 #include "stdafx.h"
 #include "SmpVSTHost.h"
 #include "../EffectWnd.h"
-#include "../EffEditWnd.h"
+#include "../EffectTxTDlg.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

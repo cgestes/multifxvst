@@ -15,7 +15,7 @@
 #include "multifxVSTEditor.h"
 #include "vsthost/smpvsthost.h"
 #include "effectwnd.h"
-#include "effeditwnd.h"
+#include "EffectTxTDlg.h"
 #include "Chaindlg.h"
 // Boîte de dialogue CMainDlg
 #include "controleurdlg.h"
