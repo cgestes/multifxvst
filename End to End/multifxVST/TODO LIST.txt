@@ -1,7 +1,11 @@
 //####################################################################
 //########### HISTORY ################################################
 //####################################################################
-//-- 06/05/2004
+//-- 09/05/2004 :
+     - improve : fichier d'aide
+     - ajout : définition des controleurs et de leurs fonctionnements
+
+//-- 06/05/2004 : (version 0.6.2)
      - improve : passage du projet sous SVN (facilité de maintenance des versions)
      - improve : gestionnaire de controleur(midi)
      - ajout : interface controleur(midi)
@@ -112,7 +116,7 @@
 //####################################################################
 //########### BUG ####################################################
 //####################################################################
-// - fx processeur => probleme de resize qd on revient sur le plug-ins
+// - fx processeur => problème de resize qd on revient sur le plug-ins
      (il remet la taille de la fenetre d'origine)(il conserve editor contrairement à cubase)
 // - qd on ajoute un plug-ins déja utilisé il ne met pas les paramètres par défault du plug mais ceux de la dernier config utilisé
 

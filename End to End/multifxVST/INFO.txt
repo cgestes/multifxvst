@@ -1,4 +1,4 @@
-MultiFXVST - version 0.6.1
+MultiFXVST - version 0.6.2
 
 MultifxVST est un plug-ins VST qui permet de gérer des chaines d'effets.
 
