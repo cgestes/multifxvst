@@ -1,0 +1,143 @@
+//####################################################################
+//########### HISTORY ################################################
+//####################################################################
+//-- 03/05/2004
+     - ajout : affichage "used plug-ins"
+     - ajout : fenetre "Controleur" + gestionnaire de controleur(base)
+     - ajout : bouton "validate"
+
+//-- 02/05/2004
+     - ajout : boutons "clear chain"/"copie chain"/"paste chain"
+     - ajout : boutons "<<" / ">>"    (chaine--/chaine++)
+     - ajout : affichage "copied chain"
+     - improve : interface
+
+//-- 31/05/2004
+     - tests poussés ds cubase :-)
+
+//-- 30/05/2004 : (version 0.6.1)
+     - ajout : gestion de la compensation des delays
+     - ajout : setInitialDelay , OnGetOutputLatency, OnGetInputLatency : communication plug-ins <=> host
+     - ajout : le bouton effet devient encore plus intelligent! (double click = fenetre générique)
+     - bug : le slider ne marchait pas correctement ac les touches...
+     - ajout : sauvegarde des parametres chunks pour chaque chaines
+     - ajout : save / load des parametres de multifxVST dans son hote (en chunk)
+     - improve : le nombre de chaine passe à 127 (c'est plus simple pour le midi)
+     - bug : problèmes de sauvegarge/chargement
+
+//-- 29/05/2004
+     - ajout : configurations de compilation optimisées et fonctionnel (debug/release   static/dynamic)
+
+//-- 27/05/2004
+     - improve : le slider de chaine est maintenant visible tous le temps (changement de fenetre)
+     - bug : changechaine ne change pas nbeff
+
+//-- 26/05/2004
+     - bug : loadfx(chunk) / savefx(chunk)
+     - bug : pointeur sur APP aprés un decrease use pas toujours valide (pb multithread)
+     - ajout : double click dans la liste des effets => affichage de l'effet
+
+//-- 25/05/2004
+     - bug : synchro de pMain->nbeff
+     - ajout : loadfx / savefx (chunks et normal) (fxp)
+
+//-- 24/05/2004 : (version 0.5.3)
+     - ajout : implémentation des programs de chaque plug-ins
+     - ajout : loadbank / savebank (chunks et normal) (fxb)
+     - ajout : l'host est capable de renseigner un plug sur certain params avant que celui ci ne soit enregistré dans le tableau
+     - ajout : vendorspecific : dans cubase les plug-ins cubase ne marchait pas
+
+//-- 23/05/2004 :
+     - bug : CVSTHost::processreplace ne tienne pas compte du fait qu'un plug soit capable de faire un processreplace ou pas ...
+     - improve : amélioration de l'interface
+     - ajout : communication entre notre plug et les plugs (vendor,timeinfo,tempo)
+
+//-- 19/05/2004
+     - improve : restructuration de l'interface
+     - improve : restructuration du code
+
+//-- 17/05/2004
+     - bug : problème de gestion des fenetres des plugs
+     - bug : problème de destruction de certains plug-ins (notamment lui mm ds lui mm!)
+     - bug : problème de destruction avec certain hote
+
+//-- 16/05/2004
+     - improve : multithread,setsamplerate / setblocksize entre différentes threads
+     - bug : OnSetParameterAutomated => EffeditWnd (setparm) (synchro des current_chaine)
+     - improve : processreplacing (avant tous les plugs avait la mm input et le mm outputs!!)
+     - improve : process (avant tous les plugs avait la mm input et le mm outputs!!)
+     - bug : synchro des current_chaine (recursion à l'infini)
+     - ajout : fenêtre des parametres du plug-ins (affichage generique)
+
+//-- 15/05/2004
+     - ajout : interface graphique
+     - ajout : intégration de la fenêtre principale dans celle du plug-ins
+
+//-- 14/05/2004
+     - improve : SaveChaine/LoadChaine
+
+//-- 13/05/2004
+     - bug : (fatal) automation (play et stop)
+     - bug : synchro de tous les current_chaine (slider,interne et autre)
+     - bug : (fatal) suppr,pendant le process =>  ASSERT  (cs?) (Cubase, classic flanger)
+
+//-- 12/05/2004 ------------------------------------------------------
+     - bug : numprograms
+     - bug : getparam ,setparam ,setparamdisplay, ..
+     - improve : loadall/saveall
+
+//-- 11/05/2004 ------------------------------------------------------
+     - bug : suppr / find_effbisnb avec effectnbbis et l'host
+       (assignation du nbEffect de plugins existant à de nouveaux plugs)
+
+//-- 09/05/2004 ------------------------------------------------------
+     - ajout : saveall / loadall
+     - improve : multithread (une instance = un nouveau plug-ins)
+
+//-- 08/05/2004 ------------------------------------------------------
+     première version utilisable :
+     - stock les params de chaque plug-ins (en globalité en ram)
+     - réutilise les plugs (pas entre instance)
+     - mono-thread
+
+//-- 04/05/2004 ------------------------------------------------------
+     debut du projet
+
+
+//####################################################################
+//########### BUG ####################################################
+//####################################################################
+// - fx processeur => probleme de resize qd on revient sur le plug-ins
+     (il remet la taille de la fenetre d'origine)(il conserve editor contrairement à cubase)
+// - qd on ajoute un plug-ins déja utilisé il ne met pas les paramètres par défault du plug mais ceux de la dernier config utilisé
+
+
+
+//####################################################################
+//########### TODO LIST ##############################################
+//####################################################################
+
+//######### Ajout de fonction ########################################
+// - plug-ins shell et dx
+// - controleur coupe son
+// - sauvegarder autant de program que nécessaire pour chaque chaine
+// - midi
+// - mute (avec controleur)
+
+//######### General ##################################################
+// - Automation de tous les params
+// - mettre en cache le nom des plug-ins dans un menu
+/#/- verif si un plugins peut être mono ou pas au chargement
+// - bypasser un plugins (ac controleur)
+// - réutiliser les loadmodules(dll)
+// - verif le type de plug-ins,ses options,etc... au chargement du plug
+// - effacer tt
+// - info : nb plug utilisé / mémoire / ...
+
+//############ HOST => PLUG => MultiFXHost => MultiFXPlug #############
+/#/- synchro? ( a verif juste)
+/#/- fxidle
+// - getTailSize (process aprés un suspend,pour les reverbs...)
+
+
+

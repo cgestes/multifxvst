@@ -1,0 +1,30 @@
+MultiFXVST - version 0.6.1
+
+MultifxVST est un plug-ins VST qui permet de gérer des chaines d'effets.
+
+Principales caractéristiques : 
+ - gestion d'un nombre infini de plug-ins (limitation de la machine hein!)
+ - jusqu'a 127 chaine possible
+ - réutilise les effets entre les chaines
+ - gestion des fxp et fxb
+ - gestion de la compensation du delay
+ - fonctionne en insert comme en send
+ - gestion de la synchronisation avec l'hote
+ 
+A venir :
+ - automation des paramètres (autant que l'on veut)
+ - gestion des plug-ins shell (waves notamment) et dx
+  
+Installation :
+ - dezipper "multifxVST.dll" dans votre repertoire vstplugins
+
+MidiStick :
+En plus est fournit Midistick qui permet de générer des événements midi à partir d'un joystick
+
+
+remerciement à H Heib pour sa mise à disposition d'un hote VST MDI exemple.
+
+pour tout commentaire et/ou pour signaler un bug non listé dans TODO LIST.txt :
+
+ctaf.bob@laposte.net
+Cédric GESTES
