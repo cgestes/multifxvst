@@ -221,7 +221,7 @@ void CMainDlg::SetEffect(int nb)
   //if(nb == nbeff)return;
   UpdateData();
   
-  if(nb < 0)
+  if((nb < 0) || (APP->chaine_eff->get_count(APP->current_chaine)<=0))
   {
     nbeff = -1;//un nb peu correspondr a un effet a t = 0 , et a un autre a t = +!!
     nbef  = -1;

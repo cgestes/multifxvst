@@ -1,32 +1,36 @@
-MultiFXVST - CTAF Audio - version 0.7.3
+MultiFXVST - CTAF Audio - version 0.7.4
 
 //####################################################################
 //########### HISTORY ################################################
 //####################################################################
+//-- 02/08/2004
+     - bug : en changeant de chaine si la chaine est vide,le nom de l'effet affichié et celui de la chaine précedente
+     
+     
 //-- 30/07/2004 (version 0.7.3)
      - bug : "load/save all/chain" avec le tableau de controleur
      - bug : la fenetre effet2 ne marchait plus trop à cause d'un problème memoire (save/load)
-     
+
 //-- 29/07/2004
      - improve : sauvegarde les parametres par default de chaques effets
-     - tatonnage : les plug-ins shells (aie aie aie) 
-     
+     - tatonnage : les plug-ins shells (aie aie aie)
+
 //-- 28/07/2004 (version 0.7.2)
      - bug : supraphaser et d'autres effets plantent au chargement (SetParameterAutomated pendant leur creation)
 
 //-- 27/07/2004 (version 0.7.1)
      - bug : sauvegarde des chunks entre différentes chaines
      - improve : optimisation de l'ergonomie pendant les changements de chaines
-     
+
 //-- 26/07/2004 (version 0.7.0)
      - bug : divers bugs d'automations
      - improve : optimisation de l'affichage pour différentes fenetres (Update/SetparameterAutomated)
      - bug : affichage graphique des plug-ins
-     
+
 //-- 25/07/2004
      - ajout : l'automation fonctionne
      - bug : scintillement dans l'affichage au changement des parametres automatisables
-     
+
 //-- 30/06/2004
      - ajout : getparameter totalement fonctionnel
      - ajout : controleur sauvegardé ("save all"/"load all"/"save chain"/"load chain")
@@ -37,19 +41,19 @@ MultiFXVST - CTAF Audio - version 0.7.3
 
 //-- 22/06/2004
      - ajout : 32 controleurs automatisables (setparameter /interne)
-     
+
 //-- 15/06/2004
      - ajout : implementation ComboBox pour choisir le controleur
-     
+
 //-- 14/06/2004
      - improve : interface
      - improve : CControleurLst / CControleurStk
      - ajout : come back du deuxieme bouton effet (effect2)!!!!
      - ajout : choix du controleur dans la fenetre d'effet générique
-     
-//-- 11/06/2004 
+
+//-- 11/06/2004
      - improve : interface pour l'ajout d'un controleur midi
-     
+
 //-- 10/06/2004 : (version 0.6.3)
      - bug : synchro (HostCanDo("SendVSTtimeInfo") retourne true maintenant)
      - bug : destructeur CControleurLst
@@ -175,7 +179,6 @@ MultiFXVST - CTAF Audio - version 0.7.3
 //####################################################################
 // - fx processeur => problème de resize qd on revient sur le plug-ins
      (il remet la taille de la fenetre d'origine)(il conserve editor contrairement à cubase)
-// - qd on ajoute un plug-ins déja utilisé il ne met pas les paramètres par défault du plug mais ceux de la dernier config utilisé
 // - bug resize (l'un dans l'autre dans l'un dans...)
 
 // - load/save => ne restore pas l'automation ? => faut changer de chaine pr que ca marche
@@ -189,7 +192,7 @@ MultiFXVST - CTAF Audio - version 0.7.3
 // - sauvegarde de la fenetre en cours lors du changement de chaine / plug-ins
 // - effecteditWnd => ne pas recréer à chaque fois...
 // - message d'erreur contenant le nom du plug-ins (load all,...)
-// - si un plug-ins est mono alors on applique en entré un melange 
+// - si un plug-ins est mono alors on applique en entré un melange
      du signal gauche et droit puis on duplique sa sortie
 
 //######### Ajout de fonction ########################################

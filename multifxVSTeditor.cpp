@@ -220,6 +220,8 @@ void multifxVSTEditor::update()
   {
   case 1:  //changement de chaine
       APP->pMainDlg->ChangeChaine(APP->current_chaine);
+      //if(APP->chaine_eff->get_count(APP->current_chaine)>0)
+      APP->pMainDlg->SetEffect(0);
       if(APP->pMainDlg->pActiv == APP->pControleur)
       {
 
