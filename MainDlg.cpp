@@ -107,6 +107,7 @@ ON_WM_SHOWWINDOW()
 ON_BN_DOUBLECLICKED(IDC_BUTTON2, OnBnDoubleclickedButton2)
 
 ON_BN_CLICKED(IDC_BTNEFFECTTXT, OnBnClickedBtneffecttxt)
+//ON_COMMAND(ID_EFFECTS_SHELLPLUG, OnEffectsShellplug)
 END_MESSAGE_MAP()
 
 
@@ -1064,3 +1065,8 @@ void CMainDlg::OnBnDoubleclickedButton2()
 
 
 
+
+//void CMainDlg::OnEffectsShellplug()
+//{
+//  // TODO : ajoutez ici le code de votre gestionnaire de commande
+//}

@@ -555,7 +555,7 @@ void CEffectWnd::EnterIdle()
   if(pEffect)
     pEffect->EffEditIdle();
 
-  OutputDebugString("Idle Plug\n");
+  //OutputDebugString("Idle Plug\n");
   // TODO : ajoutez ici le code de votre gestionnaire de messages
 }
 

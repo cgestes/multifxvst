@@ -114,10 +114,6 @@ void CEffectStk::loadFromMem(CEffect * ceff)
       ceff->EffSetParameter(k,tabval[k+1]);
     }
   }
-  if(tabcontroleur)
-  {
-
-  }
 }
 
 
@@ -130,8 +126,8 @@ void CEffectStk::saveToMem(CEffect * ceff)
 
         tabval = NULL;
 
-        void * chunk;
-        long lg = ceff->EffGetChunk(&chunk,true);
+        void * chunke = NULL;
+        long lg = ceff->EffGetChunk(&chunke,true);
         if(lg != length)
         {
           if( chunk )
@@ -143,7 +139,7 @@ void CEffectStk::saveToMem(CEffect * ceff)
           chunk = new char [lg];
 
         ASSERT(chunk);
-        memcpy(chunk,chunk,lg);
+        memcpy(chunk,chunke,lg);
         length = lg;
         ischunk = true;
 
@@ -187,6 +183,18 @@ void CEffectStk::save(CArchive &ar)
   ar << bankname;
   ar << ischunk;
   ar << length;
+  char c = 0;
+  //**7.0.3**//deb
+  if(!tabcontroleur)
+      ar << c;
+  else
+  {
+    ar << tabcontroleur[0];
+    for(int i = 1;i<= tabcontroleur[0]; i++)
+      ar << tabcontroleur[i];
+  }
+  //**7.0.3**//end
+
   if(ischunk)
   {
     ar.Write(chunk,length);
@@ -204,6 +212,8 @@ void CEffectStk::save(CArchive &ar)
   }
 
 
+
+
 }
 void CEffectStk::load(CArchive &ar)
 {
@@ -213,13 +223,36 @@ void CEffectStk::load(CArchive &ar)
   ar >> bankname;
   ar >> ischunk;
   ar >> length;
+
+   //**7.0.3**//deb
+  //if(tabcontroleur)
+  //{
+    char nbval;
+    ar >> nbval;
+    if(tabcontroleur)
+    {delete [] tabcontroleur;
+    tabcontroleur = NULL;}
+    if(nbval > 0)
+    {
+      tabcontroleur = new char[(int)nbval+1];
+      tabcontroleur[0] = nbval;
+      for(int i =1;i<=(int)nbval;i++)
+      {
+        ar >> tabcontroleur[i];
+      }
+    }
+  //}
+  //**7.0.3**//end
+
   if(ischunk)
   {
     chunk = new char[length];
     ar.Read(chunk,length);
+    tabval = NULL;
   }
   else
   {
+    chunk = NULL;
     float nbval;
     ar >> nbval;
     if(tabval)
@@ -235,6 +268,7 @@ void CEffectStk::load(CArchive &ar)
       }
     }
   }
+ 
 }
 
 
@@ -498,6 +532,10 @@ int CStockEffetLst::add_eff(int chaine,LPCSTR dll_name)
 
     nb_effect_used++;
     Neweff = true;
+  }else
+  {
+    CSmpEffect * ceff = (CSmpEffect *)host->GetAt(nb);
+    ceff->DefParam.loadFromMem(ceff);
   }
   if(nb<0)
     return -1;
@@ -592,7 +630,7 @@ int CStockEffetLst::find_eff(int chaine,int nbeffect)
     eff = get(chaine,i);
 		if(eff)
       if( (eff->effect_nb == nbeffect))
-        return ((CEffectStk *)eff)->effect_nb;
+        return i/*((CEffectStk *)eff)->effect_nb*/;
 	}
 
   return -1;
@@ -705,6 +743,10 @@ int CStockEffetLst::add_effload(int chaine,CEffectStk & eff)
     if(nb<0)
       return -1;
     nb_effect_used++;
+  }else
+  {
+    CSmpEffect * ceff = (CSmpEffect *)host->GetAt(nb);
+    ceff->DefParam.loadFromMem(ceff);
   }
   if(nb<0)return -1;
   host->IncreaseUse(nb);
@@ -756,7 +798,6 @@ void CStockEffetLst::Set(CAppPointer * m_app)
 //charge une liste d'effet
 void CStockEffetLst::load(CArchive &ar)
 {
-
   for (int k = 0; k < MAX_CHAINE; k ++)
   {
     int i =0,j =0;
@@ -768,7 +809,6 @@ void CStockEffetLst::load(CArchive &ar)
       add_effload(k,eff);
 	  }
   }
-  //LoadParamsFromMem(k);
 }
 
 CEffectStk * CStockEffetLst::get(int chaine,int i)

@@ -42,10 +42,11 @@ protected:
   ::CRect   WinRect,WinRectInit;
 
   CAppPointer       * APP;
-  CWnd              * pActiv;//Attention ne sert que pour le size et n'est pas forcement exact
   CMenu  mnu1;
 
 public:
+    CWnd              * pActiv;//Attention ne sert que pour le size et n'est pas forcement exact
+
   virtual BOOL OnInitDialog();
   afx_msg void OnBnClickedButton1();
   afx_msg void OnBnClickedButton2();
@@ -96,4 +97,5 @@ public:
   afx_msg void OnBnHotItemChangeButton3(NMHDR *pNMHDR, LRESULT *pResult);
   afx_msg void OnBnClickedBtneffecttxt();
   CHoverButton m_btneffect2;
+//  afx_msg void OnEffectsShellplug();
 };

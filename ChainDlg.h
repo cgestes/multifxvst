@@ -125,6 +125,8 @@ public:
   CHoverButton m_btnpaste;
   int m_used;
   afx_msg void OnStnClickedTxtinfoctaf();
+  afx_msg void OnEffectsBrowse();
+  afx_msg void OnEffectsShellplug();
 };
 
 #endif

@@ -658,7 +658,7 @@ public:
 
     virtual bool OnGetVendorString(int nEffect,char *text) { strcpy(text, "CTAF"); return true; } // forgive this little vanity :-)
     virtual long OnGetHostVendorVersion(int nEffect) { return 1; }
-    virtual bool OnGetProductString(int nEffect,char *text) { strcpy(text, "Default CVSTHost"); return true; }
+    virtual bool OnGetProductString(int nEffect,char *text) { strcpy(text, "CTAFHost"); return true; }
     virtual bool OnGetSpeakerArrangement(int nEffect, VstSpeakerArrangement* pluginInput, VstSpeakerArrangement* pluginOutput) { return false; }
     virtual void OnSetOutputSampleRate(int nEffect, float sampleRate) { }
     virtual bool OnOfflineStart(int nEffect, VstAudioFile* audioFiles, long numAudioFiles, long numNewAudioFiles) { return false; }

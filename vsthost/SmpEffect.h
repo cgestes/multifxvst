@@ -18,6 +18,31 @@
 class CEffectTxTDlg;
 class CEffectWnd;
 class CAppPointer;
+class CParamStk
+{
+public :
+
+	CParamStk();
+  ~CParamStk();
+	CParamStk(CParamStk & eff);
+
+  void loadFromMem(CEffect *ceff);
+  void saveToMem(CEffect *ceff);
+
+
+	/*int effect_nb;       //numero de l'effet dans CVSTHost
+  int effectbisnb;     //numero d'instance de l'effet (si plusieurs fois le mm effet dans une chaine)
+	CString effect_name; //path et nom de la dll
+	CString bankname;    //path et nom de la bank d'effet utilis?
+  */
+  float  * tabval;
+  char   * chunk;
+  char   * tabcontroleur;
+  bool   ischunk;
+  long   length;
+  //int    nbcontroleur;
+};
+
 class CSmpEffect : public CEffect  
 {
 public:
@@ -46,6 +71,7 @@ public:
 
    CEffectWnd * pEditWnd;
    CEffectTxTDlg * pParmWnd;
+   CParamStk DefParam;
 protected:
 	unsigned short wChnMask;
 	//int nAllocatedOutbufs;

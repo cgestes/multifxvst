@@ -609,6 +609,7 @@ AEffect *(*pMain)(long (*audioMaster)(AEffect *effect,
 #ifdef WIN32
 
 hModule = ::LoadLibrary(name);          /* try to load the DLL               */
+
 if (hModule)                            /* if there, get its main() function */
  /* pMain = (AEffect * (*)(long (*)(AEffect *,long,long,long,void *,float)))
           ::GetProcAddress(hModule, "main");*/
@@ -927,7 +928,12 @@ switch (opcode)
   case audioMasterVersion :
     return OnGetVersion(nEffect);
   case audioMasterCurrentId :
-    return nEffect;
+    {
+      if(nEffect == -1)
+       return 0;
+      else
+       return nEffect;
+    }
   case audioMasterIdle :
     return OnIdle(nEffect);
   case audioMasterPinConnected :
@@ -1303,9 +1309,10 @@ bool CVSTHost::OnCanDo(const char *ptr)
 {
 if ((!strcmp(ptr, "sendVstMidiEvent"))     ||
     (!strcmp(ptr, "receiveVstMidiEvent"))  ||
-    (!strcmp(ptr, "sendVstTimeInfo"))      /*||
-    (!strcmp(ptr, "supplyIdle")) */)
+    (!strcmp(ptr, "sendVstTimeInfo"))      ||
+    (!strcmp(ptr, "supportShell")) )
   return true;
+
 /*"sendVstEvents" 
 "sendVstMidiEvent" 
 "sendVstTimeInfo" 

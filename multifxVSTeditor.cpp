@@ -32,6 +32,8 @@
 #include <stdlib.h>	
 #include <stdio.h>
 
+#include "effectWnd.h"
+#include "EffectTxTdlg.h"
 
 
 enum
@@ -208,7 +210,7 @@ void multifxVSTEditor::idle ()                                        //AFFAIREE
 
   APP->pMainDlg->EnterIdle();
 	AEffGUIEditor::idle ();		// always call this to ensure update
-    OutputDebugString("idle\n");
+    //OutputDebugString("idle\n");
 }
 
 void multifxVSTEditor::update()                                       
@@ -218,8 +220,27 @@ void multifxVSTEditor::update()
   {
   case 1:  //changement de chaine
       APP->pMainDlg->ChangeChaine(APP->current_chaine);
-      APP->pMainDlg->SetEffect(-1);
-      APP->pMainDlg->KillEffect();
+      if(APP->pMainDlg->pActiv == APP->pControleur)
+      {
+
+      }
+      //pas d'effete a ouvrir donc on remet la fenetre main
+      else if(APP->chaine_eff->get_count(APP->current_chaine) == 0)
+      {
+         APP->pMainDlg->KillEffect();
+         APP->pMainDlg->ChildNotify(APP->pChain);
+      }
+      else
+      {
+        if(APP->pMainDlg->pActiv == (CWnd *)APP->pEffEditDlg)
+        { APP->pMainDlg->OpenEffect(APP->current_chaine,0);
+        }
+        else if (APP->pMainDlg->pActiv == (CWnd *)APP->pEffParmDlg)
+        {APP->pMainDlg->OpenEffectTxT(APP->current_chaine,0);
+          
+         //APP->pEffParmDlg->SetEffect(0);
+        }
+      }
       break;
   case 2:  //parametre de l'automation
     break;

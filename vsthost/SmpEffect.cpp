@@ -14,6 +14,128 @@ static char THIS_FILE[]=__FILE__;
 #endif
 
 
+CParamStk::CParamStk()
+{
+  tabval = NULL;
+  chunk = NULL;
+  ischunk = false;
+  length = 0;
+}
+
+
+CParamStk::~CParamStk()
+{
+  if(tabval)delete tabval;
+  if(chunk)delete chunk;
+  TRACE("DESTROY::CParamStk\n");
+}
+
+CParamStk::CParamStk(CParamStk & eff)
+{
+  tabval = NULL;
+  chunk = NULL;
+  ischunk = eff.ischunk;
+  length = eff.length;
+
+
+  if(eff.ischunk)
+  {
+    if(eff.chunk)
+    {
+      chunk = new char[eff.length];
+      memcpy(chunk,eff.chunk,eff.length);
+    }
+  }
+  else
+  {
+    if(eff.tabval)
+    {
+      tabval = new float[(int)eff.tabval[0]+1];
+
+      for(int i =0; i<=eff.tabval[0];i++)
+        tabval[i] = eff.tabval[i];
+    }  
+  }
+}
+void CParamStk::loadFromMem(CEffect * ceff)
+{
+  if(ceff->pEffect->flags & effFlagsProgramChunks)
+  {
+    if(chunk)
+    {
+      ceff->EffSetChunk(chunk,length,true);
+    }
+  }
+  else
+  {
+    if(tabval)
+    {
+    int k,l = (int)tabval[0];
+    for( k = 0; k < l;k++)
+      ceff->EffSetParameter(k,tabval[k+1]);
+    }
+  }
+}
+
+
+void CParamStk::saveToMem(CEffect * ceff)
+{
+  if(ceff->pEffect->flags & effFlagsProgramChunks)
+  {
+        if(tabval)
+          delete tabval;
+
+        tabval = NULL;
+
+        void * chunke = NULL;
+        long lg = ceff->EffGetChunk(&chunke,true);
+        if(lg != length)
+        {
+          if( chunk )
+            delete chunk;
+          chunk = NULL;
+        }
+
+        if(!chunk)
+          chunk = new char [lg];
+
+        ASSERT(chunk);
+        memcpy(chunk,chunke,lg);
+        length = lg;
+        ischunk = true;
+
+  }
+  else
+  {
+        int k,l = ceff->pEffect->numParams;
+
+        //par sécurité on kill les chunk si yen a
+        if(chunk)
+          delete chunk;
+
+        chunk = NULL;
+        length = 0;
+        ischunk = false;
+
+
+        //si c'est pas le bon tableau on kill
+        if(tabval && tabval[0] != l)
+        {delete [] tabval;
+        tabval = NULL;
+        }
+
+        //si pas de tableau
+        if(!tabval)
+        {tabval = new float[l+1];
+        tabval[0] = (float)l;
+        }
+
+        //on sauvegarde l'effet
+        for( k = 0; k < l;k++)
+          tabval[k+1] = ceff->EffGetParameter(k);
+  }
+}
+
 CSmpEffect::CSmpEffect(CVSTHost *pHost)
   : CEffect(pHost)
 {
@@ -42,9 +164,15 @@ bool CSmpEffect::Load(const char *name)
 {
 if (!CEffect::Load(name))               /* do basic stuff                    */
 {
-  AfxMessageBox("Boom!!ce plugins ne marche pas");
+  CString buf;
+  buf.Format("Ce plug-ins n'a pas put etre chargé : \n%s",name);
+  AfxMessageBox(buf);
   return false;
 }
+
+//if(!(pEffect->flags & kPlugCategShell))
+  DefParam.saveToMem(this);
+
 return true;
 }
 

@@ -1,10 +1,25 @@
-MultiFXVST - CTAF Audio - version 0.6.4
+MultiFXVST - CTAF Audio - version 0.7.3
 
 //####################################################################
 //########### HISTORY ################################################
 //####################################################################
+//-- 30/07/2004 (version 0.7.3)
+     - bug : "load/save all/chain" avec le tableau de controleur
+     - bug : la fenetre effet2 ne marchait plus trop à cause d'un problème memoire (save/load)
+     
+//-- 29/07/2004
+     - improve : sauvegarde les parametres par default de chaques effets
+     - tatonnage : les plug-ins shells (aie aie aie) 
+     
+//-- 28/07/2004 (version 0.7.2)
+     - bug : supraphaser et d'autres effets plantent au chargement (SetParameterAutomated pendant leur creation)
+
+//-- 27/07/2004 (version 0.7.1)
+     - bug : sauvegarde des chunks entre différentes chaines
+     - improve : optimisation de l'ergonomie pendant les changements de chaines
+     
 //-- 26/07/2004 (version 0.7.0)
-     - bug : divers bug d'automation
+     - bug : divers bugs d'automations
      - improve : optimisation de l'affichage pour différentes fenetres (Update/SetparameterAutomated)
      - bug : affichage graphique des plug-ins
      
@@ -163,24 +178,23 @@ MultiFXVST - CTAF Audio - version 0.6.4
 // - qd on ajoute un plug-ins déja utilisé il ne met pas les paramètres par défault du plug mais ceux de la dernier config utilisé
 // - bug resize (l'un dans l'autre dans l'un dans...)
 
-// - quand on fait un update ou que l'on change de chaine on memorise le dernier effet regardé 
-//   on l'affiche , sinon on update la fenetre corespondante
+// - load/save => ne restore pas l'automation ? => faut changer de chaine pr que ca marche
 
-// - bool CSmpEffect::OnSetParameterAutomated à proprifier
-// - load/save => ne restore pas l'automation => faut changer de chaine pr que ca marche
+//load/save => si ca plante => ca créé un effet famtome (gerer mieux les exceptions ac les fichiers)
 
 //####################################################################
 //########### TODO LIST ##############################################
 //####################################################################
 // - perte de focus dans les listes
-// - automation => redraw systématique de l'interface (onupdate)
 // - sauvegarde de la fenetre en cours lors du changement de chaine / plug-ins
 // - effecteditWnd => ne pas recréer à chaque fois...
 // - message d'erreur contenant le nom du plug-ins (load all,...)
+// - si un plug-ins est mono alors on applique en entré un melange 
+     du signal gauche et droit puis on duplique sa sortie
 
 //######### Ajout de fonction ########################################
 // - plug-ins shell et dx
-// - sauvegarder autant de program que nécessaire pour chaque chaine
+// - sauvegarder autant de program que nécessaire pour chaques chaines
 // - mute (avec controleur)
 // - midi learn / parameter learn
 

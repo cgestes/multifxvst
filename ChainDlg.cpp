@@ -15,6 +15,8 @@
 #include "EffectTxTDlg.h"
 #include "multifxVST.h"
 #include "maindlg.h"
+#include ".\chaindlg.h"
+#include "Controleurlst.h"
 
 extern class CChainApp theApp;
 
@@ -103,6 +105,8 @@ ON_BN_CLICKED(IDC_BTNCLRCHAIN, OnBnClickedBtnclrchain)
 ON_BN_CLICKED(IDC_BTNCOPIETO, OnBnClickedBtncopieto)
 ON_BN_CLICKED(IDC_BTNPASTETO, OnBnClickedBtnpasteto)
 ON_STN_CLICKED(IDC_TXTINFOCTAF, OnStnClickedTxtinfoctaf)
+ON_COMMAND(ID_EFFECTS_BROWSE, OnEffectsBrowse)
+ON_COMMAND(ID_EFFECTS_SHELLPLUG, OnEffectsShellplug)
 END_MESSAGE_MAP()
 
 
@@ -119,23 +123,19 @@ void CChainDlg::PostNcDestroy()
 //ajoute un plug-ins a la fin de current_chaine
 void CChainDlg::OnBnClickedBtnadd()
 {
-CString sStartAt;
-sStartAt = AfxGetApp()->GetProfileString("Load", "Path");
-if (sStartAt.GetLength())
-  sStartAt += "\\*.dll";
+  ::CRect r;
+  GetDlgItem(IDC_BTNADD)->GetWindowRect(&r);
 
-CFileDialog dlg(TRUE, NULL, sStartAt,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
-     "VST Plug-ins (*.dll)|*.dll|All Files (*.*)|*.*||");
 
-if (dlg.DoModal() == IDOK)
-  {
-  sStartAt = dlg.GetPathName();
-  sStartAt = sStartAt.Left(sStartAt.ReverseFind('\\'));
-  AfxGetApp()->WriteProfileString("Load", "Path", sStartAt);
-  LoadEffect(dlg.GetPathName());
-  }
-  // TODO : ajoutez ici le code de votre gestionnaire de notification de contrôle
+    if (APP->mnu == NULL)
+         return;
+
+    CMenu  * mnu = APP->mnu->GetSubMenu(0);
+    if(mnu)
+      mnu->TrackPopupMenu(TPM_LEFTALIGN |TPM_RIGHTBUTTON, r.left , r.bottom , this);
 }
+
+
 
 //charge un plug-ins
 void CChainDlg::LoadEffect(LPCSTR dllpath)
@@ -325,6 +325,7 @@ BOOL CChainDlg::LoadAll(LPCSTR Path)
   //on supprime les fenetres
   APP->pMainDlg->KillEffect();
   APP->pMainDlg->SetEffect(-1);
+  APP->parameter->DeleteAllItems();
 
   if(APP->chaine_eff->m_processing)
     APP->chaine_eff->suspend(APP->current_chaine);
@@ -381,6 +382,7 @@ BOOL CChainDlg::LoadChaine(int chaine,LPCSTR Path)
   //close();
   APP->pMainDlg->KillEffect();
   APP->pMainDlg->SetEffect(-1);
+  APP->parameter->DeleteAllItems();
 
   if(APP->chaine_eff->m_processing)
     APP->chaine_eff->suspend(APP->current_chaine);
@@ -669,4 +671,44 @@ void CChainDlg::OnStnClickedTxtinfoctaf()
 {
   ShellExecute(NULL,"open","http://www.ctaf.free.fr","","",0);
   // TODO : ajoutez ici le code de votre gestionnaire de notification de contrôle
+}
+
+void CChainDlg::OnEffectsBrowse()
+{
+
+CString sStartAt;
+sStartAt = AfxGetApp()->GetProfileString("Load", "Path");
+if (sStartAt.GetLength())
+  sStartAt += "\\*.dll";
+
+CFileDialog dlg(TRUE, NULL, sStartAt,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+     "VST Plug-ins (*.dll)|*.dll|All Files (*.*)|*.*||");
+
+if (dlg.DoModal() == IDOK)
+  {
+  sStartAt = dlg.GetPathName();
+  sStartAt = sStartAt.Left(sStartAt.ReverseFind('\\'));
+  AfxGetApp()->WriteProfileString("Load", "Path", sStartAt);
+  LoadEffect(dlg.GetPathName());
+  }
+
+}
+
+void CChainDlg::OnEffectsShellplug()
+{
+CString sStartAt;
+sStartAt = AfxGetApp()->GetProfileString("Load", "Path");
+if (sStartAt.GetLength())
+  sStartAt += "\\*.dll";
+
+CFileDialog dlg(TRUE, NULL, sStartAt,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+     "VST Plug-ins (*.dll)|*.dll|All Files (*.*)|*.*||");
+
+if (dlg.DoModal() == IDOK)
+  {
+  sStartAt = dlg.GetPathName();
+  sStartAt = sStartAt.Left(sStartAt.ReverseFind('\\'));
+  AfxGetApp()->WriteProfileString("Load", "Path", sStartAt);
+  LoadEffect(dlg.GetPathName());
+  }
 }

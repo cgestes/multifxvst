@@ -51,6 +51,7 @@ public :
     effect         = 0;
     current_chaine = 0;
     parameter      = 0;
+    mnu            = 0;
   }
 
 
@@ -65,7 +66,7 @@ public :
   multifxVSTEditor * editor;      //fenetre VST contenant la fenetre principale
   multifxVST       * effect;      //Notre effet 
   CParameterLst    * parameter;   //automatisation des parametres
-
+  CMenu            * mnu;
   int current_chaine;
 
 };

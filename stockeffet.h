@@ -13,7 +13,7 @@
 class CAppPointer;
 
 #pragma once
-#define MAX_CHAINE 127
+#define MAX_CHAINE 128
 /*
 class CParamStk
 {

@@ -15,6 +15,8 @@
 class CSmpEffect;
 class CAppPointer;
 
+
+
 class CCVSTHost :  public CVSTHost
 {
 public:

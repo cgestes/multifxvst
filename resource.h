@@ -31,6 +31,7 @@
 #define IDB_BITMAP2                     127
 #define IDB_BITMAP16                    128
 #define IDM_VSTMNU                      130
+#define IDR_MNUEFFECTS                  131
 #define IDC_CURSOR_HAND                 140
 #define IDC_LSTPLUG                     141
 #define IDC_BTNUP                       142
@@ -104,13 +105,18 @@
 #define ID_PLUG_PRESET                  32777
 #define ID_PRESET_ENREGISTRER           32778
 #define ID_PRESET_SUPPRIMER             32779
+#define ID_EFFECTS_BROWSE               32780
+#define ID_EFFECTS_                     32781
+#define ID_Menu                         32782
+#define ID_EFFECTS_FUTURLISTEDESEFFETS  32783
+#define ID_EFFECTS_SHELLPLUG            32784
 
 // Next default values for new objects
-//
+// 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        131
-#define _APS_NEXT_COMMAND_VALUE         32780
+#define _APS_NEXT_RESOURCE_VALUE        132
+#define _APS_NEXT_COMMAND_VALUE         32785
 #define _APS_NEXT_CONTROL_VALUE         204
 #define _APS_NEXT_SYMED_VALUE           303
 #endif

@@ -7,6 +7,9 @@
 #include "ControleurLst.h"
 #include "EffectWnd.h"
 
+
+
+
 CEffect * CCVSTHost::CreateEffect()
 {
   return new CSmpEffect(this);
@@ -103,7 +106,24 @@ if (!pEffect->Load(sName))              /* try to load the thing             */
   delete pEffect;                       /* upon error delete the object      */
   return -1;                            /* and regretfully return error      */
   }
+/**********************************************************************/
+  //if(pEffect->EffGetPlugCategory() == kPlugCategShell)
+    //pEffect->pEffect->flags & kPlugCategShell)
+  /*{
+    long lghfd = pEffect->EffGetPlugCategory()  ;
+    CString msg;
+    CString buf;
+      long iDD = pEffect->EffGetNextShellPlugin(buf.GetBuffer(60));
+      buf.ReleaseBuffer();
+      msg.AppendFormat("%d : %s\n",iDD,buf);
+      iDD = pEffect->EffGetNextShellPlugin(buf.GetBuffer(60));
+      buf.ReleaseBuffer();
+      msg.AppendFormat("%d : %s\n",iDD,buf);
+      AfxMessageBox(msg);
+  }*/
 
+
+/**********************************************************************/
 
 pEffect->EffOpen();                     /* open the effect                   */
 pEffect->EffSetSampleRate(fSampleRate); /* adjust its sample rate            */
@@ -146,29 +166,31 @@ bool CCVSTHost::DecreaseUse(int nEffect,bool killing_plug,CAppPointer * m_app)
 bool CCVSTHost::OnSetParameterAutomated(int nEffect, long index, float value)
 {
 CSmpEffect *pEffect = (CSmpEffect *)GetAt(nEffect);
-CEffectStk *effstk;
+CEffectStk *effstk = NULL;
 if (pEffect)
-  {
-    pEffect->OnSetParameterAutomated(index, value);
-
-  }
-
-ASSERT(SetAPP()); //on positionne le pointeur sur APP
-//on s'occupe de l'automation
-int nbeffstk = APP->chaine_eff->find_eff(APP->current_chaine,nEffect);
-if(nbeffstk != -1)
 {
-  effstk = APP->chaine_eff->get(APP->current_chaine,nbeffstk);
-  int ind = effstk->Get_Controleur(index);
-  if(ind != -1)
+  pEffect->OnSetParameterAutomated(index, value);
+  //on s'occupe de l'automation
+  if(pEffect->APP)
   {
-    APP->parameter->setParameter(ind-1,value);
-    APP->effect->setParameterAutomated(ind-1+kNumParams,value);
-  }/*else if (pEffect)
-    pEffect->OnSetParameterAutomated(index, value);*/
+    int nbeffstk = pEffect->APP->chaine_eff->find_eff(pEffect->APP->current_chaine,nEffect);
+    if(nbeffstk != -1)
+    {
+      effstk = pEffect->APP->chaine_eff->get(pEffect->APP->current_chaine,nbeffstk);
+      ASSERT(effstk);
+      if(effstk)
+      {
+        int ind = effstk->Get_Controleur(index);
+        if(ind != -1)
+        {
+          pEffect->APP->parameter->setParameter(ind-1,value);
+          pEffect->APP->effect->setParameterAutomated(ind-1+kNumParams,value);
+        }
+      }
+    }
+  }
+}
 
-}/*else if (pEffect)
-  pEffect->OnSetParameterAutomated(index, value);*/
 
 
 //return CVSTHost::OnSetParameterAutomated(nEffect, index, value);

@@ -44,6 +44,7 @@ extern bool oome;
 multifxVST::multifxVST (audioMasterCallback audioMaster) :
   AudioEffectX (audioMaster, 0, kNumParams+32)
 {
+  AFX_MANAGE_STATE(AfxGetStaticModuleState());
   TRACE("multifxVST::multifxVST \n");
   dat = NULL;
 
@@ -53,7 +54,9 @@ multifxVST::multifxVST (audioMasterCallback audioMaster) :
   APP.controleur = new CControleurLst;
   APP.chaine_eff = new CStockEffetLst;
   APP.host       = &theApp.host;
-  
+  APP.mnu = new CMenu;
+  APP.mnu->LoadMenu(IDR_MNUEFFECTS);
+
   APP.parameter->Init(32);
   APP.controleur->Init(32);
 
@@ -150,6 +153,11 @@ multifxVST::~multifxVST ()
   }
   if(dat)
     delete dat;
+  if(APP.mnu)
+  {
+    delete APP.mnu;
+    APP.mnu = NULL;
+  }
 
   CString buf;buf.Format("DESTROY :: multifxVST(%d) \n", this);  TRACE(buf);
 
