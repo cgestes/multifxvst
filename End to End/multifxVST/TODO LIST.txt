@@ -3,6 +3,15 @@ MultiFXVST - CTAF Audio - version 0.6.4
 //####################################################################
 //########### HISTORY ################################################
 //####################################################################
+//-- 26/07/2004 (version 0.7.0)
+     - bug : divers bug d'automation
+     - improve : optimisation de l'affichage pour différentes fenetres (Update/SetparameterAutomated)
+     - bug : affichage graphique des plug-ins
+     
+//-- 25/07/2004
+     - ajout : l'automation fonctionne
+     - bug : scintillement dans l'affichage au changement des parametres automatisables
+     
 //-- 30/06/2004
      - ajout : getparameter totalement fonctionnel
      - ajout : controleur sauvegardé ("save all"/"load all"/"save chain"/"load chain")
@@ -152,9 +161,13 @@ MultiFXVST - CTAF Audio - version 0.6.4
 // - fx processeur => problème de resize qd on revient sur le plug-ins
      (il remet la taille de la fenetre d'origine)(il conserve editor contrairement à cubase)
 // - qd on ajoute un plug-ins déja utilisé il ne met pas les paramètres par défault du plug mais ceux de la dernier config utilisé
-// bug resize (l'un dans l'autre dans l'un dans...)
+// - bug resize (l'un dans l'autre dans l'un dans...)
 
+// - quand on fait un update ou que l'on change de chaine on memorise le dernier effet regardé 
+//   on l'affiche , sinon on update la fenetre corespondante
 
+// - bool CSmpEffect::OnSetParameterAutomated à proprifier
+// - load/save => ne restore pas l'automation => faut changer de chaine pr que ca marche
 
 //####################################################################
 //########### TODO LIST ##############################################

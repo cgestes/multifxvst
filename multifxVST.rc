@@ -233,7 +233,7 @@ BEGIN
         VERTGUIDE, 351
         VERTGUIDE, 356
         TOPMARGIN, 2
-        BOTTOMMARGIN, 61
+        BOTTOMMARGIN, 60
         HORZGUIDE, 14
     END
 END

@@ -66,6 +66,7 @@ private:
   CCVSTHost       * host;*/
   ERect             WinRect;
 	long              oldTicks;
+  int               UpdateType;
 public:
   friend CMainDlg; //pour l'access au pointeur frame
 

@@ -37,8 +37,9 @@ void CMainDlg::ChangeChaine(int chaine,BOOL paramAutom)
 
   if(!VCH(chaine))return ;
 
-  APP->pMainDlg->KillEffect();
-  ChildNotify(APP->pChain);
+  //APP->pMainDlg->KillEffect();
+  //ChildNotify(APP->pChain);
+
   //on affiche la nouvelle chaine
   APP->chaine_eff->ViewChaine(APP->current_chaine,APP->pChain->m_listvst,0);
  
@@ -544,16 +545,12 @@ void CMainDlg::OnBnClickedButton2()
 
 void CMainDlg::OnBnClickedButton3()
 {
- /* if(APP->pMainDlg->pActiv == APP->pEffEditDlg)
-    OpenEffectTxT(APP->current_chaine,nbeff); 
-  else*/
     OpenEffect(APP->current_chaine,nbeff);  
 }
 
 void CMainDlg::OnBnClickedBtneffecttxt()
 {
   OpenEffectTxT(APP->current_chaine,nbeff); 
-  // TODO : ajoutez ici le code de votre gestionnaire de notification de contrôle
 }
 
 void CMainDlg::PostNcDestroy()
@@ -904,11 +901,17 @@ else
 
 void CMainDlg::OnUpdate()
 {
-  if(APP->pEffEditDlg)
-    APP->pEffEditDlg->Update();
+  if(!pActiv) return;
 
-  if(APP->pEffParmDlg)
-    APP->pEffParmDlg->Update();
+  if(pActiv ==  APP->pEffEditDlg)
+     APP->pEffEditDlg->Update();
+  else if(pActiv ==  APP->pEffParmDlg)
+     APP->pEffParmDlg->Update();
+  else if(pActiv == APP->pControleur)
+     APP->pControleur->Update();
+
+  //case APP->pChain    : APP->pChain->Up
+  
 }
 
 void CMainDlg::OnFxbLoadfxp()

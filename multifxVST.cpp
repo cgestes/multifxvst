@@ -279,7 +279,6 @@ void multifxVST::setParameter (long index, float value)
 	}else if((index >= kNumParams) && (index < kNumParams + APP.parameter->GetCount()))
   {
     APP.parameter->setParameter(index-kNumParams,value);
-  
   }
 
   //on met l'affichage a jours

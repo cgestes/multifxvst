@@ -26,7 +26,7 @@
 #include "Chaindlg.h"
 #include "MainDlg.h"
 #include "controleurdlg.h"
-
+#include "Controleurlst.h"
 
 #include <math.h>
 #include <stdlib.h>	
@@ -55,6 +55,7 @@ void stringConvert (float value, char* string);
 multifxVSTEditor::multifxVSTEditor (AudioEffect *effect) 
 	:	AEffGUIEditor (effect)
 {
+  UpdateType = 0;
 	frame = 0;
 	oldTicks = 0;
   visible = false;
@@ -207,13 +208,27 @@ void multifxVSTEditor::idle ()                                        //AFFAIREE
 
   APP->pMainDlg->EnterIdle();
 	AEffGUIEditor::idle ();		// always call this to ensure update
+    OutputDebugString("idle\n");
 }
 
 void multifxVSTEditor::update()                                       
 {
   AEffEditor::update();
-  APP->pMainDlg->ChangeChaine(APP->current_chaine);
-  APP->pMainDlg->SetEffect(-1);
+  switch(UpdateType)
+  {
+  case 1:  //changement de chaine
+      APP->pMainDlg->ChangeChaine(APP->current_chaine);
+      APP->pMainDlg->SetEffect(-1);
+      APP->pMainDlg->KillEffect();
+      break;
+  case 2:  //parametre de l'automation
+    break;
+  }
+  UpdateType = 0;
+  //APP->pMainDlg->OnUpdate();
+
+  OutputDebugString("Update\n");
+
 }
 //-----------------------------------------------------------------------------  AFAFAFAFAAF
 void multifxVSTEditor::setParameter (long index, float value)
@@ -226,16 +241,12 @@ void multifxVSTEditor::setParameter (long index, float value)
 	if (!frame)
 		return;
 
-	switch (index)
-	{
-  case kSliderHTag:
-    {
-      //on notifie la fenetre que les params ont changées
-      if(APP->pChain)
-//       APP->pChain->SetNewNumChaine();
-
-     break;
-    }
+	if (index == kSliderHTag)
+  {
+     UpdateType = 1;
+  }else if((index >= kNumParams) && (index < kNumParams + APP->parameter->GetCount()))
+  {
+     UpdateType = 2;
 	}
 	
 	// call this to be sure that the graphic will be updated

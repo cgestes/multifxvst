@@ -4,8 +4,8 @@
 #include "multifxVST.h"
 #include "stockeffet.h"
 #include "vsthost/SmpEffect.h"
-
-
+#include "ControleurLst.h"
+#include "EffectWnd.h"
 
 CEffect * CCVSTHost::CreateEffect()
 {
@@ -146,10 +146,33 @@ bool CCVSTHost::DecreaseUse(int nEffect,bool killing_plug,CAppPointer * m_app)
 bool CCVSTHost::OnSetParameterAutomated(int nEffect, long index, float value)
 {
 CSmpEffect *pEffect = (CSmpEffect *)GetAt(nEffect);
+CEffectStk *effstk;
 if (pEffect)
-  pEffect->OnSetParameterAutomated(index, value);
-return CVSTHost::OnSetParameterAutomated(nEffect, index, value);
-  return 0;
+  {
+    pEffect->OnSetParameterAutomated(index, value);
+
+  }
+
+ASSERT(SetAPP()); //on positionne le pointeur sur APP
+//on s'occupe de l'automation
+int nbeffstk = APP->chaine_eff->find_eff(APP->current_chaine,nEffect);
+if(nbeffstk != -1)
+{
+  effstk = APP->chaine_eff->get(APP->current_chaine,nbeffstk);
+  int ind = effstk->Get_Controleur(index);
+  if(ind != -1)
+  {
+    APP->parameter->setParameter(ind-1,value);
+    APP->effect->setParameterAutomated(ind-1+kNumParams,value);
+  }/*else if (pEffect)
+    pEffect->OnSetParameterAutomated(index, value);*/
+
+}/*else if (pEffect)
+  pEffect->OnSetParameterAutomated(index, value);*/
+
+
+//return CVSTHost::OnSetParameterAutomated(nEffect, index, value);
+  return 1;
 }
 
 //faut demander a l'host et retourner cette valeur

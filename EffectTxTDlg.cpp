@@ -54,7 +54,7 @@ void CEffectTxTDlg::DoDataExchange(CDataExchange* pDX)
 
 void CEffectTxTDlg::Update(int nbsel)
 {
-  CString sParm;
+ /* CString sParm;
   m_lstparms.SetRedraw(FALSE);
 
   if(nbsel == -1)
@@ -70,16 +70,16 @@ for (int idx = 0; idx < eff->pEffect->numParams; idx++)
 
       sParm.Format("%d",effstk->Get_Controleur(i));
       m_lstparms.SetItemText(idx,3,sParm);
-      /*UpdateData();
-      m_controleurnb = effstk->Get_Controleur(i);
-      UpdateData(FALSE);*/
+      //UpdateData();
+      //m_controleurnb = effstk->Get_Controleur(i);
+      //UpdateData(FALSE);
       m_lstparms.SetItemData(idx, i);
     }
   m_lstparms.SetCurSel(nbsel);
 
 m_lstparms.SetRedraw(TRUE);
 //OnSelchangeParmlist();
-
+*/
 }
 
 /*****************************************************************************/
@@ -92,7 +92,6 @@ BEGIN_MESSAGE_MAP(CEffectTxTDlg, CDialog)
   ON_WM_CLOSE()
   ON_WM_DESTROY()
   ON_WM_CTLCOLOR()
-  ON_NOTIFY(LVN_ITEMCHANGED, IDC_LISTPARMS, OnLvnItemchangedListparms)
   ON_NOTIFY(NM_CLICK, IDC_LISTPARMS, OnNMClickListparms)
   ON_CBN_DROPDOWN(IDC_COMBO1, OnCbnDropdownCombo1)
   ON_CBN_SELCHANGE(IDC_COMBO1, OnCbnSelchangeCombo1)
@@ -144,6 +143,7 @@ void CEffectTxTDlg::SetEffect(int nEffectStk)
   effstk = APP->chaine_eff->get(APP->current_chaine,nEffectStk);
 CString sParm;
 this->nEffect = nEffect;
+this->nEffectStk = nEffectStk;
 eff = (CSmpEffect *) APP->host->GetAt(nEffect);
 m_lstparms.SetRedraw(FALSE);
 m_lstparms.DeleteAllItems();
@@ -229,6 +229,7 @@ if (eff)
   else
   {
     param = szData;
+    szData = "";
     eff->EffGetParamLabel(nParm, szData.GetBuffer(60));
     szData.ReleaseBuffer();
     param += CString(' ') + szData;
@@ -257,6 +258,13 @@ if (pScrollBar->GetDlgCtrlID() == IDC_PARMVAL)
       int i = (int)m_lstparms.GetItemData(sel);
       float fNewVal = float(65535 - slParmval.GetPos()) / 65535.f;
       eff->EffSetParameter(i, fNewVal);
+
+      int ind = effstk->Get_Controleur(i);
+      if(ind != -1)
+      {
+        APP->parameter->setParameter(ind-1,fNewVal);
+        APP->effect->setParameterAutomated(ind-1+kNumParams,fNewVal);
+      }
       SetParmDisp(i);
     }
   }
@@ -267,17 +275,59 @@ if (nSBCode == SB_ENDSCROLL)            /* if scroll terminated              */
   OnSelchangeParmlist();                /* reset to real current value       */
 }
 
+
+
+
+
 /*****************************************************************************/
 /* OnSetParameterAutomated : called when a parameter changes                 */
 /*****************************************************************************/
 
 bool CEffectTxTDlg::OnSetParameterAutomated(long index, float value)
 {
-/*if (index == m_lstparms.GetCurSel())       /* if it's the currently displayed   */
- // OnSelchangeParmlist();                /* reget parameter settings          */
+  int sel = m_lstparms.GetCurSel();
+  bool selected = false;
 
-Update();
-  
+  if (index == sel)       
+    selected = true;
+
+  sel = (int ) index;
+  if(sel < 0)return false;
+  int i = (int)m_lstparms.GetItemData(sel);
+  CString sVal;
+  float fVal = GetParamVal(i,sVal);
+
+  SetDlgItemText(IDC_RVALUE, sVal);
+
+  //on update la liste
+  //m_lstparms.DeleteItem(i);
+
+  m_lstparms.SetRedraw(FALSE);
+  /*GetParamName(i,sVal);
+  m_lstparms.SetItemText(sel,0,sVal);*/
+  GetParamVal(i,sVal);
+  m_lstparms.SetItemText(sel,2,sVal);
+  GetParamDisp(i,sVal);
+  m_lstparms.SetItemText(sel,1,sVal);
+  sVal.Format("%d",effstk->Get_Controleur(i));
+  m_lstparms.SetItemText(sel,3,sVal);
+  m_lstparms.SetItemData(sel, i);
+  /*UpdateData();
+  m_controleurnb = effstk->Get_Controleur(i);
+  UpdateData(FALSE);*/
+  //m_lstparms.SetCurSel(sel);
+  m_lstparms.SetRedraw(TRUE);
+
+  if(selected)
+  {
+    //on update l'affichage en bas a gauche
+    SetParmDisp(i);
+    //SetDlgItemText(IDC_PARMTEXT,sVal);
+
+    //on update l'affichage du slider
+    slParmval.SetPos(65535 - (int)(fVal * 65535.));
+  }
+
 return true;
 }
 
@@ -340,8 +390,8 @@ void CEffectTxTDlg::OnSelchangeParmlist()
 
   m_lstparms.SetRedraw(FALSE);
 
-  GetParamName(i,sVal);
-  m_lstparms.SetItemText(sel,0,sVal);
+  /*GetParamName(i,sVal);
+  m_lstparms.SetItemText(sel,0,sVal);*/
   GetParamVal(i,sVal);
   m_lstparms.SetItemText(sel,2,sVal);
   GetParamDisp(i,sVal);
@@ -364,13 +414,7 @@ void CEffectTxTDlg::OnSelchangeParmlist()
   //on update l'affichage du slider
   slParmval.SetPos(65535 - (int)(fVal * 65535.));
 }
-void CEffectTxTDlg::OnLvnItemchangedListparms(NMHDR *pNMHDR, LRESULT *pResult)
-{
-  LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
 
-
-  *pResult = 0;
-}
 
 void CEffectTxTDlg::OnNMClickListparms(NMHDR *pNMHDR, LRESULT *pResult)
 {
@@ -413,13 +457,17 @@ void CEffectTxTDlg::OnCbnSelchangeCombo1()
   int nbparam = m_lstparms.GetItemData(nbsel);
   int ancval = effstk->Get_Controleur(nbparam);
   effstk->Set_Controleur(nbparam,m_value,eff);
-  /*if(ancval)
-    APP->parameter->
-  APP->parameter->Set(*/
+  //on supprime l'ancienne valeur
+  if(ancval != -1)
+  {
+    APP->parameter->ParamSupprParam(ancval-1,nEffectStk,nbparam);
+  }
+  //on ajoute la nouvelle valeur
+  APP->parameter->ParamAddParam(m_value-1,nEffectStk,nbparam);
+  
   CString buf;
   buf.Format("%d",m_value);
   m_lstparms.SetItemText(nbsel,3,buf);
-  // TODO : ajoutez ici le code de votre gestionnaire de notification de contrôle
 }
 
 void CEffectTxTDlg::OnCbnCloseupCombo1()

@@ -191,14 +191,14 @@ if (pEffect)
   {
   sName.Format("%d %s: ", nEffect, GetEditType());
   char szBuf[256] = "";
-                                        /* if V2 plugin                      */
+                                   
   if (pEffect->EffGetProductString(szBuf))
-    sName += szBuf;                     /* use plugin info                   */
-  else                                  /* if V1 plugin                      */
+    sName += szBuf;                   
+  else                              
     {
     CString sFile(pEffect->sName);
     int nrbsl = sFile.ReverseFind('\\');
-    sName += sFile.Mid(nrbsl + 1);      /* use plugin file name              */
+    sName += sFile.Mid(nrbsl + 1);     
     }
 
   CString sProg;
@@ -551,10 +551,11 @@ void CEffectWnd::EnterIdle()
   if(nEffect == -1)return;
 
   CSmpEffect *pEffect = (CSmpEffect *)APP->host->GetAt(nEffect);
-  //ASSERT(pEffect); failed dans classic flanger
+  ASSERT(pEffect);
   if(pEffect)
     pEffect->EffEditIdle();
 
+  OutputDebugString("Idle Plug\n");
   // TODO : ajoutez ici le code de votre gestionnaire de messages
 }
 

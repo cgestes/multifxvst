@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="multifxVST"
 	SccProjectName=""
 	SccLocalPath=""
@@ -73,7 +73,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release Static|Win32"
@@ -134,7 +140,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Debug Dyn|Win32"
@@ -191,7 +203,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Debug Stat|Win32"
@@ -247,9 +265,17 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Source Files"
@@ -259,6 +285,9 @@
 			</File>
 			<File
 				RelativePath=".\ControleurLst.h">
+			</File>
+			<File
+				RelativePath=".\resource.h">
 			</File>
 			<File
 				RelativePath=".\StdAfx.cpp">
@@ -274,9 +303,6 @@
 						Name="VCCLCompilerTool"
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\resource.h">
 			</File>
 			<File
 				RelativePath=".\stdafx.h">
@@ -360,6 +386,9 @@
 			Name="Resource Files"
 			Filter=".rc">
 			<File
+				RelativePath=".\res\bmp10001.bmp">
+			</File>
+			<File
 				RelativePath=".\Skin\ListCtrlSkin\ColumnHeaderEnd.bmp">
 			</File>
 			<File
@@ -367,6 +396,9 @@
 			</File>
 			<File
 				RelativePath=".\Skin\ListCtrlSkin\ColumnHeaderStart.bmp">
+			</File>
+			<File
+				RelativePath=".\res\cursor1.cur">
 			</File>
 			<File
 				RelativePath=".\Skin\ListCtrlSkin\HorizontalScrollBarLeftArrow.bmp">
@@ -384,30 +416,6 @@
 				RelativePath=".\Skin\HoverButton.bmp">
 			</File>
 			<File
-				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollBarDownArrow.bmp">
-			</File>
-			<File
-				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollBarSpan.bmp">
-			</File>
-			<File
-				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollBarThumb.bmp">
-			</File>
-			<File
-				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollBarUpArrow.bmp">
-			</File>
-			<File
-				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollbarBottom.bmp">
-			</File>
-			<File
-				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollbarTop.bmp">
-			</File>
-			<File
-				RelativePath=".\res\bmp10001.bmp">
-			</File>
-			<File
-				RelativePath=".\res\cursor1.cur">
-			</File>
-			<File
 				RelativePath=".\multifxVST.def">
 			</File>
 			<File
@@ -421,6 +429,24 @@
 			</File>
 			<File
 				RelativePath=".\skinslider\track_ticksel.bmp">
+			</File>
+			<File
+				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollbarBottom.bmp">
+			</File>
+			<File
+				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollBarDownArrow.bmp">
+			</File>
+			<File
+				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollBarSpan.bmp">
+			</File>
+			<File
+				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollBarThumb.bmp">
+			</File>
+			<File
+				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollbarTop.bmp">
+			</File>
+			<File
+				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollBarUpArrow.bmp">
 			</File>
 		</Filter>
 		<Filter
@@ -578,31 +604,13 @@
 				Name="VST Files"
 				Filter="">
 				<File
-					RelativePath=".\vstsdk2.3\vstsdk2.3\source\common\AEffEditor.hpp">
-				</File>
-				<File
 					RelativePath=".\AEffect.h">
 				</File>
 				<File
-					RelativePath=".\AudioEffect.cpp">
-					<FileConfiguration
-						Name="Debug Dyn|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							BasicRuntimeChecks="3"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug Stat|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							BasicRuntimeChecks="3"/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\AudioEffect.hpp">
-				</File>
-				<File
 					RelativePath=".\aeffectx.h">
+				</File>
+				<File
+					RelativePath=".\vstsdk2.3\vstsdk2.3\source\common\AEffEditor.hpp">
 				</File>
 				<File
 					RelativePath=".\aeffguieditor.cpp">
@@ -621,6 +629,24 @@
 				</File>
 				<File
 					RelativePath=".\aeffguieditor.h">
+				</File>
+				<File
+					RelativePath=".\AudioEffect.cpp">
+					<FileConfiguration
+						Name="Debug Dyn|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BasicRuntimeChecks="3"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Stat|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BasicRuntimeChecks="3"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\AudioEffect.hpp">
 				</File>
 				<File
 					RelativePath=".\audioeffectx.cpp">
@@ -714,5 +740,8 @@
 		</Filter>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="multifxVST.rc"/>
 	</Globals>
 </VisualStudioProject>

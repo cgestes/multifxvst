@@ -6,7 +6,7 @@
 #include "vstHost/SmpEffect.h"
 #include "CCVSThost.h"
 #include "multifxVST.h"
-
+#include "ControleurLst.h"
 //##############################################################################
 //stock des info sur un plug-ins
 //class CEffectStk
@@ -113,6 +113,10 @@ void CEffectStk::loadFromMem(CEffect * ceff)
     for( k = 0; k < l;k++)
       ceff->EffSetParameter(k,tabval[k+1]);
     }
+  }
+  if(tabcontroleur)
+  {
+
   }
 }
 
@@ -272,6 +276,7 @@ void CStockEffetLst::LoadParamsFromMem(int chaine)
 {
   CEffectStk * eff;
   CEffect *ceff;
+  APP->parameter->DeleteAllItems();
   int i,j = get_count(chaine);
   for(i=0;i<j;i++)
   {
@@ -280,6 +285,15 @@ void CStockEffetLst::LoadParamsFromMem(int chaine)
     {
       ceff = host->GetAt(eff->effect_nb);
       eff->loadFromMem(ceff);
+      if(eff->tabcontroleur)
+       for(int k=0;k<ceff->pEffect->numParams;k++)
+       {
+         int controleur = eff->Get_Controleur(k);
+         if(controleur != -1)
+           APP->parameter->ParamAddParam(controleur-1,i,k);
+       }
+
+      
     }
   }
 }
@@ -565,6 +579,23 @@ int CStockEffetLst::find_effbisnb(int chaine,LPCSTR dllname)
 
   return count;*/
 
+}
+
+int CStockEffetLst::find_eff(int chaine,int nbeffect)
+{
+  ASSERT(VCH(chaine));
+	int i,j = get_count(chaine);
+	CEffectStk * eff;
+
+	for (i = 0; i < j;i++)
+	{
+    eff = get(chaine,i);
+		if(eff)
+      if( (eff->effect_nb == nbeffect))
+        return ((CEffectStk *)eff)->effect_nb;
+	}
+
+  return -1;
 }
 
 int CStockEffetLst::find_eff(int chaine,LPCSTR dllname,int effectbisnb)

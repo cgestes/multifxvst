@@ -1,24 +1,32 @@
 #include "stdafx.h"
 #include "multifxvst.h"
 #include ".\controleurlst.h"
+#include "stockeffet.h"
+#include "CCVSTHost.h"
+#include "EffectTxtDlg.h"
 
 
 void CControleurParam::AddParam(int nbeffstk,int nparam)
 {
-  DWORD val = ((nparam<<16)>16) + (nbeffstk << 16);
+  DWORD val = ((nparam<<16)>>16) + (nbeffstk << 16);
   m_param.Add(val);
 }
 
 void CControleurParam::SupprParam(int nbeffstk,int nparam)
 {
-  DWORD val = (nparam<<16 >>16) + (nbeffstk << 16);
+  DWORD val = ((nparam<<16) >>16) + (nbeffstk << 16);
   int i,j = m_param.GetCount();
   for(i = 0;i<j;i++)
   {
     if(m_param[i] == val)
       m_param.RemoveAt(i);
   }
+}
 
+void CControleurParam::Set(int value127)
+{
+  value = value127;
+  
 }
 
 CParameterLst::~CParameterLst()
@@ -28,6 +36,26 @@ CParameterLst::~CParameterLst()
 
   delete controleur_value;
   controleur_value = NULL;
+}
+void CParameterLst::ParamSupprParam(int nbcontroleur,int nbeffstk,int nparam)
+{
+  controleur_value[nbcontroleur]->SupprParam(nbeffstk,nparam);
+}
+
+void CParameterLst::ParamAddParam(int nbcontroleur,int nbeffstk,int nparam)
+{
+  controleur_value[nbcontroleur]->AddParam(nbeffstk,nparam);
+}
+
+void CParameterLst::DeleteAllItems()
+{
+  CControleurParam * param;
+  for(int i=0;i<nb_controleur;i++)
+  {
+    param = controleur_value[i];
+    param->m_param.RemoveAll();
+    param->value = 0;
+  }
 
 }
 
@@ -43,7 +71,24 @@ void CParameterLst::Init(int nbcontroleur)
 void CParameterLst::setParameter(long index, float value)
 {
   int val = float2NBChaine(value);
-  controleur_value[index]->Set(val);
+  CControleurParam * param = controleur_value[index];
+  param->Set(val);
+  int i,j = param->m_param.GetCount();
+  for(i = 0;i<j;i++)
+  {
+    DWORD effectval;
+    effectval = param->m_param.GetAt(i);
+    int effnb = APP->chaine_eff->get_effect(APP->current_chaine,HIWORD(effectval));
+    APP->host->EffSetParameter(effnb,LOWORD(effectval),NBChaine2float(param->Get()));
+
+
+    if(APP->pEffParmDlg)
+     if(APP->pEffParmDlg->nEffectStk  == HIWORD(effectval))
+       APP->pEffParmDlg->OnSetParameterAutomated(LOWORD(effectval),value);
+    //CSmpEffect * eff = (CSmpEffect *)APP->host->GetAt(effnb);
+    // eff->set
+  }
+ 
 }
 
 float CParameterLst::getParameter(long index)

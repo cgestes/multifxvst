@@ -43,11 +43,9 @@ public:
 public:
     virtual void SetEffect(int nEff) { nEffect = nEff; }
     int  GetEffect() { return nEffect; }
-//    void SetMain(CWnd *pFrm) { pMain = pFrm; }
     void SetupTitle();
-   // virtual HICON RetrieveIcon() { return AfxGetApp()->LoadIcon(IDI_EFFEDIT); }
     virtual LPCSTR GetEditType() { return "E"; }
-    virtual BOOL NeedView() { return FALSE; }
+
 
 // Overrides
 	// ClassWizard generated virtual function overrides

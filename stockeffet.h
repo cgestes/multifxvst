@@ -90,6 +90,8 @@ public:
   //erreur = -1
   int find_eff(int chaine,LPCSTR dllname,int effectbisnb = 1);
 
+  //recherche a partir de nbeffet
+  int find_eff(int chaine,int nbeffect);
 
 	//sauve  une liste d'effet
 	void save(CArchive &ar);

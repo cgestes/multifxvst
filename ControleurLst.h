@@ -1,16 +1,17 @@
 #pragma once
 
+
 class CControleurParam
 {
 public:
   CControleurParam(){value = 0;};
-  void Set(int value127){value = value127;}
+  void Set(int value127);
   int  Get(){
     return value;
   }
   void AddParam(int nbeffstk,int nparam);
   void SupprParam(int nbeffstk,int nparam);
-  CArray <DWORD,DWORD> m_param;//liste des params associés
+  CArray <DWORD,DWORD> m_param;//liste des params associés (nbeffstk,paramnb)
   int value;    //parametre associé
 };
 
@@ -18,12 +19,14 @@ public:
 class CParameterLst
 {
 public:
-  CParameterLst(){nb_controleur = 32;}
+  CParameterLst(){nb_controleur = 32;controleur_value = NULL;}
   virtual ~CParameterLst();
   void Init(int nbcontroleur);
-
-  void AddParam();
-  void SupprParam();
+  void DeleteAllItems();
+  //suppr un parametre d'un effet a un controleur
+  void ParamSupprParam(int nbcontroleur,int nbeffstk,int nparam);
+  //ajoute un parametre d'un effet a un controleur
+  void ParamAddParam(int nbcontroleur,int nbeffstk,int nparam);
 
   void Set_APP(CAppPointer * mapp){APP = mapp;}
   void  setParameter(long index, float value);

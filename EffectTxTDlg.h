@@ -29,7 +29,7 @@ public:
   virtual BOOL Create(CWnd *pParentWnd=NULL);
 
   bool OnSetParameterAutomated(long index, float value);
-	int nEffect;
+	int nEffect,nEffectStk;
   CSmpEffect * eff;
   CEffectStk * effstk;
 // Dialog Data
@@ -62,7 +62,6 @@ public:
   afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
   CSkinListCtrl m_lstparms;
   ::CFont font;
-  afx_msg void OnLvnItemchangedListparms(NMHDR *pNMHDR, LRESULT *pResult);
   afx_msg void OnNMClickListparms(NMHDR *pNMHDR, LRESULT *pResult);
   CComboBox m_cbcontroleurnb;
   afx_msg void OnCbnDropdownCombo1();
