@@ -18,6 +18,7 @@
 /*****************************************************************************/
 class CCVSTHost;
 class CAppPointer;
+class CEffectStk;
 class CEffectTxTDlg : public CDialog
 {
   DECLARE_DYNAMIC(CEffectTxTDlg)
@@ -29,7 +30,8 @@ public:
 
   bool OnSetParameterAutomated(long index, float value);
 	int nEffect;
-
+  CSmpEffect * eff;
+  CEffectStk * effstk;
 // Dialog Data
 	//{{AFX_DATA(CEffectTxTDlg)
 	enum { IDD = IDD_PARMS };
@@ -38,8 +40,8 @@ public:
 	//}}AFX_DATA
 
   //void SetMain(CChildFrame *pFrm) { pMain = pFrm; }
-	void SetEffect(int nEffect);
-  void Update();
+	void SetEffect(int nEffectStk);
+  void Update(int nbsel = -1);
 
 	protected:
   DECLARE_MESSAGE_MAP()
@@ -47,14 +49,14 @@ public:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
   virtual void PostNcDestroy();
-	void SetParmDisp(CEffect *pEffect, int nParm);
+	void SetParmDisp( int nParm);
   void OnSelchangeParmlist();
   CAppPointer    * APP;
 public:
   afx_msg void OnClose();
-  float GetParamVal(CEffect *pEffect, int nParm,CString & param);
-  void  GetParamDisp(CEffect *pEffect, int nParm,CString & param);
-  void  GetParamName(CEffect *pEffect, int nParm,CString & param);
+  float GetParamVal( int nParm,CString & param);
+  void  GetParamDisp( int nParm,CString & param);
+  void  GetParamName( int nParm,CString & param);
   void  close();
   afx_msg void OnDestroy();
   afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
@@ -66,6 +68,8 @@ public:
   afx_msg void OnCbnDropdownCombo1();
   BOOL inited;
   int m_controleurnb;
+  afx_msg void OnCbnSelchangeCombo1();
+  afx_msg void OnCbnCloseupCombo1();
 };
 
 #endif // !defined(AFX_EffectTxTDlg_H__45274173_9C71_11D5_8162_4000001054B2__INCLUDED_)

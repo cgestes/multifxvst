@@ -511,7 +511,7 @@ void CMainDlg::OpenEffectTxT(int chaine,int nbeffectstk)
 
     if (pWnd)
       {
-      pWnd->SetEffect(nEffect);
+      pWnd->SetEffect(/*nEffect,*/nbeffectstk);
 
       APP->pEffParmDlg = pWnd;
       
@@ -1006,8 +1006,8 @@ void CMainDlg::OnBnClickedBtnchmoins()
 
   if(APP->current_chaine > 0)
   {
-     APP->current_chaine--;
-     APP->effect->setParameterAutomated(0,NBChaine2float(APP->current_chaine));
+     //APP->current_chaine--;
+     APP->effect->setParameterAutomated(0,NBChaine2float(APP->current_chaine-1));
   }
 }
 
@@ -1016,8 +1016,8 @@ void CMainDlg::OnBnClickedBtnchplus()
 
   if(APP->current_chaine < 126)
   {
-   APP->current_chaine++;
-   APP->effect->setParameterAutomated(0,NBChaine2float(APP->current_chaine));
+   //APP->current_chaine++;
+   APP->effect->setParameterAutomated(0,NBChaine2float(APP->current_chaine+1));
   }
 
 }

@@ -124,11 +124,11 @@ BOOL CControleurDlg::OnInitDialog()
 	m_lstcontroleur.InsertColumn(1, "Midi channel", LVCFMT_LEFT, 58);
   m_lstcontroleur.InsertColumn(2, "Controleur/Note", LVCFMT_LEFT, 80);
 	m_lstcontroleur.InsertColumn(3, "Action", LVCFMT_LEFT, 100);
-	m_lstcontroleur.InsertColumn(4, "Value1", LVCFMT_LEFT, 60);
+	m_lstcontroleur.InsertColumn(4, "Value", LVCFMT_LEFT, 60);
 	m_lstcontroleur.InsertColumn(5, "Invert", LVCFMT_LEFT, 60);
-  m_lstcontroleur.InsertColumn(6, "Min", LVCFMT_LEFT, 60);
+  /*m_lstcontroleur.InsertColumn(6, "Min", LVCFMT_LEFT, 60);
 	m_lstcontroleur.InsertColumn(7, "Max", LVCFMT_LEFT, 60);
-	m_lstcontroleur.InsertColumn(9, "Controleur value", LVCFMT_LEFT, 60);
+	m_lstcontroleur.InsertColumn(9, "Controleur value", LVCFMT_LEFT, 60);*/
 
 
 
@@ -175,6 +175,7 @@ void CControleurDlg::OnBnClickedBtnvalidate()
    param->invert = m_cksimple;
    param->action = m_action ;
    param->value1 = m_value1;
+   param->controleurnb = m_controleurnb+1;
 
   APP->controleur->ViewControleur(m_lstcontroleur,n);
 }

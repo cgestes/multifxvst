@@ -31,7 +31,7 @@ protected:
 
 }*/
 
-
+class CEffect;
 //stock des info sur un plug-ins
 class CEffectStk
 {
@@ -44,6 +44,13 @@ public :
 	void save(CArchive &ar);
 	void load(CArchive &ar);
 
+  void loadFromMem(CEffect *ceff);
+  void saveToMem(CEffect *ceff);
+
+  int Get_Controleur(int nb);
+  
+  void Set_Controleur(int nb,int val,CEffect *ceff);
+
 
 	int effect_nb;       //numero de l'effet dans CVSTHost
   int effectbisnb;     //numero d'instance de l'effet (si plusieurs fois le mm effet dans une chaine)
@@ -52,9 +59,10 @@ public :
   
   float  * tabval;
   char   * chunk;
+  char   * tabcontroleur;
   bool   ischunk;
   long   length;
-  int    nbcontroleur;
+  //int    nbcontroleur;
 };
 
 //#include

@@ -18,24 +18,50 @@ CEffectStk::CEffectStk()
   effectbisnb = 1;
   bankname = _T("");
   tabval = NULL;
+  tabcontroleur = NULL;
   chunk = NULL;
   ischunk = false;
   length = 0;
-  nbcontroleur = -1;
-  CString buf;buf.Format("CREATE :: CEffectStk(%d) \n", this);  TRACE(buf);
 
+}
+int CEffectStk::Get_Controleur(int nb){
+  if((tabcontroleur))
+  {
+    if((nb<0) || (nb>tabcontroleur[0]))
+      return -1;
+    else
+      return tabcontroleur[nb+1];
+  }
+  else
+    return -1;
+
+}
+
+void CEffectStk::Set_Controleur(int nb,int val,CEffect *ceff)
+{
+  if(!tabcontroleur)
+  {
+    int i,j = ceff->pEffect->numParams;
+    tabcontroleur = new char[j + 1];
+    for(i = 0;i<j;i++)
+      tabcontroleur[i+1] = -1; 
+    tabcontroleur[0] = j;
+  }
+  tabcontroleur[nb + 1] = val;
 }
 
 CEffectStk::~CEffectStk()
 {
   if(tabval)delete tabval;
   if(chunk)delete chunk;
+  if(tabcontroleur)delete tabcontroleur;
   TRACE("DESTROY::CEffectStk\n");
 }
 
 CEffectStk::CEffectStk(CEffectStk & eff)
 {
   tabval = NULL;
+  tabcontroleur = NULL;
   chunk = NULL;
   effect_nb = eff.effect_nb;
   effect_name = eff.effect_name;
@@ -43,7 +69,13 @@ CEffectStk::CEffectStk(CEffectStk & eff)
   bankname = eff.bankname;
   ischunk = eff.ischunk;
   length = eff.length;
-  nbcontroleur = eff.nbcontroleur;
+  if(eff.tabcontroleur)
+  {
+    tabcontroleur = new char[(int)eff.tabcontroleur[0]+1];
+
+    for(int i =0; i<=eff.tabcontroleur[0];i++)
+      tabcontroleur[i] = eff.tabcontroleur[i];
+  } 
 
   if(eff.ischunk)
   {
@@ -64,6 +96,84 @@ CEffectStk::CEffectStk(CEffectStk & eff)
     }  
   }
 }
+void CEffectStk::loadFromMem(CEffect * ceff)
+{
+  if(ceff->pEffect->flags & effFlagsProgramChunks)
+  {
+    if(chunk)
+    {
+      ceff->EffSetChunk(chunk,length,true);
+    }
+  }
+  else
+  {
+    if(tabval)
+    {
+    int k,l = (int)tabval[0];
+    for( k = 0; k < l;k++)
+      ceff->EffSetParameter(k,tabval[k+1]);
+    }
+  }
+}
+
+
+void CEffectStk::saveToMem(CEffect * ceff)
+{
+  if(ceff->pEffect->flags & effFlagsProgramChunks)
+  {
+        if(tabval)
+          delete tabval;
+
+        tabval = NULL;
+
+        void * chunk;
+        long lg = ceff->EffGetChunk(&chunk,true);
+        if(lg != length)
+        {
+          if( chunk )
+            delete chunk;
+          chunk = NULL;
+        }
+
+        if(!chunk)
+          chunk = new char [lg];
+
+        ASSERT(chunk);
+        memcpy(chunk,chunk,lg);
+        length = lg;
+        ischunk = true;
+
+  }
+  else
+  {
+        int k,l = ceff->pEffect->numParams;
+
+        //par sécurité on kill les chunk si yen a
+        if(chunk)
+          delete chunk;
+
+        chunk = NULL;
+        length = 0;
+        ischunk = false;
+
+
+        //si c'est pas le bon tableau on kill
+        if(tabval && tabval[0] != l)
+        {delete [] tabval;
+        tabval = NULL;
+        }
+
+        //si pas de tableau
+        if(!tabval)
+        {tabval = new float[l+1];
+        tabval[0] = (float)l;
+        }
+
+        //on sauvegarde l'effet
+        for( k = 0; k < l;k++)
+          tabval[k+1] = ceff->EffGetParameter(k);
+  }
+}
 
 
 void CEffectStk::save(CArchive &ar)
@@ -73,7 +183,6 @@ void CEffectStk::save(CArchive &ar)
   ar << bankname;
   ar << ischunk;
   ar << length;
-  ar << nbcontroleur;
   if(ischunk)
   {
     ar.Write(chunk,length);
@@ -90,6 +199,7 @@ void CEffectStk::save(CArchive &ar)
     }
   }
 
+
 }
 void CEffectStk::load(CArchive &ar)
 {
@@ -99,7 +209,6 @@ void CEffectStk::load(CArchive &ar)
   ar >> bankname;
   ar >> ischunk;
   ar >> length;
-  ar >> nbcontroleur;
   if(ischunk)
   {
     chunk = new char[length];
@@ -146,7 +255,7 @@ CStockEffetLst::CStockEffetLst()
 void CStockEffetLst::SaveParamsToMem(int chaine)
 {
   CEffectStk * eff;
-  CEffect * ceff;
+  CEffect *ceff;
   int i,j = get_count(chaine);
   for(i=0;i<j;i++)
   {
@@ -154,61 +263,7 @@ void CStockEffetLst::SaveParamsToMem(int chaine)
     if(eff)
     {
       ceff = host->GetAt(eff->effect_nb);
-
-      if(ceff->pEffect->flags & effFlagsProgramChunks)
-      {
-            if(eff->tabval)
-              delete eff->tabval;
-
-            eff->tabval = NULL;
-
-            void * chunk;
-            long lg = ceff->EffGetChunk(&chunk,true);
-            if(lg != eff->length)
-            {
-              if( eff->chunk )
-                delete eff->chunk;
-              eff->chunk = NULL;
-            }
-
-            if(!eff->chunk)
-              eff->chunk = new char [lg];
-
-            ASSERT(eff->chunk);
-            memcpy(eff->chunk,chunk,lg);
-            eff->length = lg;
-            eff->ischunk = true;
-
-      }
-      else
-      {
-            int k,l = ceff->pEffect->numParams;
-
-            //par sécurité on kill les chunk si yen a
-            if(eff->chunk)
-              delete eff->chunk;
-
-            eff->chunk = NULL;
-            eff->length = 0;
-            eff->ischunk = false;
-
-
-            //si c'est pas le bon tableau on kill
-            if(eff->tabval && eff->tabval[0] != l)
-            {delete [] eff->tabval;
-            eff->tabval = NULL;
-            }
-
-            //si pas de tableau
-            if(!eff->tabval)
-            {eff->tabval = new float[l+1];
-            eff->tabval[0] = (float)l;
-            }
-
-            //on sauvegarde l'effet
-            for( k = 0; k < l;k++)
-              eff->tabval[k+1] = ceff->EffGetParameter(k);
-      }
+      eff->saveToMem(ceff);
     }
   }
 }
@@ -216,7 +271,7 @@ void CStockEffetLst::SaveParamsToMem(int chaine)
 void CStockEffetLst::LoadParamsFromMem(int chaine)
 {
   CEffectStk * eff;
-  CEffect * ceff;
+  CEffect *ceff;
   int i,j = get_count(chaine);
   for(i=0;i<j;i++)
   {
@@ -224,23 +279,7 @@ void CStockEffetLst::LoadParamsFromMem(int chaine)
     if(eff)
     {
       ceff = host->GetAt(eff->effect_nb);
-
-      if(ceff->pEffect->flags & effFlagsProgramChunks)
-      {
-        if(eff->chunk)
-        {
-          ceff->EffSetChunk(eff->chunk,eff->length,true);
-        }
-      }
-      else
-      {
-        if(eff->tabval)
-        {
-        int k,l = (int)eff->tabval[0];
-        for( k = 0; k < l;k++)
-          ceff->EffSetParameter(k,eff->tabval[k+1]);
-        }
-      }
+      eff->loadFromMem(ceff);
     }
   }
 }

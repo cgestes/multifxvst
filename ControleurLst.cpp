@@ -3,6 +3,24 @@
 #include ".\controleurlst.h"
 
 
+void CControleurParam::AddParam(int nbeffstk,int nparam)
+{
+  DWORD val = ((nparam<<16)>16) + (nbeffstk << 16);
+  m_param.Add(val);
+}
+
+void CControleurParam::SupprParam(int nbeffstk,int nparam)
+{
+  DWORD val = (nparam<<16 >>16) + (nbeffstk << 16);
+  int i,j = m_param.GetCount();
+  for(i = 0;i<j;i++)
+  {
+    if(m_param[i] == val)
+      m_param.RemoveAt(i);
+  }
+
+}
+
 
 void CParameterLst::Init(int nbcontroleur)
 {
@@ -13,7 +31,7 @@ void CParameterLst::Init(int nbcontroleur)
 void CParameterLst::setParameter(long index, float value)
 {
   int val = int( value *127);
-  controleur_value[index].Set(val);
+  controleur_value[index]->Set(val);
 }
 
 //-------#############################################-------//

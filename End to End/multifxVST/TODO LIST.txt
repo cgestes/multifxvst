@@ -3,8 +3,12 @@ MultiFXVST - CTAF Audio - version 0.6.4
 //####################################################################
 //########### HISTORY ################################################
 //####################################################################
+//-- 24/06/2004
+     - ajout : gestion des parametres automatisables (getparameter / travail interne)
+     - bug : GetBlockSize/GetSampleRate (retourne une constante)
+
 //-- 22/06/2004
-     - ajout : 32 controleurs automatisable (setparameter/getparameter)
+     - ajout : 32 controleurs automatisable (setparameter)
      
 //-- 15/06/2004
      - ajout : implementation ComboBox pour choisir le controleur
@@ -145,13 +149,9 @@ MultiFXVST - CTAF Audio - version 0.6.4
      (il remet la taille de la fenetre d'origine)(il conserve editor contrairement à cubase)
 // - qd on ajoute un plug-ins déja utilisé il ne met pas les paramètres par défault du plug mais ceux de la dernier config utilisé
 // bug resize (l'un dans l'autre dans l'un dans...)
+//bug affichage txt : fenetre generique
 
-
-
-
-
-
-// - GetBlockSize/GetSampleRate (retourne une constante)
+//perte de focus dans les listes
 
 //####################################################################
 //########### TODO LIST ##############################################
