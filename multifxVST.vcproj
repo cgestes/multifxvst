@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="multifxVST"
 	SccProjectName=""
 	SccLocalPath=""
@@ -73,7 +73,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release Static|Win32"
@@ -134,7 +140,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Debug Dyn|Win32"
@@ -191,7 +203,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Debug Stat|Win32"
@@ -247,9 +265,17 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Source Files"
@@ -309,21 +335,6 @@
 				RelativePath=".\MainDlg.h">
 			</File>
 			<File
-				RelativePath=".\StdAfx.cpp">
-				<FileConfiguration
-					Name="Debug Dyn|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug Stat|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\multifxVST.cpp">
 			</File>
 			<File
@@ -343,6 +354,21 @@
 			</File>
 			<File
 				RelativePath=".\resource.h">
+			</File>
+			<File
+				RelativePath=".\StdAfx.cpp">
+				<FileConfiguration
+					Name="Debug Dyn|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug Stat|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\stdafx.h">
@@ -370,31 +396,13 @@
 			Name="VST Files"
 			Filter="">
 			<File
-				RelativePath=".\vstsdk2.3\vstsdk2.3\source\common\AEffEditor.hpp">
-			</File>
-			<File
 				RelativePath=".\AEffect.h">
 			</File>
 			<File
-				RelativePath=".\AudioEffect.cpp">
-				<FileConfiguration
-					Name="Debug Dyn|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug Stat|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\AudioEffect.hpp">
-			</File>
-			<File
 				RelativePath=".\aeffectx.h">
+			</File>
+			<File
+				RelativePath=".\vstsdk2.3\vstsdk2.3\source\common\AEffEditor.hpp">
 			</File>
 			<File
 				RelativePath=".\aeffguieditor.cpp">
@@ -413,6 +421,24 @@
 			</File>
 			<File
 				RelativePath=".\aeffguieditor.h">
+			</File>
+			<File
+				RelativePath=".\AudioEffect.cpp">
+				<FileConfiguration
+					Name="Debug Dyn|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug Stat|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\AudioEffect.hpp">
 			</File>
 			<File
 				RelativePath=".\audioeffectx.cpp">
@@ -461,24 +487,6 @@
 			Name="Fenetre VST"
 			Filter="">
 			<File
-				RelativePath=".\EffEditWnd.cpp">
-				<FileConfiguration
-					Name="Debug Dyn|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug Stat|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\EffEditWnd.h">
-			</File>
-			<File
 				RelativePath=".\EffectWnd.cpp">
 				<FileConfiguration
 					Name="Debug Dyn|Win32">
@@ -495,6 +503,24 @@
 			</File>
 			<File
 				RelativePath=".\EffectWnd.h">
+			</File>
+			<File
+				RelativePath=".\EffEditWnd.cpp">
+				<FileConfiguration
+					Name="Debug Dyn|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug Stat|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\EffEditWnd.h">
 			</File>
 		</Filter>
 		<Filter
@@ -551,6 +577,21 @@
 			Name="Resource Files"
 			Filter=".rc">
 			<File
+				RelativePath=".\res\bmp10001.bmp">
+			</File>
+			<File
+				RelativePath=".\res\bmp10002.bmp">
+			</File>
+			<File
+				RelativePath=".\res\bmp10004.bmp">
+			</File>
+			<File
+				RelativePath=".\res\bmp10010.bmp">
+			</File>
+			<File
+				RelativePath=".\res\bmp10016.bmp">
+			</File>
+			<File
 				RelativePath=".\Skin\ListCtrlSkin\ColumnHeaderEnd.bmp">
 			</File>
 			<File
@@ -575,39 +616,6 @@
 				RelativePath=".\Skin\HoverButton.bmp">
 			</File>
 			<File
-				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollBarDownArrow.bmp">
-			</File>
-			<File
-				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollBarSpan.bmp">
-			</File>
-			<File
-				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollBarThumb.bmp">
-			</File>
-			<File
-				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollBarUpArrow.bmp">
-			</File>
-			<File
-				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollbarBottom.bmp">
-			</File>
-			<File
-				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollbarTop.bmp">
-			</File>
-			<File
-				RelativePath=".\res\bmp10001.bmp">
-			</File>
-			<File
-				RelativePath=".\res\bmp10002.bmp">
-			</File>
-			<File
-				RelativePath=".\res\bmp10004.bmp">
-			</File>
-			<File
-				RelativePath=".\res\bmp10010.bmp">
-			</File>
-			<File
-				RelativePath=".\res\bmp10016.bmp">
-			</File>
-			<File
 				RelativePath=".\multifxVST.def">
 			</File>
 			<File
@@ -621,6 +629,24 @@
 			</File>
 			<File
 				RelativePath=".\skinslider\track_ticksel.bmp">
+			</File>
+			<File
+				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollbarBottom.bmp">
+			</File>
+			<File
+				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollBarDownArrow.bmp">
+			</File>
+			<File
+				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollBarSpan.bmp">
+			</File>
+			<File
+				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollBarThumb.bmp">
+			</File>
+			<File
+				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollbarTop.bmp">
+			</File>
+			<File
+				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollBarUpArrow.bmp">
 			</File>
 		</Filter>
 		<Filter
