@@ -244,9 +244,9 @@ void CSkinListCtrl::OnPaint()
 	    memDC.FillSolidRect(clip,g_MyClrBg2);
 
   }*/
-	memDC.FillSolidRect(clip,g_MyClrBg1);
+	memDC.FillSolidRect(clip,g_MyClrBg2);
 	   
-	SetTextBkColor(g_MyClrBg1);
+	SetTextBkColor(g_MyClrBg2);
 	   
 	m_SkinVerticleScrollbar.UpdateThumbPosition();
 	m_SkinHorizontalScrollbar.UpdateThumbPosition();

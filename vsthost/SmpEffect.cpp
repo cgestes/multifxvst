@@ -479,11 +479,11 @@ switch (opCode)
 #endif
 
 long lRC = 0;
-//__try
+__try
   {
   lRC = CEffect::EffDispatch(opCode, index, value, ptr, opt);
   }
-//__except (EvalException(GetExceptionCode()))
+__except (EvalException(GetExceptionCode()))
   {
        // no code here; isn't executed
   }

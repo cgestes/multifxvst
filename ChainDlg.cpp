@@ -331,7 +331,8 @@ BOOL CChainDlg::LoadAll(LPCSTR Path)
   APP->pMainDlg->SetEffect(-1);
   APP->parameter->DeleteAllItems();
 
-  if(APP->chaine_eff->m_processing)
+  BOOL b = APP->chaine_eff->m_processing;
+  if(b)
     APP->chaine_eff->suspend(APP->current_chaine);
 
   APP->chaine_eff->RemoveAll();
@@ -344,7 +345,7 @@ BOOL CChainDlg::LoadAll(LPCSTR Path)
 
   OnUpdate();
 
-  if(APP->chaine_eff->m_processing)
+  if(b)
     APP->chaine_eff->resume(0);
 
   ar.Close();
@@ -387,8 +388,8 @@ BOOL CChainDlg::LoadChaine(int chaine,LPCSTR Path)
   APP->pMainDlg->KillEffect();
   APP->pMainDlg->SetEffect(-1);
   APP->parameter->DeleteAllItems();
-
-  if(APP->chaine_eff->m_processing)
+  BOOL b = APP->chaine_eff->m_processing;
+  if(b)
     APP->chaine_eff->suspend(APP->current_chaine);
 
   APP->chaine_eff->RemoveAt(APP->current_chaine);
@@ -397,12 +398,13 @@ BOOL CChainDlg::LoadChaine(int chaine,LPCSTR Path)
   APP->chaine_eff->load_chaine(chaine,ar);
   APP->chaine_eff->LoadParamsFromMem(chaine);
  // ChangeChaine(chaine); /* réactive current_chaine */
-  //APP->effect->setParameterAutomated(0,NBChaine2float(chaine));
+  
+  APP->effect->setParameterAutomated(0,NBChaine2float(chaine));
 
 
   OnUpdate();
 
-  if(APP->chaine_eff->m_processing)
+  if(b)
     APP->chaine_eff->resume(APP->current_chaine);
 
   ar.Close();
@@ -644,7 +646,7 @@ BOOL CChainDlg::OnEraseBkgnd(CDC* pDC)
 	mybitmap.GetBitmap(&bitmapbits);
 
 	//CPoint point(0,0);	
-	//pDC->SetStretchBltMode(HALFTONE);
+	pDC->SetStretchBltMode(HALFTONE);
   pDC->BitBlt(0,0,bitmapbits.bmWidth/* getWidth()*/,bitmapbits.bmHeight,pMemDC,0,0,SRCCOPY);
 
 

@@ -90,6 +90,7 @@ public:
 	virtual void getParameterName(long index, char *text);
   virtual bool  needIdle(){return 1;};
   virtual long fxIdle(){return 0;};
+  void SetUpdateChaine(int chaine){};
 	void mIdle () {masterIdle ();}
 
 	virtual void suspend ();

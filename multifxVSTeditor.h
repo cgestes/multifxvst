@@ -34,10 +34,11 @@ public:
 	void resume ();*/
 	bool keysRequired ();
   void SetAPP(CAppPointer * m_cheff = NULL);
+  	void setParameter (long index, float value);
 protected:
 	virtual long open (void *ptr);
 	virtual void idle ();
-	void setParameter (long index, float value);
+
 	virtual void close ();
   virtual void update();
 	

@@ -109,8 +109,21 @@ if (!pEffect->Load(sName))              /* try to load the thing             */
 /**********************************************************************/
   //if(pEffect->EffGetPlugCategory() == kPlugCategShell)
     //pEffect->pEffect->flags & kPlugCategShell)
-  /*{
-    long lghfd = pEffect->EffGetPlugCategory()  ;
+  
+
+
+/**********************************************************************/
+
+pEffect->EffOpen();                     /* open the effect                   */
+/*{
+   // long lghfd = pEffect->EffGetPlugCategory()  ;//kPlugCategUnknown possible
+    char * buffer = (char *)malloc(1000);
+    pEffect->EffGetProductString(buffer);
+    pEffect->EffIdentify();
+    pEffect->EffGetEffectName(buffer);// EffGetProductString(&buffer);
+    //pEffect->EffSetBypass(
+    long lghfd = pEffect->EffGetPlugCategory()  ;//kPlugCategUnknown possible
+
     CString msg;
     CString buf;
       long iDD = pEffect->EffGetNextShellPlugin(buf.GetBuffer(60));
@@ -120,12 +133,9 @@ if (!pEffect->Load(sName))              /* try to load the thing             */
       buf.ReleaseBuffer();
       msg.AppendFormat("%d : %s\n",iDD,buf);
       AfxMessageBox(msg);
+
+      delete [] buffer;
   }*/
-
-
-/**********************************************************************/
-
-pEffect->EffOpen();                     /* open the effect                   */
 pEffect->EffSetSampleRate(fSampleRate); /* adjust its sample rate            */
 pEffect->EffSetBlockSize(lBlockSize);   /* and block size                    */
 pEffect->EffMainsChanged(true);         /* then force resume.                */

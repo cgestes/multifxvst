@@ -1,29 +1,41 @@
-MultiFXVST - CTAF Audio - version 0.7.5
+MultiFXVST - CTAF Audio - version 0.7.6
 
 //####################################################################
 //########### HISTORY ################################################
 //####################################################################
+//-- 15/08/2004 (version 0.7.6)
+     - improve : amelioration du moteur audio (fade,load,loadall...)
+     - bug : un bon tas de bug dûe au multithread
+     
+//-- 12/08/2004
+     - ajout : gestion du fade pour les changements de chaine
+
+//-- 11/08/2004 (version 0.7.5 Interne)
+     - bug : multithread, setchunk
+     - bug : memory leak a cause de getchunk
+
 //-- 10/08/2004
      - ajout : bypass
-     
+     - ajout : fade in/fade out sur le bypass (vive le soft bypass)
+
 //-- 09/08/2004 (version 0.7.4)
      - improve : nettoyage, optimisation de tout le code "graphique" (load,update,changement de fenetre)
      - ajout : fenetre about
      - improve : calage exact des elements du skin
-     
+
 //-- 08/08/2004
      - bug : pendant le changement de chaine (affichage instable sur la fenetre chaine)
-     
+
 //-- 07/08/2004
-     - improve : skin (boutons)    
-     
+     - improve : skin (boutons)
+
 //-- 04/08/2004
      - ajout : skin de l'interface graphique (MainDlg pour l'instant)
-     
+
 //-- 02/08/2004
      - bug : en changeant de chaine si la chaine est vide,le nom de l'effet affichié et celui de la chaine précedente
-     
-     
+
+
 //-- 30/07/2004 (version 0.7.3)
      - bug : "load/save all/chain" avec le tableau de controleur
      - bug : la fenetre effet2 ne marchait plus trop à cause d'un problème memoire (save/load)
@@ -225,10 +237,14 @@ MultiFXVST - CTAF Audio - version 0.7.5
 // - verif le type de plug-ins,ses options,etc... au chargement du plug
 // - info : mémoire / ...
 
-//############ HOST => PLUG => MultiFXHost => MultiFXPlug #############
+//######## Moteur sonore #############################################
 /#/- fxidle
 // - getTailSize (process aprés un suspend,pour les reverbs...)
 // - getTailSize transmettre les queues de reverbs et autres entre les chaines si possible
+// - toujours réinitialisé le fade dans stockeffect (loadchaine,setchunk,...,remove)
+// - ne calcul le delay dans le cas d'une suppression d'effet ou autre... (initialdelay)
+// - critical_section => suspend/resume (processing) , ...
+// - effMainsChanged => qd on active dézactive un effet pour qu'il vide ses buffers
 
 //####################################################################
 //########### CONTACT ################################################

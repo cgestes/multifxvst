@@ -105,6 +105,12 @@ long multifxVST::getChunk(void **data,bool isPreset)
 
   long len =(long) f.GetLength();
 
+  if(dat)//data buffer for chunk file
+  {
+    delete dat;
+    dat = NULL;
+  }
+
   dat = f.Detach();
 
   *data = dat;
@@ -120,10 +126,25 @@ long multifxVST::setChunk(void *data,long byteSize,bool isPreset)
   CMemFile f(0);
   f.Attach((BYTE *)data,byteSize);
   CArchive ar(&f,CArchive::load);
+  BOOL b;
+  if(APP.pMainDlg )
+    APP.pMainDlg->KillEffect();
+  
+  if((b=APP.chaine_eff->m_processing))
+  {
+    APP.chaine_eff->suspend(APP.current_chaine);
+  }
+
+  APP.chaine_eff->RemoveAll(false);
   APP.chaine_eff->load(ar);
   APP.chaine_eff->LoadParamsFromMem(APP.current_chaine);
 
+  if(b)
+  {
+    APP.chaine_eff->resume(APP.current_chaine);
+  }
   ar.Close();
+  f.Detach();//sinon memory leak! car ca detruit le buffer et Boumm
   f.Close();
   return 1;
 }
@@ -150,8 +171,12 @@ multifxVST::~multifxVST ()
     delete APP.parameter;
     APP.controleur = NULL;
   }
-  if(dat)
+  if(dat)//data buffer for chunk file
+  {
     delete dat;
+    dat = NULL;
+  }
+
   if(APP.mnu)
   {
     delete APP.mnu;
@@ -165,6 +190,7 @@ void multifxVST::setParameterAutomated(long index ,float value)
 {
   AudioEffect::setParameterAutomated(index,value);
 }
+
 //------------------------------------------------------------------------
 long multifxVST::vendorSpecific (long lArg1, long lArg2, void* ptrArg, float floatArg)
 {
@@ -255,9 +281,14 @@ void multifxVST::setSampleRate(float sampleRate)
 //-----------------------------------------------------------------------------
 void multifxVST::setParameter (long index, float value)
 {
+  bool updateUI = true;
+  //change chaine
 	if (index == kChainTag)
 	{
-        BOOL b =APP.chaine_eff->m_processing;
+    //signale un debut de changement de chaine
+    APP.chaine_eff->ChangeChaine(APP.current_chaine,float2NBChaine(value));
+        
+        /*BOOL b =APP.chaine_eff->m_processing;
         //on arrete de les plugins
         if(b)
           APP.chaine_eff->suspend(APP.current_chaine);
@@ -272,14 +303,17 @@ void multifxVST::setParameter (long index, float value)
 
         //on lance les autres
         if(b)
-          APP.chaine_eff->resume(APP.current_chaine);
+          APP.chaine_eff->resume(APP.current_chaine);*/
+
+    updateUI = false;
+  // si c'est un  controleur
 	}else if((index >= kNumParams) && (index < kNumParams + APP.parameter->GetCount()))
   {
     APP.parameter->setParameter(index-kNumParams,value);
   }
 
   //on met l'affichage a jours
-	if (editor)
+	if (editor && updateUI)
 		((AEffGUIEditor*)editor)->setParameter (index, value);
 }
 
@@ -293,9 +327,7 @@ float multifxVST::getParameter (long index)
   else
   {
     v = APP.parameter->getParameter(index-kNumParams);
-    //APP.parameter->setParameter(index-kNumParams,value);
   }
-
 	return v;
 }
 
@@ -306,7 +338,6 @@ void multifxVST::getParameterDisplay (long index, char *text)
 		sprintf (text, "%d",APP.current_chaine);
   else
 		sprintf (text, "%f",getParameter(index));
-
 }
 
 //-----------------------------------------------------------------------------
@@ -321,7 +352,6 @@ void multifxVST::getParameterLabel (long index, char *text)
 	default :
 		strcpy (text, "");
 	}
-  		//strcpy (text, "-");
 }
 
 //-----------------------------------------------------------------------------
@@ -330,36 +360,26 @@ void multifxVST::getParameterName (long index, char *text)
 	if (index == kChainTag)
 		strcpy (text, "Chain number");
   else
-		sprintf (text, "Parameter %d",index - kNumParams +1);
-	
-  	//	strcpy (text, "-");
+    sprintf (text, "Param #%d",index - kNumParams +1);
 }
 
 //-----------------------------------------------------------------------------
 void multifxVST::process (float **inputs, float **outputs, long sampleFrames)
 {
-  /*AFX_MANAGE_STATE(AfxGetStaticModuleState());
-  CChainApp * theApp =(CChainApp *) AfxGetApp();*/
-  
   APP.chaine_eff->process(APP.current_chaine,inputs,outputs,sampleFrames);
-	//outputs = outputs;
 }
 
 //-----------------------------------------------------------------------------
 void multifxVST::processReplacing (float **inputs, float **outputs, long sampleFrames)
 {
-  /*AFX_MANAGE_STATE(AfxGetStaticModuleState());
-  CChainApp * theApp =(CChainApp *) AfxGetApp();*/
   APP.chaine_eff->processReplace (APP.current_chaine,inputs,outputs,sampleFrames);
 }
 
 void multifxVST::close()
 {
-
     CString buf;buf.Format("DEBCLOSE :: multifxVST(%d) \n", this);  TRACE(buf);
     AudioEffectX::close();
     buf.Format("CLOSE :: multifxVST(%d) \n", this);  TRACE(buf);
-
 };
 
 

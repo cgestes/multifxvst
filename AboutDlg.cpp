@@ -28,6 +28,8 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
   ON_WM_CTLCOLOR()
 //  ON_WM_NCDESTROY()
+ON_STN_CLICKED(IDC_STATIC1, OnStnClickedStatic1)
+ON_STN_CLICKED(IDC_STATIC2, OnStnClickedStatic2)
 END_MESSAGE_MAP()
 
 
@@ -54,4 +56,14 @@ void CAboutDlg::PostNcDestroy()
   APP->pAboutDlg  = NULL;
 	delete this;
 
+}
+
+void CAboutDlg::OnStnClickedStatic1()
+{
+  ShellExecute(NULL,"open","http://www.ctaf.free.fr","","",SW_NORMAL);
+}
+
+void CAboutDlg::OnStnClickedStatic2()
+{
+  ShellExecute(NULL,"open","http://www.ctaf.free.fr","","",SW_NORMAL);
 }

@@ -929,10 +929,11 @@ switch (opcode)
     return OnGetVersion(nEffect);
   case audioMasterCurrentId :
     {
-      if(nEffect == -1)
+      return 0;
+      /*if(nEffect == -1)
        return 0;
       else
-       return nEffect;
+       return nEffect;*/
     }
   case audioMasterIdle :
     return OnIdle(nEffect);

@@ -25,4 +25,7 @@ public:
 protected:
   CAppPointer * APP;
   virtual void PostNcDestroy();
+public:
+  afx_msg void OnStnClickedStatic1();
+  afx_msg void OnStnClickedStatic2();
 };

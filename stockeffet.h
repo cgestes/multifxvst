@@ -10,44 +10,16 @@
 //gestion d'une chaine de plugins (plusieurs chaines peuveut utiliser le mm plug-ins)
 #ifndef __stockeffect__
 #define __stockeffect__
+
 class CAppPointer;
+#include "Tafadeinout.h"
 
 #pragma once
 #define MAX_CHAINE 128
-/*
-class CParamStk
-{
-public:
-	CParamStk();
-  ~CParamStk();
-	CParamStk(CEffectStk & eff);
-  Load();
 
-protected:
-  float  * tabval;
-  char   * chunk;
-  bool   ischunk;
-  long   lenght;
-
-}*/
-/*class FadeStruct
-{
-  FadeStruct(){fade = false;fadein = false;stop = 0.0;start = 1.0;current = 0.0;}
-  bool fade;    //fade actif
-  bool fadein;  //fade in or fade out
-
-  //value between 0.0f and 1.0f
-  float current;  //current fade value 
-  float start;    //start fade value
-  float stop;     //stop fade value
-
-  int sample_left_to_proceed = 
-
-
-
-};*/
 
 class CEffect;
+class CTAFadeInOut;
 //stock des info sur un plug-ins
 class CEffectStk
 {
@@ -80,11 +52,19 @@ public :
   char   * tabcontroleur;//tableau contenant pour chaque parametre le controleur associé
 
   long   length; //taille du chunk
+
+
+  CTAFadeInOut fader;//classe gérant le fade
+  
   bool   bypass;
-  float  bypass_fade_value; //0 -> 1
-  bool   fade;
+  //float  bypass_fade_value; //0 -> 1
+  //bool   fade;
   //int    nbcontroleur;
 };
+
+
+//changement de chaine
+UINT WorkerThreadProc(LPVOID Param) ;
 
 //#include
 class CCVSTHost;
@@ -156,11 +136,18 @@ public:
 	void process(int chaine,float **inputs, float **outputs, long sampleFrames,bool replace=false);
   //return false si il n'a rien fait
   bool ProcessEffect(CEffectStk * effst,float **inputs, float **outputs, long sampleFrames);
-  void CopyBuffer(float ** dest,float ** source,long size);
-  void AddBuffer(float ** dest,float ** source,long size);
   //fait un fondu de afondre avec source dans dest 
-  void FonduBuffer(float ** dest,float ** source,float ** afondre,long size,float start,float end);
-	void processReplace(int chaine,float **inputs, float **outputs, long sampleFrames);
+  //void FonduBuffer(float ** dest,float ** source,float ** afondre,long size,float start,float end);
+	
+
+  //demande un changement de chaine
+  //=> fadeout 
+  //=> demande affichage changement chaine + changement de chaine effectif
+  //=> dry tant que pa fini changé
+  //=> fadein
+  void ChangeChaine(int from,int to);
+  
+  void processReplace(int chaine,float **inputs, float **outputs, long sampleFrames);
   void suspend(int chaine);
   void resume(int chaine);
   void SetBlockSize(long size);
@@ -188,8 +175,9 @@ public:
   //supprime tout!
   void RemoveAt(int chaine,bool killing_plug = false);
 
-
-  BOOL m_processing; //en mode resume ou suspend??? 
+  int  GetNextChaine(){return fadechainenext;}
+  void SetChangingFlag(bool changing){m_changing_chain = changing;};
+  volatile BOOL m_processing; //en mode resume ou suspend??? 
   int  nb_effect_used;
 
 protected:
@@ -211,6 +199,14 @@ protected:
   float ** processreplacebuffer;
   float ** fadebuffer;
 
+  CTAFadeInOut fader;
+  volatile int newchaine,fadechaineanc,fadechainenext;
+  enum fadetype{FD_NOTHING = 0,FD_FADEOUT,FD_FADEIN,FD_CHANGING};
+  volatile fadetype  /*int*/ fadestate; //0 = pas de fade, 1 = fadeout ,2 = fadein  ,3 = changement de cahine 
+  float increment; // increment pour le fade (calculer a partir du samplerate)
+
+  volatile bool m_changing_chain;
+  CCriticalSection CS_Processing;
   //int            current_chaine;
 
 };

@@ -157,6 +157,7 @@ void CMainDlg::EnterIdle()
 
 void CMainDlg::SetEffect(int nbeffstk)
 {
+  CEffectStk * effstk;
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
   //if(nb == nbeff)return;
   UpdateData();
@@ -165,14 +166,19 @@ void CMainDlg::SetEffect(int nbeffstk)
   {
     this->nbeffstk = -1;//un nb peu correspondr a un effet a t = 0 , et a un autre a t = +!!
     nbeff  = -1;
+    m_btnbypass.SetValue(false);
     m_txteff = "";
   }
   else
   {
     this->nbeffstk = nbeffstk;//un nb peu correspondr a un effet a t = 0 , et a un autre a t = +!!
-    nbeff  = APP->chaine_eff->get_effect(APP->current_chaine,nbeffstk);
+    effstk = APP->chaine_eff->get(APP->current_chaine,nbeffstk);
+    ASSERT(effstk);
+    nbeff  = effstk->effect_nb;
+    m_btnbypass.SetValue(effstk->bypass);
     m_txteff.Format("%d:%s",nbeffstk+1,APP->chaine_eff->Get_Name(APP->current_chaine,nbeffstk));
   }
+
   UpdateData(FALSE);
 }
 
@@ -993,6 +999,8 @@ if (dlg.DoModal() == IDOK)
 
 void CMainDlg::OnSize(UINT nType, int cx, int cy)
 {
+  //cy += OFFSETY;
+  
   CDialog::OnSize(nType, cx, cy);
   if(APP)
     APP->editor->frame->setSize(cx,cy);

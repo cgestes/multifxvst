@@ -50,8 +50,8 @@
 #include <afxcmn.h>			// Prise en charge des MFC pour les contrôles communs Windows
 #endif // _AFX_NO_AFXCMN_SUPPORT
 
-#include <afxtempl.h>
-
+#include <afxtempl.h> //template
+#include <afxmt.h>    //multithread (CS)
 float NBChaine2float(int nbchaine);
 int float2NBChaine(float flot);
 

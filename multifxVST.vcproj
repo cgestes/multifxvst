@@ -839,6 +839,12 @@
 				<File
 					RelativePath=".\vsthost\SmpEffect.h">
 				</File>
+				<File
+					RelativePath=".\TAFadeInOut.cpp">
+				</File>
+				<File
+					RelativePath=".\TAFadeInOut.h">
+				</File>
 			</Filter>
 		</Filter>
 	</Files>

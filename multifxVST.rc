@@ -83,7 +83,7 @@ BEGIN
     CONTROL         "",IDC_BTNPASTETO,"Button",BS_OWNERDRAW | BS_FLAT | 
                     WS_TABSTOP,299,171,37,12
     CTEXT           "127",IDC_TXTCOPIED,373,217,12,8,SS_CENTERIMAGE
-    RTEXT           "0.7.5",IDC_STATIC,378,230,18,8,0,WS_EX_TRANSPARENT
+    RTEXT           "0.7.6",IDC_STATIC,378,230,18,8,0,WS_EX_TRANSPARENT
 END
 
 IDD_PARMS DIALOGEX 0, 0, 400, 240
@@ -154,7 +154,8 @@ BEGIN
     CONTROL         "",IDC_BUTTON3,"Button",BS_OWNERDRAW | BS_FLAT | 
                     WS_TABSTOP,160,28,80,11
     CONTROL         "Effect",IDC_TXTEFF,"Static",SS_LEFTNOWORDWRAP | 
-                    SS_ENDELLIPSIS | WS_GROUP,85,18,95,8,WS_EX_TRANSPARENT
+                    SS_CENTERIMAGE | SS_ENDELLIPSIS | WS_GROUP,85,18,95,8,
+                    WS_EX_TRANSPARENT
     CONTROL         "",IDC_BTNEFFUP,"Button",BS_OWNERDRAW | BS_FLAT | 
                     WS_TABSTOP,74,17,8,10
     CONTROL         "",IDC_BTNEFFDOWN,"Button",BS_OWNERDRAW | BS_FLAT | 
@@ -179,13 +180,15 @@ IDD_ABOUT DIALOGEX 0, 0, 400, 240
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
 FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
-    RTEXT           "0.7.5",IDC_STATIC,378,230,18,8,0,WS_EX_TRANSPARENT
+    RTEXT           "0.7.6",IDC_STATIC,378,230,18,8,0,WS_EX_TRANSPARENT
     LTEXT           "MultifxVST - CTAF Audio\nhttp://www.ctaf.free.fr\n\nProgrammation : Cédric GESTES\nDesign : Valery HERLAUD",
-                    IDC_STATIC,17,17,367,46
-    GROUPBOX        "Configuration",IDC_STATIC,7,74,389,127,BS_FLAT,
+                    IDC_STATIC1,17,17,104,46,SS_NOTIFY
+    GROUPBOX        "Configuration",IDC_STATIC,7,160,389,44,BS_FLAT,
                     WS_EX_TRANSPARENT
-    LTEXT           "Fade Time (ms):",IDC_STATIC,19,94,44,8
-    EDITTEXT        IDC_FADETIME,78,92,62,12,ES_AUTOHSCROLL
+    LTEXT           "Chain Fade Time (ms):",IDC_STATIC,18,173,107,8
+    LTEXT           "Bypass Fade Time (ms):",IDC_STATIC,18,185,106,9
+    LTEXT           "This plug-ins is donationware\nI have spend a lot of time doing this software,\nIf you want to support it please make a donation\n",
+                    IDC_STATIC2,145,17,237,49,SS_NOTIFY
 END
 
 

@@ -1,12 +1,15 @@
 //Copyleft CTAF
 #include "stdafx.h"
 
-
+#include "multifxVST.h"
 #include "stockeffet.h"
 #include "vstHost/SmpEffect.h"
 #include "CCVSThost.h"
-#include "multifxVST.h"
+#include "multifxvsteditor.h"
+
 #include "ControleurLst.h"
+#include "TAFadeInOut.h"
+
 //##############################################################################
 //stock des info sur un plug-ins
 //class CEffectStk
@@ -24,8 +27,8 @@ CEffectStk::CEffectStk()
   length = 0;
   
   bypass = false;
-  bypass_fade_value = 1.0; //0 -> 1
-  fade = false;
+  //bypass_fade_value = 1.0; //0 -> 1
+  //fade = false;
 
 }
 int CEffectStk::Get_Controleur(int nb){
@@ -75,8 +78,9 @@ CEffectStk::CEffectStk(CEffectStk & eff)
   length = eff.length;
 
   bypass= eff.bypass;
-  bypass_fade_value= eff.bypass_fade_value; //0 -> 1
-  fade= eff.fade;
+  //bypass_fade_value= eff.bypass_fade_value; //0 -> 1
+  //fade= eff.fade;
+  fader = eff.fader;
 
 
   if(eff.tabcontroleur)
@@ -281,7 +285,43 @@ void CEffectStk::load(CArchive &ar)
  
 }
 
+//##############################################################################
 
+
+//worker thread pour le changement de chaine
+UINT WorkerThreadProc(LPVOID Param) 
+{
+  CAppPointer * APP = (CAppPointer *)Param;
+
+  BOOL b =APP->chaine_eff->m_processing;
+  //on arrete de les plugins
+  APP->chaine_eff->SetChangingFlag(true);
+  if(b)
+    APP->chaine_eff->suspend(APP->current_chaine);
+
+  //on sauvegarde les parametres de l'anciens chaine (de cq plug)
+  APP->chaine_eff->SaveParamsToMem(APP->current_chaine);
+
+  APP->current_chaine = APP->chaine_eff->GetNextChaine();
+
+  //on met a jours l'affichage graphique
+  if(APP->editor)
+  {
+    //fait le travail pendant l'idle
+    APP->editor->setParameter(0,NBChaine2float(APP->current_chaine));
+  }
+
+  //on charge les params de l'autre chaine
+  APP->chaine_eff->LoadParamsFromMem(APP->current_chaine);
+
+  //on lance les autres
+  if(b)
+    APP->chaine_eff->resume(APP->current_chaine);
+
+  APP->chaine_eff->SetChangingFlag(false);
+
+  return false;//default
+}
 
 
 //##############################################################################
@@ -294,11 +334,15 @@ CStockEffetLst::CStockEffetLst()
   processbuffer = NULL;
   processreplacebuffer = NULL;
   fadebuffer = NULL;
-
   m_processing = FALSE;
   host = NULL;
   APP = NULL;
   nb_effect_used = 0;
+  newchaine = -1;
+  fadechaineanc= 0;
+  fadechainenext= 0;
+  fadestate = FD_NOTHING;
+  m_changing_chain = false;
 }//constructeur
 
 
@@ -861,6 +905,7 @@ int CStockEffetLst::get_effect(int chaine,int i)
 void CStockEffetLst::suspend(int chaine)
 {
     if(!VCH(chaine))return ;
+    CS_Processing.Lock();
     int i =0,j = get_count(chaine);
     CEffectStk * effst;
     CEffect * eff;
@@ -873,10 +918,12 @@ void CStockEffetLst::suspend(int chaine)
       }
     }
     m_processing = FALSE;
+    CS_Processing.Unlock();
 }
 void CStockEffetLst::resume(int chaine)
 {
     if(!VCH(chaine))return ;
+    CS_Processing.Lock();
     int i =0,j = get_count(chaine);
     CEffectStk * effst;
     CEffect * eff;
@@ -889,7 +936,13 @@ void CStockEffetLst::resume(int chaine)
       }
     }
     m_processing = TRUE;
+    
+    fadestate = FD_FADEIN;
+    fadechainenext = chaine;
+    fader.SetFadeIn();
+    CS_Processing.Unlock();
 }
+
 
 
 //suivant la parité du nombre d'effet on affecte out1 et out2
@@ -910,26 +963,27 @@ void CStockEffetLst::resume(int chaine)
 void CStockEffetLst::process(int chaine,float **inputs, float **outputs, long sampleFrames,bool replace)
 {
     if(!VCH(chaine))return ;
+    CS_Processing.Lock();
     int i =0,k = 0,j = get_count(chaine);
     CEffectStk * effst;
     float ** out1,** out2;
     //bool replace = false;
 
-    if(!j) //aucun plug-ins => on met l'entrée dans la sortie et tayo
+    /*if(!j) //aucun plug-ins => on met l'entrée dans la sortie et tayo
     {
       if(replace)
-        CopyBuffer(outputs,inputs,sampleFrames);
+        CTAFadeInOut::CopyBuffer(outputs,inputs,sampleFrames);
       else 
-        AddBuffer(outputs,inputs,sampleFrames);
+        CTAFadeInOut::AddBuffer(outputs,inputs,sampleFrames);
       return; //on se casse ya rien a faire de plus
-    }
+    }*/
         
 
     out1 = processbuffer;
     out2 = processreplacebuffer;
 
     //par sécurité on copy notre buffer d'entrées dans out1
-    CopyBuffer(out1,inputs,sampleFrames);
+    CTAFadeInOut::CopyBuffer(out1,inputs,sampleFrames);
     
     bool processeed = false;
     while(i < j)
@@ -961,47 +1015,135 @@ void CStockEffetLst::process(int chaine,float **inputs, float **outputs, long sa
     }
 
     //la sortie se trouve obligatoirement dans out1
-    
+    //on gere les fades pr les changement de chaine
+    if(newchaine != -1)
+    {
+      if(fadestate == FD_NOTHING)//il n'y avait pas de fade
+      {
+        fadechaineanc = APP->current_chaine;
+        fadechainenext = newchaine;
+        fader.SetFadeOut();
+        fadestate = FD_FADEOUT;
+      }else if(fadestate == FD_FADEOUT) //pendant un fade out
+      {
+        if(newchaine == fadechaineanc)//on revient sur la mm chaine
+        {
+          fadechainenext = newchaine;
+          fader.SetFadeIn();
+          fadestate = FD_FADEIN;
+        }else
+        {
+          fadechainenext = newchaine;
+        }
+      }else if(fadestate == FD_FADEIN) //pendant un fade in (on a deja changé de chaine
+      {
+        if(fadechainenext != newchaine)//chaine différente donc on change ,sinon rien
+        {
+          fadechaineanc = fadechainenext;
+          fadechainenext = newchaine;
+          fader.SetFadeOut();
+          fadestate = FD_FADEOUT;
+        }
+      }
+      
+      //on efface pas la demande de nouvelle chaine =>
+      //on attend que FD_CHANGING est changéé
+      if(fadestate != FD_CHANGING)
+      {
+        newchaine = -1;
+      }
+      
+    }
 
+    if(fadestate == FD_CHANGING && m_changing_chain == false)
+    {
+      //chaine changée
+      ASSERT(APP->current_chaine == fadechainenext);
+      fadestate = FD_FADEIN;
+      fader.SetFadeIn();
+    }
+
+
+
+    if(fadestate != FD_NOTHING && fadestate != FD_CHANGING) //on doit faire un fade
+    {
+      //if(fadestate == FD_FADEOUT /*&& chainchanged*/)//si on vient de changer de chaine
+      //{
+      //  fader.SetFadeIn();
+      //  fadestate = FD_CHANGING;
+      //}
+      bool finish = fader.FonduBuffer(out2,out1,inputs,sampleFrames);
+      //on inverse les buffers
+      {
+        float **buf = out1;
+        out1 = out2;
+        out2 = buf;
+      }
+      if(finish)
+      {
+        if(fadestate == FD_FADEIN)
+          fadestate = FD_NOTHING;
+        else if(fadestate == FD_FADEOUT)
+        {
+          SetChangingFlag(true);
+          fadestate = FD_CHANGING;   
+          //on commense une thread qui va changer de chaine
+          AfxBeginThread(WorkerThreadProc,(LPVOID)APP,THREAD_PRIORITY_NORMAL,0,0,NULL);             
+        }
+
+      }
+    }
     //on gere le fade des chaines
     if(replace)
     {
-      if(k%2)
-        CopyBuffer(outputs,out1,sampleFrames);
+      CTAFadeInOut::CopyBuffer(outputs,out1,sampleFrames);
     }
     else
     {
-      AddBuffer(outputs,out1,sampleFrames);
+      CTAFadeInOut::AddBuffer(outputs,out1,sampleFrames);
     }
         
 
+CS_Processing.Unlock();
+}
 
+
+
+void CStockEffetLst::ChangeChaine(int from,int to)
+{
+  //on lui dit de faire un fade out
+  //fader.SetFadeOut();
+  if(m_processing)
+    newchaine = to;
+  else  //on change la chaine par nous meme
+  {
+    SetChangingFlag(true);
+    fadestate = FD_CHANGING;   
+    //on commense une thread qui va changer de chaine
+    AfxBeginThread(WorkerThreadProc,(LPVOID)APP,THREAD_PRIORITY_NORMAL,0,0,NULL);   
+  }
 }
 
 //process l'effet gere le softbypass 
 bool CStockEffetLst::ProcessEffect(CEffectStk * effst,float **inputs, float **outputs, long sampleFrames)
 {
-  if((effst->bypass == true) && (effst->fade == false))  return false;
+  if((effst->bypass == true) && (effst->fader.Fade() == false))  return false;
 
   int nbeff = effst->effect_nb;
   CSmpEffect * eff = (CSmpEffect *)host->GetAt(nbeff);
   ASSERT(eff);
 
-
-
-  if(effst->fade)
+  if(effst->fader.Fade())//on process au fade
   {
     eff->EffProcessReplacing(inputs,fadebuffer,sampleFrames);
-    if(effst->bypass)
-      FonduBuffer(outputs,fadebuffer,inputs,sampleFrames,0.0,1.0);
-    else
-      FonduBuffer(outputs,fadebuffer,inputs,sampleFrames,1.0,0.0);
-
-    effst->fade = false;
+    
+    //return true si fini le fade
+    effst->fader.FonduBuffer(outputs,fadebuffer,inputs,sampleFrames);
   }
   else
     eff->EffProcessReplacing(inputs,outputs,sampleFrames);
   return true;
+
 }
 
 //remplace outputs
@@ -1019,50 +1161,8 @@ void CStockEffetLst::processReplace(int chaine,float **inputs, float **outputs, 
   //et si on fait un process (dans le CEffect::processreplace) on efface input
   //et ca,C pas bon!
   process(chaine,inputs, outputs, sampleFrames,true);
- 
-
-
 }
 
-//on voit l'algo direct! (vive l'assembleur!)
-void CStockEffetLst::CopyBuffer(float ** dest,float ** source,long size)
-{
-  for (int i = 0; i< size; i++)
-  {
-    dest[0][i] = source[0][i];
-    dest[1][i] = source[1][i];
-  }
-}
-
-//on voit l'algo direct! (vive l'assembleur!)
-void CStockEffetLst::AddBuffer(float ** dest,float ** source,long size)
-{
-  for (int i = 0; i< size; i++)
-  {
-    dest[0][i] += source[0][i];
-    dest[1][i] += source[1][i];
-  }
-}
-
-#define OPERATION_SCIENTIFIQUE(x,y,coef) ( (x*(1.0f - coef))+(y*coef) )
-//on voit l'algo direct! (vive l'assembleur!)
-//on realise un fondu de afondre avec source
-//dest //process  //clear
-void CStockEffetLst::FonduBuffer(float ** dest,float ** source,float ** afondre,long size,float start,float end)
-{
-  float val = start;
-  float inc = (end - start) / float(size);
-
-  for (int i = 0; i< size; i++)
-  {
-    if(val < 0)val = 0;
-    if(val > 1)val = 1;
-    dest[0][i] = OPERATION_SCIENTIFIQUE(source[0][i],afondre[1][i],val) ;
-    dest[1][i] = OPERATION_SCIENTIFIQUE(source[1][i],afondre[1][i],val);
-    val += inc;
-    
-  }
-}
 
 void CStockEffetLst::SetByPass(int chaine,int nbeffstk,bool bypass)
 {
@@ -1071,11 +1171,17 @@ void CStockEffetLst::SetByPass(int chaine,int nbeffstk,bool bypass)
   if(eff == NULL)return;
 
   eff->bypass = bypass;
-  eff->fade = true;
-  if(bypass)
-    eff->bypass_fade_value = 1;
-  else
-    eff->bypass_fade_value = 0;
+
+  /*if(!fader.Fade())//pa de fade avant on initialise
+  {*/
+  if(m_processing) //pas en process donc on s'en fou
+    if(bypass)
+      eff->fader.SetFadeOut();
+      //eff->bypass_fade_value = 0.0f;
+    else
+      eff->fader.SetFadeIn();
+      //eff->bypass_fade_value = 1.0f;
+  //}
 }
 
 bool CStockEffetLst::GetByPass(int chaine,int nbeffstk)
