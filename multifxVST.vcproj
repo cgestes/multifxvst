@@ -567,10 +567,10 @@
 			Name="Maintenance"
 			Filter="">
 			<File
-				RelativePath=".\vstplugins\multifxVST\INFO.txt">
+				RelativePath=".\End to End\multifxVST\INFO.txt">
 			</File>
 			<File
-				RelativePath=".\vstplugins\multifxVST\TODO LIST.txt">
+				RelativePath=".\End to End\multifxVST\TODO LIST.txt">
 			</File>
 		</Filter>
 		<Filter
@@ -784,5 +784,8 @@
 		</File>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="multifxVST.rc"/>
 	</Globals>
 </VisualStudioProject>

@@ -143,14 +143,19 @@ MultiFXVST - CTAF Audio - version 0.6.2
 // - réutiliser les loadmodules(dll)
 // - verif le type de plug-ins,ses options,etc... au chargement du plug
 // - effacer tt
-// - info : nb plug utilisé / mémoire / ...
+// - info : mémoire / ...
+// - liste => possibilité de n'avoir rien selectinonné...
+// - effecteditWnd => ne pas recréer à chaque fois...
 
 //############ HOST => PLUG => MultiFXHost => MultiFXPlug #############
 /#/- synchro? ( a verif juste)
 /#/- fxidle
 // - getTailSize (process aprés un suspend,pour les reverbs...)
+// - getTailSize transmettre les queues de reverbs et autres entre les chaines si possible
 
-
+//####################################################################
+//########### CONTACT ################################################
+//####################################################################
 Copyright CTAF Audio
 ctaf.bob@laposte.net
 http://www.ctaf.free.fr

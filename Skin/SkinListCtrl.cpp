@@ -26,8 +26,13 @@ CSkinListCtrl::~CSkinListCtrl()
 
 int CSkinListCtrl::GetCurSel()
 {
-
 	return GetNextItem(-1, LVNI_SELECTED);
+}
+
+void CSkinListCtrl::SetCurSel(int nbsel)
+{
+  EnsureVisible(nbsel,TRUE);
+  SetItemState(nbsel, LVIS_SELECTED, LVIS_SELECTED);
 }
 
 BEGIN_MESSAGE_MAP(CSkinListCtrl, CListCtrl)

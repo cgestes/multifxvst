@@ -10,27 +10,12 @@
 #include ".\effeditwnd.h"
 
 
-/*
-#include "stdafx.h"
-#include "vsthost.h"
-#include "childfrm.h"
-#include "EffEditWnd.h"*/
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//#define GetApp()  ((CVsthostApp *)AfxGetApp())
-
-/*===========================================================================*/
-/* CEffEditDlg dialog                                                        */
-/*===========================================================================*/
-
-/*****************************************************************************/
-/* CEffEditDlg : constructor                                                 */
-/*****************************************************************************/
 IMPLEMENT_DYNAMIC(CEffEditDlg, CDialog)
 
 CEffEditDlg::CEffEditDlg(CWnd* pParent /*=NULL*/,CAppPointer * m_app)
@@ -38,15 +23,11 @@ CEffEditDlg::CEffEditDlg(CWnd* pParent /*=NULL*/,CAppPointer * m_app)
 {
 nEffect = -1;                           /* initialize effect to nothing      */
 APP = m_app;
-	//{{AFX_DATA_INIT(CEffEditDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
 }
 
 /*****************************************************************************/
 /* Create : creates the dialog                                               */
 /*****************************************************************************/
-
 BOOL CEffEditDlg::Create(CWnd* pParentWnd) 
 {
 return CDialog::Create(IDD, pParentWnd);
@@ -55,32 +36,34 @@ return CDialog::Create(IDD, pParentWnd);
 /*****************************************************************************/
 /* DoDataExchange : data exchange between dialog and object                  */
 /*****************************************************************************/
-
 void CEffEditDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CEffEditDlg)
-	DDX_Control(pDX, IDC_PARMVAL, slParmval);
-	DDX_Control(pDX, IDC_PARMTEXT, stParmtext);
-	DDX_Control(pDX, IDC_PARMLIST, lbParms);
-	//}}AFX_DATA_MAP
+  CDialog::DoDataExchange(pDX);
+  //{{AFX_DATA_MAP(CEffEditDlg)
+  DDX_Control(pDX, IDC_PARMVAL, slParmval);
+  DDX_Control(pDX, IDC_PARMTEXT, stParmtext);
+  DDX_Control(pDX, IDC_LISTPARMS, m_lstparms);
+  //}}AFX_DATA_MAP
+
 }
+
 void CEffEditDlg::Update()
 {
   SetEffect(nEffect);
 }
+
 /*****************************************************************************/
 /* CEffEditDlg message map                                                   */
 /*****************************************************************************/
-
 BEGIN_MESSAGE_MAP(CEffEditDlg, CDialog)
 	//{{AFX_MSG_MAP(CEffEditDlg)
-	ON_LBN_SELCHANGE(IDC_PARMLIST, OnSelchangeParmlist)
 	ON_WM_VSCROLL()
 	//}}AFX_MSG_MAP
   ON_WM_CLOSE()
   ON_WM_DESTROY()
   ON_WM_CTLCOLOR()
+  ON_NOTIFY(LVN_ITEMCHANGED, IDC_LISTPARMS, OnLvnItemchangedListparms)
+  ON_NOTIFY(NM_CLICK, IDC_LISTPARMS, OnNMClickListparms)
 END_MESSAGE_MAP()
 
 /*****************************************************************************/
@@ -91,8 +74,28 @@ BOOL CEffEditDlg::OnInitDialog()
 {
 CDialog::OnInitDialog();
 
-slParmval.SetRange(0, 65535);
-SetDlgItemText(IDC_RVALUE, "");
+  m_lstparms.Init();
+	m_lstparms.g_MyClrFgHi = RGB(35,12,200);
+	m_lstparms.g_MyClrBgHi = RGB(20,242,0);
+  m_lstparms.g_MyClrBg   = RGB(130,120,240);
+
+	LOGFONT lf;
+	memset(&lf, 0, sizeof(LOGFONT));
+	lf.lfHeight = 12;
+  //lf.lfWidth  = 10;
+	strcpy(lf.lfFaceName, "Verdana");
+	font.CreateFontIndirect(&lf);
+	m_lstparms.SetFont(&font, TRUE);
+
+	m_lstparms.InsertColumn(0, "Name", LVCFMT_LEFT, 150);
+	m_lstparms.InsertColumn(1, "Value", LVCFMT_LEFT, 60);
+  m_lstparms.InsertColumn(2, "Units", LVCFMT_LEFT, 60);
+  m_lstparms.InsertColumn(3, "Controleur #", LVCFMT_LEFT, 60);
+
+	ListView_SetExtendedListViewStyle(m_lstparms.m_hWnd, LVS_EX_FULLROWSELECT  | LVS_EX_HEADERDRAGDROP);
+	
+  slParmval.SetRange(0, 65535);
+  SetDlgItemText(IDC_RVALUE, "");
 	
 return TRUE;  // return TRUE unless you set the focus to a control
               // EXCEPTION: OCX Property Pages should return FALSE
@@ -107,51 +110,28 @@ void CEffEditDlg::SetEffect(int nEffect)
 CString sParm;
 this->nEffect = nEffect;
 CSmpEffect *pEffect = (CSmpEffect *) APP->host->GetAt(nEffect);
-lbParms.ResetContent();
+m_lstparms.SetRedraw(FALSE);
+m_lstparms.DeleteAllItems();
 if (pEffect)
   {
     pEffect->SetParmWnd(this);
-    lbParms.SetRedraw(FALSE);
+
     for (int i = 0; i < pEffect->pEffect->numParams; i++)
     {
       GetParamName(pEffect,i,sParm);
-      int idx = lbParms.AddString(sParm);
-      lbParms.SetItemData(idx, i);
-    }
-  lbParms.SetCurSel(0);
-  lbParms.SetRedraw(TRUE);
-  }
+      int idx =   m_lstparms.InsertItem(i,sParm);
+      m_lstparms.SetItemText(idx,1,"dd");
 
+      m_lstparms.SetItemData(idx, i);
+    }
+  m_lstparms.SetCurSel(0);
+
+  }
+m_lstparms.SetRedraw(TRUE);
 OnSelchangeParmlist();
 }
 
-/*****************************************************************************/
-/* OnSelchangeParmlist : called when the parameter list selection changes    */
-/*****************************************************************************/
 
-void CEffEditDlg::OnSelchangeParmlist() 
-{
-  int i = (int)lbParms.GetItemData(lbParms.GetCurSel());
-  CEffect *pEffect = APP->host->GetAt(nEffect);
-  CString sVal;
-  float fVal = GetParamVal(pEffect,i,sVal);
-
-  SetDlgItemText(IDC_RVALUE, sVal);
-
-  //on update la liste
-  lbParms.DeleteString(i);
-  GetParamName(pEffect,i,sVal);
-  int idx = lbParms.InsertString(i,sVal);
-  lbParms.SetItemData(idx, i);
-  lbParms.SetCurSel(i);
-
-  //on update l'affichage en bas a gauche
-  SetParmDisp(pEffect,i);
-  //SetDlgItemText(IDC_PARMTEXT,sVal);
-
-  //on update l'affichage du slider
-  slParmval.SetPos(65535 - (int)(fVal * 65535.));
-}
 
 /*****************************************************************************/
 /* SetParmDisp : internal function for parameter display                     */
@@ -215,9 +195,9 @@ if (pEffect)
 
 void CEffEditDlg::SetParmDisp(CEffect *pEffect, int nParm)
 {
-CString szData;
-GetParamDisp(pEffect,nParm,szData);
-stParmtext.SetWindowText(szData);
+  CString szData;
+  GetParamDisp(pEffect,nParm,szData);
+  stParmtext.SetWindowText(szData);
 }
 
 /*****************************************************************************/
@@ -228,11 +208,15 @@ void CEffEditDlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
 if (pScrollBar->GetDlgCtrlID() == IDC_PARMVAL)
   {
-  int i = (int)lbParms.GetItemData(lbParms.GetCurSel());
-  float fNewVal = float(65535 - slParmval.GetPos()) / 65535.f;
-  CEffect *pEffect = APP->host->GetAt(nEffect);
-  pEffect->EffSetParameter(i, fNewVal);
-  SetParmDisp(pEffect, i);
+    int sel = m_lstparms.GetCurSel();
+    if(sel >= 0)
+    {
+      int i = (int)m_lstparms.GetItemData(sel);
+      float fNewVal = float(65535 - slParmval.GetPos()) / 65535.f;
+      CEffect *pEffect = APP->host->GetAt(nEffect);
+      pEffect->EffSetParameter(i, fNewVal);
+      SetParmDisp(pEffect, i);
+    }
   }
 	
 CDialog::OnVScroll(nSBCode, nPos, pScrollBar);
@@ -247,112 +231,10 @@ if (nSBCode == SB_ENDSCROLL)            /* if scroll terminated              */
 
 bool CEffEditDlg::OnSetParameterAutomated(long index, float value)
 {
-if (index == lbParms.GetCurSel())       /* if it's the currently displayed   */
+if (index == m_lstparms.GetCurSel())       /* if it's the currently displayed   */
   OnSelchangeParmlist();                /* reget parameter settings          */
 return true;
 }
-
-/*===========================================================================*/
-/* CEffEditWnd class members                                                 */
-/*===========================================================================*/
-
-//IMPLEMENT_DYNCREATE(CEffEditWnd, CEffectWnd)
-
-/*****************************************************************************/
-/* CEffEditWnd : constructor                                                 */
-/*****************************************************************************/
-
-/*CEffEditWnd::CEffEditWnd()
-{
-}*/
-
-/*****************************************************************************/
-/* ~CEffEditWnd : destructor                                                 */
-/*****************************************************************************/
-
-/*CEffEditWnd::~CEffEditWnd()
-{
-}*/
-
-/*****************************************************************************/
-/* CEffEditWnd message map                                                   */
-/*****************************************************************************/
-
-/*BEGIN_MESSAGE_MAP(CEffEditWnd, CEffectWnd)
-	//{{AFX_MSG_MAP(CEffEditWnd)
-	ON_WM_CLOSE()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()*/
-
-/*****************************************************************************/
-/* CreateView : creates a view for the window                                */
-/*****************************************************************************/
-
-/*CWnd * CEffEditWnd::CreateView()
-{
-CEffEditDlg *pWnd = new CEffEditDlg;
-
-if (pWnd)
-  pWnd->Create(this);
-return pWnd;
-}*/
-
-/*****************************************************************************/
-/* SetEffect : sets new effect                                               */
-/*****************************************************************************/
-
-/*void CEffEditWnd::SetEffect(int nEff)
-{
-CEffectWnd::SetEffect(nEff);
-
-CEffEditDlg *pEffDlg = (CEffEditDlg *)pView;
-if (pEffDlg)
-  {
-  pEffDlg->SetEffect(nEffect);
-  CRect rc;
-  pEffDlg->GetWindowRect(&rc);
-  SetEffSize(rc.Width(), rc.Height());
-  }
-}*/
-
-/*****************************************************************************/
-/* OnClose : called when the parameter edit window is closed                 */
-/*****************************************************************************/
-
-/*void CEffEditWnd::OnClose() 
-{
-// we need to skip CEffectWnd::OnClose() here since it would try to close an
-// (eventually unopened) effect edit window... and would report the wrong
-// window as closed to the main window.
-
-pMain->ParmClosed();
-CWnd::OnClose();
-}*/
-
-/*****************************************************************************/
-/* OnSetParameterAutomated : called when one of the effect's parms changes   */
-/*****************************************************************************/
-
-/*bool CEffEditWnd::OnSetParameterAutomated(long index, float value)
-{
-CEffEditDlg *pEffDlg = (CEffEditDlg *)pView;
-if (pEffDlg)
-  return pEffDlg->OnSetParameterAutomated(index, value);
-else
-  return CEffectWnd::OnSetParameterAutomated(index, value);
-}*/
-
-/*****************************************************************************/
-/* Update : makes sure that the dialog is up to date                         */
-/*****************************************************************************/
-
-/*void CEffEditWnd::Update()
-{
-SetupTitle();
-CEffEditDlg *pEffDlg = (CEffEditDlg *)pView;
-if (pEffDlg)
-  pEffDlg->OnSelchangeParmlist();
-}*/
 
 void CEffEditDlg::close()
 {
@@ -366,16 +248,9 @@ void CEffEditDlg::close()
 
 void CEffEditDlg::PostNcDestroy()
 {
-  // TODO : ajoutez ici votre code spécialisé et/ou l'appel de la classe de base
-/*  CSmpEffect *pEffect = (CSmpEffect *)host->GetAt(nEffect);
-  if (pEffect)
-  {
-    pEffect->SetParmWnd(NULL);
-  }*/
-
   CDialog::PostNcDestroy();
-    m_hWnd = NULL;
-    APP->pEffParmDlg = NULL;
+  m_hWnd = NULL;
+  APP->pEffParmDlg = NULL;
   //CEffectStk  * eff = ;	SetParmWnd
   delete this;
   CString buf;buf.Format("PostNcDestroy :: CEffEditDlg(%d) \n", this);  TRACE(buf);
@@ -411,4 +286,44 @@ HBRUSH CEffEditDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 
   // TODO :  Retourner une autre brosse si la brosse par défaut n'est pas souhaitée
   return hbr;
+}
+void CEffEditDlg::OnSelchangeParmlist()
+{
+  int sel = m_lstparms.GetCurSel();
+  if(sel < 0)return;
+  int i = (int)m_lstparms.GetItemData(sel);
+  CEffect *pEffect = APP->host->GetAt(nEffect);
+  CString sVal;
+  float fVal = GetParamVal(pEffect,i,sVal);
+
+  SetDlgItemText(IDC_RVALUE, sVal);
+
+  //on update la liste
+  //m_lstparms.DeleteItem(i);
+  GetParamName(pEffect,i,sVal);
+  m_lstparms.SetRedraw(FALSE);
+  m_lstparms.SetItemText(sel,0,sVal);
+  //int idx = m_lstparms.InsertItem(i,sVal);
+  m_lstparms.SetItemData(sel, i);
+  //m_lstparms.SetCurSel(sel);
+  m_lstparms.SetRedraw(TRUE);
+  //on update l'affichage en bas a gauche
+  SetParmDisp(pEffect,i);
+  //SetDlgItemText(IDC_PARMTEXT,sVal);
+
+  //on update l'affichage du slider
+  slParmval.SetPos(65535 - (int)(fVal * 65535.));
+}
+void CEffEditDlg::OnLvnItemchangedListparms(NMHDR *pNMHDR, LRESULT *pResult)
+{
+  LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
+
+
+  *pResult = 0;
+}
+
+void CEffEditDlg::OnNMClickListparms(NMHDR *pNMHDR, LRESULT *pResult)
+{
+  OnSelchangeParmlist();
+  *pResult = 0;
 }

@@ -27,6 +27,7 @@ public:
 	bool IsRowSelected(HWND hWnd, int row);
 	bool IsRowHighlighted(HWND hWnd, int row);
     int GetCurSel();
+    void SetCurSel(int sel);
 	CSkinVerticleScrollbar m_SkinVerticleScrollbar;
 	CSkinHorizontalScrollbar m_SkinHorizontalScrollbar;
 

@@ -76,6 +76,8 @@
 #define IDC_CBACTION                    1033
 #define IDC_BTNLOADMIDI                 1034
 #define IDC_CHECK1                      1035
+#define IDC_LIST1                       1036
+#define IDC_LISTPARMS                   1036
 #define IDC_PARMLIST                    1100
 #define IDC_PARMVAL                     1101
 #define IDC_PARMTEXT                    1102
@@ -98,7 +100,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        146
 #define _APS_NEXT_COMMAND_VALUE         40012
-#define _APS_NEXT_CONTROL_VALUE         1036
+#define _APS_NEXT_CONTROL_VALUE         1037
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
