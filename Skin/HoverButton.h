@@ -42,6 +42,7 @@ protected:
 // Implementation
 public:
 	BOOL LoadBitmap(UINT bitmapid,bool OnOff = false,int x = 0 ,int y = 0);
+  void SetBitmapDisp(int m_hoverOn,int m_hoverOff,int m_clickOn,int m_clickOff,int m_normalOn,int m_normalOff);
 	virtual ~CHoverButton();
 
 	// Generated message map functions
@@ -56,6 +57,7 @@ protected:
 	afx_msg LRESULT OnMouseHover(WPARAM wparam, LPARAM lparam) ;
 	//}}AFX_MSG
 
+  int m_hoverOn,m_hoverOff,m_clickOn,m_clickOff,m_normalOn,m_normalOff;
 	DECLARE_MESSAGE_MAP()
 public:
 //  afx_msg void OnLButtonDown(UINT nFlags, ::CPoint point);

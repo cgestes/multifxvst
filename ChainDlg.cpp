@@ -315,8 +315,9 @@ BOOL CChainDlg::SaveAll(LPCSTR Path)
   return TRUE;
   }CATCH(CFileException , ex)
   {
-    return FALSE;
     TRACE("###erreur de sauvegarde (save)");
+    return FALSE;
+
   }END_CATCH
 }
 
@@ -338,15 +339,17 @@ BOOL CChainDlg::LoadAll(LPCSTR Path)
   APP->chaine_eff->RemoveAll();
 
 
-  APP->chaine_eff->load(ar);
-  APP->chaine_eff->LoadParamsFromMem(0);
-  APP->effect->setParameterAutomated(0,NBChaine2float(0));
+  int chainnb = APP->chaine_eff->load(ar);
+  APP->chaine_eff->LoadParamsFromMem(chainnb);
+
+  //change de chaine
+  APP->effect->setParameterAutomated(0,NBChaine2float(chainnb));
   //ChangeChaine(0); /* reactive current_chaine */
 
   OnUpdate();
 
   if(b)
-    APP->chaine_eff->resume(0);
+    APP->chaine_eff->resume(chainnb);
 
   ar.Close();
   f.Close();
@@ -372,8 +375,9 @@ BOOL CChainDlg::SaveChaine(int chaine,LPCSTR Path)
   return TRUE;
   }CATCH(CFileException , ex)
   {
-    return FALSE;
     TRACE("###erreur de sauvegarde (save)");
+    return FALSE;
+
   }END_CATCH
 }
 

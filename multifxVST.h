@@ -95,6 +95,9 @@ public:
 
 	virtual void suspend ();
 	virtual void resume ();
+  virtual long startProcess ();	// Called one time before the start of process call
+	virtual long stopProcess ();	// Called after the stop of process call
+
   virtual void setSampleRate(float sampleRate);
 	virtual bool keysRequired ();
   virtual bool getProductString(char *text){strcpy(text,"MultifxVST"); return TRUE;}

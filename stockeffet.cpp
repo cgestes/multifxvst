@@ -229,7 +229,7 @@ void CEffectStk::save(CArchive &ar)
 
 
 }
-void CEffectStk::load(CArchive &ar)
+void CEffectStk::load(CArchive &ar,int version)
 {
   //ar >> effect_nb;
 
@@ -289,9 +289,55 @@ void CEffectStk::load(CArchive &ar)
 
 
 //worker thread pour le changement de chaine
+/*UINT WorkerThreadProcLoadChaine(LPVOID Param) 
+{
+  CAppPointer * APP = (CAppPointer *)Param;
+
+  m_hNobodyIsReading = CreateEvent(NULL, FALSE, true, "LoadChaine");
+  //on cree un evenement 
+  //set changingchaine = true
+  //on attend la liberation de cette evenement par process
+  //on 
+  //on change la chaine
+  //set changingchaine = false*/
+/*
+  BOOL b =APP->chaine_eff->m_processing;
+  //on arrete de les plugins
+  APP->chaine_eff->SetChangingFlag(true);
+  if(b)
+    APP->chaine_eff->suspend(APP->current_chaine);
+
+  //on sauvegarde les parametres de l'anciens chaine (de cq plug)
+  APP->chaine_eff->SaveParamsToMem(APP->current_chaine);
+
+  APP->current_chaine = APP->chaine_eff->GetNextChaine();
+
+  //on met a jours l'affichage graphique
+  if(APP->editor)
+  {
+    //fait le travail pendant l'idle
+    APP->editor->setParameter(0,NBChaine2float(APP->current_chaine));
+  }
+
+  //on charge les params de l'autre chaine
+  APP->chaine_eff->LoadParamsFromMem(APP->current_chaine);
+
+  APP->chaine_eff->IoChanged(APP->current_chaine);
+  //on lance les autres
+  if(b)
+    APP->chaine_eff->resume(APP->current_chaine);
+
+  APP->chaine_eff->SetChangingFlag(false);
+*/
+ /* return false;//default
+}*/
+
+//worker thread pour le changement de chaine
 UINT WorkerThreadProc(LPVOID Param) 
 {
   CAppPointer * APP = (CAppPointer *)Param;
+  //APP->m_waitforchanging.Lock();
+  //m_hNobodyIsReading = CreateEvent(NULL, FALSE, true, "LoadChaine");
 
   BOOL b =APP->chaine_eff->m_processing;
   //on arrete de les plugins
@@ -314,6 +360,7 @@ UINT WorkerThreadProc(LPVOID Param)
   //on charge les params de l'autre chaine
   APP->chaine_eff->LoadParamsFromMem(APP->current_chaine);
 
+  APP->chaine_eff->IoChanged(APP->current_chaine);
   //on lance les autres
   if(b)
     APP->chaine_eff->resume(APP->current_chaine);
@@ -322,6 +369,8 @@ UINT WorkerThreadProc(LPVOID Param)
 
   return false;//default
 }
+
+
 
 
 //##############################################################################
@@ -343,6 +392,8 @@ CStockEffetLst::CStockEffetLst()
   fadechainenext= 0;
   fadestate = FD_NOTHING;
   m_changing_chain = false;
+  m_processingcalled = TRUE;
+  InitDelay = 0;
 }//constructeur
 
 
@@ -401,12 +452,14 @@ CString CStockEffetLst::Get_Name(int chaine,int nb)
 
     eff = (CEffect *)host->GetAt(nbc);
     ASSERT(eff);
+    if(eff->EffGetVstVersion() >= 2000)
+    {
     if (!eff->EffGetProductString(sFile.GetBuffer(256)))/* if V2 plugin                      */
       { sFile.ReleaseBuffer();
         sFile = "";                         /* use plugin info                   */
       }else
         sFile.ReleaseBuffer();
-      
+    } 
 
       if(sFile.GetLength()==0)                                  /* if V1 plugin                      */
       {
@@ -620,7 +673,7 @@ int CStockEffetLst::add_eff(int chaine,LPCSTR dll_name)
 
       long delay = eff2->pEffect->initialDelay;
       if(delay) //si pas de delay on change rien!
-        host->OnIoChanged(nb); //pourkoi réécrire ce qui est deja fait!
+        APP->chaine_eff->IoChanged(APP->current_chaine); //pourkoi réécrire ce qui est deja fait!
     }
   }
 
@@ -748,21 +801,40 @@ void CStockEffetLst::copie_chaine(int ch_from,int ch_to,bool kiling_effect)
   
 }
 
-void CStockEffetLst::suppr_eff(int chaine,int nb,bool killing_plug)
+void CStockEffetLst::IoChanged(int chaine)
+{
+  int NewInitDelay = APP->chaine_eff->CalculDelay(APP->current_chaine);
+  if(NewInitDelay != InitDelay) 
+  {
+    APP->effect->setInitialDelay(InitDelay); //on fix le delay
+    APP->effect->ioChanged(); // on dit a l'host de se mettre a jour
+    InitDelay = NewInitDelay;
+  }
+}
+
+
+void CStockEffetLst::suppr_eff(int chaine,int nbstk,bool killing_plug)
 {
 	CEffectStk * eff;
+  CSmpEffect * eff2;
 
   ASSERT(VCH(chaine));
 
   //POSITION p;
-	eff = get(chaine,nb);
+	eff = get(chaine,nbstk);
+  eff2 = (CSmpEffect *)APP->host->GetAt(eff->effect_nb);
+  long delay = eff2->pEffect->initialDelay;
 
   if(eff)
 	{
-    lst_stock[chaine].RemoveAt(lst_stock[chaine].FindIndex(nb));
+    lst_stock[chaine].RemoveAt(lst_stock[chaine].FindIndex(nbstk));
     //decrémente le nb d'utilisation de l'effet (si 0 il le delete ts seul)
     if(host->DecreaseUse(eff->effect_nb,killing_plug,APP))
       nb_effect_used--;
+
+    
+    if(delay) //si pas de delay on change rien!
+        APP->chaine_eff->IoChanged(APP->current_chaine); //pourkoi réécrire ce qui est deja fait!
 
 
     delete eff;
@@ -775,6 +847,8 @@ void CStockEffetLst::suppr_eff(int chaine,int nb,bool killing_plug)
 void CStockEffetLst::save(CArchive &ar)
 {
   //SaveParamsToMem(APP->current_chaine);
+  ar << CURRENT_VERSION;
+  ar << APP->current_chaine;
   for (int k = 0; k < MAX_CHAINE; k++)
   {
 	  int i,j = get_count(k);
@@ -795,6 +869,7 @@ int CStockEffetLst::add_effload(int chaine,CEffectStk & eff)
 {
  // if(find_eff_not_in(int chaine,LPCSTR dll_name)
   //CEffectStk eff;
+  //CSmpEffect * eff2;
 
   eff.effectbisnb = find_effbisnb(chaine,eff.effect_name);
 
@@ -805,6 +880,18 @@ int CStockEffetLst::add_effload(int chaine,CEffectStk & eff)
     if(nb<0)
       return -1;
     nb_effect_used++;
+
+
+  //compensation du delay  on fait la compensation directement dans le load
+  /*eff2 = (CSmpEffect *)APP->host->GetAt(nb);
+  if(eff2)
+	{
+    long delay = eff2->pEffect->initialDelay;
+    if(delay) //si pas de delay on change rien!
+        APP->chaine_eff->IoChanged(APP->current_chaine); //pourkoi réécrire ce qui est deja fait!
+  }*/
+
+
   }else
   {
     CSmpEffect * ceff = (CSmpEffect *)host->GetAt(nb);
@@ -826,6 +913,9 @@ int CStockEffetLst::add_effload(int chaine,CEffectStk & eff)
 void CStockEffetLst::save_chaine(int chaine,CArchive &ar)
 {
     //SaveParamsToMem(APP->current_chaine);  
+    ar << CURRENT_VERSION;
+
+    
 	  int i,j = get_count(chaine);
 	  CEffectStk * eff;
     ar << j;
@@ -841,13 +931,17 @@ void CStockEffetLst::save_chaine(int chaine,CArchive &ar)
 void CStockEffetLst::load_chaine(int chaine,CArchive &ar)
 {
     int i =0,j =0;
+    int version =0;
+    ar >> version;
     ar >> j;
 	  for (i = 0; i < j;i++)
 	  {
       CEffectStk eff;
-		  eff.load(ar);
+		  eff.load(ar,version);
       add_effload(chaine,eff);
 	  }
+    //compensation du delay
+    IoChanged(chaine);
     //LoadParamsFromMem(chaine);
 }
 
@@ -858,8 +952,13 @@ void CStockEffetLst::Set(CAppPointer * m_app)
 }
 
 //charge une liste d'effet
-void CStockEffetLst::load(CArchive &ar)
+int CStockEffetLst::load(CArchive &ar)
 {
+  int version = 0,chainnb = 0;
+  ar >> version;
+  if(version >= 0x0002)
+    ar >> chainnb;
+
   for (int k = 0; k < MAX_CHAINE; k ++)
   {
     int i =0,j =0;
@@ -867,10 +966,14 @@ void CStockEffetLst::load(CArchive &ar)
 	  for (i = 0; i < j;i++)
 	  {
       CEffectStk eff;
-		  eff.load(ar);
+		  eff.load(ar,version);
       add_effload(k,eff);
 	  }
   }
+  //non nécéssaire car ya le changement de chaine qui va le faire...
+  IoChanged(chainnb);
+  return chainnb;
+
 }
 
 CEffectStk * CStockEffetLst::get(int chaine,int i)
@@ -1113,7 +1216,7 @@ void CStockEffetLst::ChangeChaine(int from,int to)
 {
   //on lui dit de faire un fade out
   //fader.SetFadeOut();
-  if(m_processing)
+  if(m_processing && m_processingcalled)
     newchaine = to;
   else  //on change la chaine par nous meme
   {

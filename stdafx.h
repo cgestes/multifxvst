@@ -8,6 +8,9 @@
 #define VC_EXTRALEAN		// Exclure les en-têtes Windows rarement utilisés
 #endif
 
+#define CURRENT_VERSION 0x0002 //Version pour les sauvegardes
+
+
 // Modifiez les définitions suivantes si vous devez cibler une plate-forme avant celles spécifiées ci-dessous.
 // Reportez-vous à MSDN pour obtenir les dernières informations sur les valeurs correspondantes pour les différentes plates-formes.
 #ifndef WINVER				// Autorise l'utilisation des fonctionnalités spécifiques à Windows 95 et Windows NT 4 ou version ultérieure.
@@ -31,24 +34,17 @@
 #include <afxwin.h>         // Composants MFC principaux et standard
 #include <afxext.h>         // Extensions MFC
 
-#ifndef _AFX_NO_OLE_SUPPORT
-//#include <afxole.h>         // Classes OLE MFC
-//#include <afxodlgs.h>       // Classes de boîte de dialogue OLE MFC
+#include <afxole.h>         // Classes OLE MFC
+#include <afxodlgs.h>       // Classes de boîte de dialogue OLE MFC
 #include <afxdisp.h>        // Classes MFC Automation
-#endif // _AFX_NO_OLE_SUPPORT
 
-#ifndef _AFX_NO_DB_SUPPORT
-//#include <afxdb.h>			// Classes de base de données ODBC MFC
-#endif // _AFX_NO_DB_SUPPORT
-
-#ifndef _AFX_NO_DAO_SUPPORT
-//#include <afxdao.h>			// Classes de base de données DAO MFC
-#endif // _AFX_NO_DAO_SUPPORT
 
 //#include <afxdtctl.h>		// Prise en charge des MFC pour les contrôles communs Internet Explorer 4
 #ifndef _AFX_NO_AFXCMN_SUPPORT
 #include <afxcmn.h>			// Prise en charge des MFC pour les contrôles communs Windows
 #endif // _AFX_NO_AFXCMN_SUPPORT
+
+#include <objbase.h>
 
 #include <afxtempl.h> //template
 #include <afxmt.h>    //multithread (CS)

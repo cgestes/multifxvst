@@ -42,22 +42,35 @@ bool oome = false;
 
 CChainApp theApp;
 void* hInstance =  NULL;
+//#define _WIN32_DCOM 
 
 BOOL CChainApp::InitInstance()
 	{
  	  CWinApp::InitInstance();
     //Enable3dControls();
 
-    /*AfxEnableControlContainer();
-    CoInitialize(NULL);//ole init*/
+    HRESULT result = 0;;
+    result=CoInitializeEx(NULL,COINIT_MULTITHREADED   | COINIT_SPEED_OVER_MEMORY);
+    if(result != S_OK)
+    {//RPC_E_CHANGED_MODE 
+      TRACE("Ole init error\n");
+    }
+
+    //AfxEnableControlContainer();
+    //CoInitialize(NULL);//ole init
+    //OleInitialize(NULL);
     TRACE("CChainApp::InitInstance()\n");
 	  hInstance = m_hInstance;
 
+    
 	  return TRUE;//continue running
 }
 
 int CChainApp::ExitInstance()
 {
+  //on uninitialse OLE
+  CoUninitialize();
+
   TRACE("CChainApp::ExitInstance()\n");
   return CWinApp::ExitInstance();
 }

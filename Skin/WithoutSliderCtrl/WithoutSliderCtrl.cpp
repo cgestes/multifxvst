@@ -72,8 +72,8 @@ void CWithoutSliderCtrl::OnPaint()
 {
 	CPaintDC memDC(this); // device context for painting
 	//CMemDC memDC(&dc);
-	int nMin = GetRangeMin();
-	int nMax = GetRangeMax();
+/*	int nMin = GetRangeMin();
+	int nMax = GetRangeMax();*/
   int scalepos = ConvertNOTIN400(pos); 
   CString buf;
 
@@ -104,8 +104,8 @@ bool CWithoutSliderCtrl::SetKnobPos(float nPos)
 {
 	float nOldPos = pos;
 
-	int nMin = GetRangeMin();
-	int nMax = GetRangeMax();
+/*	int nMin = GetRangeMin();
+	int nMax = GetRangeMax();*/
 	
 	if(nPos < 0)
 		nPos =0;
@@ -137,8 +137,8 @@ bool CWithoutSliderCtrl::UpdateKnobPos(int nDelta)
 {
   if(!nDelta)return false;
 
-  int nMin = GetRangeMin();
-	int nMax = GetRangeMax();
+/*  int nMin = GetRangeMin();
+	int nMax = GetRangeMax();*/
 
   //pos += delta;
 
@@ -293,8 +293,8 @@ BOOL CWithoutSliderCtrl::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LR
 
   if(message == TBM_GETPOS )
   {
-    int nMin = GetRangeMin();
-	  int nMax = GetRangeMax();
+    /*int nMin = GetRangeMin();
+	  int nMax = GetRangeMax();*/
     BOOL b = CSliderCtrl::OnWndMsg(message, wParam, lParam, pResult);
     if(!b)//on fait que si il a fait qqch (normalement tjs)
       int((*((int *)pResult))) = ConvertNOTIN400(pos);
@@ -302,8 +302,8 @@ BOOL CWithoutSliderCtrl::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LR
 
   }else if(message == TBM_SETPOS)
   {
-    int nMin = GetRangeMin();
-	  int nMax = GetRangeMax();
+    /*int nMin = GetRangeMin();
+	  int nMax = GetRangeMax();*/
 
     BOOL b = CSliderCtrl::OnWndMsg(message, wParam, lParam, pResult);
     if(!b)//on fait que si il a fait qqch (normalement tjs)

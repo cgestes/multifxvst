@@ -103,7 +103,7 @@ return *this;
 bool CFxBank::SetSize_Preset(int nParams)
 {
 int nTotLen  = 0;
-int nProgLen = 0;
+//int nProgLen = 0;
 
  nTotLen = sizeof(fxProgram) - sizeof(float);
  nTotLen += nParams * sizeof(float);
@@ -671,7 +671,7 @@ if (!pHost)                             /* if no VST Host there              */
   return false;
 
 //ATTENTION THIS IS A CTAFINCONSCIENCE
-EffClose();                             /* make sure it's closed             */
+//EffClose();                             /* make sure it's closed             */
 pEffect = NULL;                         /* and reset the pointer             */
 
 #ifdef WIN32
@@ -764,6 +764,12 @@ long CEffect::EffDispatch
 {
 if (!pEffect)
   return 0;
+if(opCode == effOpen)
+{
+  pEffect->dispatcher(pEffect, opCode, index, value, ptr, opt);
+  return 0; 
+}
+else
 
 return pEffect->dispatcher(pEffect, opCode, index, value, ptr, opt);
 }
@@ -896,9 +902,8 @@ long VSTCALLBACK CVSTHost::AudioMasterCallback
 {
 if (!pHost)
   return 0;
-/*if(!effect)
-  return 0;*///ya certain plug qui demande la version de l'host avant de se construire
-return pHost->OnAudioMasterCallback(pHost->Search(effect),
+
+return pHost->OnAudioMasterCallback(effect,
                                     opcode,
                                     index,
                                     value,
@@ -912,7 +917,7 @@ return pHost->OnAudioMasterCallback(pHost->Search(effect),
 
 long CVSTHost::OnAudioMasterCallback
     (
-    int nEffect,
+    AEffect *effect,
     long opcode,
     long index,
     long value,
@@ -920,6 +925,8 @@ long CVSTHost::OnAudioMasterCallback
     float opt
     )
 {
+
+  int nEffect = pHost->Search(effect);
   //int nEffect = pHost->Search(pEffect);
 switch (opcode)
   {
@@ -929,7 +936,11 @@ switch (opcode)
     return OnGetVersion(nEffect);
   case audioMasterCurrentId :
     {
+      //if(effect)
+      //return effect->uniqueID;
+      //return 'VSHL';
       return 0;
+
       /*if(nEffect == -1)
        return 0;
       else
@@ -953,7 +964,7 @@ switch (opcode)
   case audioMasterTempoAt :
     return OnTempoAt(nEffect, value);
   case audioMasterGetNumAutomatableParameters :
-    return OnGetNumAutomatableParameters(nEffect);
+    return -1;//OnGetNumAutomatableParameters(nEffect);
   case audioMasterGetParameterQuantization :
     return OnGetParameterQuantization(nEffect);
   case audioMasterIOChanged :
@@ -963,11 +974,13 @@ switch (opcode)
   case audioMasterSizeWindow :
     return OnSizeWindow(nEffect, index, value);
   case audioMasterGetSampleRate :
-    OnUpdateSampleRate(nEffect);
-    return 1;
+    if(effect)
+      effect->dispatcher(effect,effSetSampleRate,0,0,0,fSampleRate);
+    //OnUpdateSampleRate(nEffect);
+    return 0;
   case audioMasterGetBlockSize :
     OnUpdateBlockSize(nEffect);
-    return 1;
+    return 0;
   case audioMasterGetInputLatency :
     return OnGetInputLatency(nEffect);
   case audioMasterGetOutputLatency :
@@ -1237,9 +1250,9 @@ if (nIndex < 0)                         /* if no empty slot available        */
 else                                    /* otherwise                         */
   aEffects[nIndex] = pEffect;           /* put into free slot                */
 
-pEffect->EffOpen();                     /* open the effect                   */
 pEffect->EffSetSampleRate(fSampleRate); /* adjust its sample rate            */
 pEffect->EffSetBlockSize(lBlockSize);   /* and block size                    */
+pEffect->EffOpen();                     /* open the effect                   */
 pEffect->EffMainsChanged(true);         /* then force resume.                */
 return nIndex;                          /* return new effect's index         */
 }
@@ -1341,7 +1354,7 @@ return false;                           /* per default, no.                  */
 
 int CVSTHost::GetPreviousPlugIn(int nEffect)
 {
-if (nEffect = -1)
+if (nEffect == -1)
   return GetNextPlugIn(nEffect);
 
 int i = nEffect - 1;

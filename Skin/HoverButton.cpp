@@ -20,6 +20,24 @@ CHoverButton::CHoverButton()
 	m_bTracking = FALSE;
   OnOff = false;
   m_value = false;
+
+m_hoverOn  = 0;
+m_hoverOff = 0;
+m_clickOn  = 1;
+m_clickOff = 1;
+m_normalOn = 0;
+m_normalOff= 2;
+
+}
+void CHoverButton::SetBitmapDisp(int m_hoverOn,int m_hoverOff,int m_clickOn,int m_clickOff,int m_normalOn,int m_normalOff)
+{
+  this->m_hoverOn = m_hoverOn;
+  this->m_hoverOff = m_hoverOff;
+  this->m_clickOn  = m_clickOn ;
+  this->m_clickOff = m_clickOff ;
+  this->m_normalOn = m_normalOn;
+  this->m_normalOff= m_normalOff;
+  RedrawWindow();
 }
 
 CHoverButton::~CHoverButton()
@@ -141,7 +159,13 @@ void CHoverButton::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	if(lpDrawItemStruct->itemState & ODS_SELECTED)
 	{
     if(OnOff)
-      mydc->BitBlt(0,0,m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx,0,SRCCOPY);
+    {
+      if(m_value) //activé
+        mydc->BitBlt(0,0,m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx*m_clickOn,0,SRCCOPY);
+      else
+        mydc->BitBlt(0,0,m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx*m_clickOff,0,SRCCOPY);
+    
+    }
     else
       mydc->BitBlt(0,0,m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx*2,0,SRCCOPY);
   }
@@ -151,10 +175,10 @@ void CHoverButton::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 		{
       if(OnOff)
       {
-        /*if(m_value) //activé
-			    mydc->BitBlt(0,0,m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx*2,0,SRCCOPY);
+        if(m_value) //activé
+			    mydc->BitBlt(0,0,m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx*m_hoverOn,0,SRCCOPY);
         else        //desactivé*/
-			    mydc->BitBlt(0,0,m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,0,0,SRCCOPY);
+			    mydc->BitBlt(0,0,m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx*m_hoverOff,0,SRCCOPY);
       }
       else
       {
@@ -165,9 +189,9 @@ void CHoverButton::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
       if(OnOff)
       {
         if(!m_value)//desactivé
-          mydc->BitBlt(0,0,m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx*2,0,SRCCOPY);
+          mydc->BitBlt(0,0,m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx*m_normalOff,0,SRCCOPY);
         else        //activé
-          mydc->BitBlt(0,0,m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,0,0,SRCCOPY);
+          mydc->BitBlt(0,0,m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx*m_normalOn,0,SRCCOPY);
       }
       else
       {

@@ -17,7 +17,7 @@ CEffect * CCVSTHost::CreateEffect()
 
 CCVSTHost::CCVSTHost()/*:CVSTHost()*/
 {
-  int a = 0;
+  //int a = 0;
   APP = NULL;
   return;
 }
@@ -52,7 +52,7 @@ CAppPointer * CCVSTHost::SetAPP(CAppPointer * m_diff_from_APP)
 CCVSTHost::~CCVSTHost()
 {
   CString buf;buf.Format("DESTROY :: CCVSTHost(%d) \n", this);  TRACE(buf);
-  int b = 0;//histoire de rien faire!
+  //int b = 0;//histoire de rien faire!
   return;
 }
 
@@ -113,8 +113,40 @@ if (!pEffect->Load(sName))              /* try to load the thing             */
 
 
 /**********************************************************************/
+//pEffect->EffSetProgram(0);
 
+//{
+    /*long lghfd = pEffect->EffGetPlugCategory()  ;//kPlugCategUnknown possible
+    char * buffer = (char *)malloc(1000);
+    pEffect->EffGetProductString(buffer);
+    pEffect->EffIdentify();
+    pEffect->EffGetEffectName(buffer);// EffGetProductString(&buffer);
+    //pEffect->EffSetBypass(
+    //long lghfd = pEffect->EffGetPlugCategory()  ;//kPlugCategUnknown possible
+
+    CString msg;
+    CString buf;
+      long iDD = pEffect->EffGetNextShellPlugin(buf.GetBuffer(60));
+      buf.ReleaseBuffer();
+      msg.AppendFormat("%d : %s\n",iDD,buf);
+      iDD = pEffect->EffGetNextShellPlugin(buf.GetBuffer(60));
+      buf.ReleaseBuffer();
+      msg.AppendFormat("%d : %s\n",iDD,buf);
+      AfxMessageBox(msg);
+
+      delete [] buffer;
+  }*/
+//pEffect->pEffect->dispatcher(pEffect->pEffect,
 pEffect->EffOpen();                     /* open the effect                   */
+TRACE("Open\n");
+pEffect->EffSetSampleRate(fSampleRate); /* adjust its sample rate            */
+TRACE("SetSamplerate\n");
+pEffect->EffSetBlockSize(lBlockSize);   /* and block size                    */
+TRACE("SetblockSize\n");
+
+pEffect->EffMainsChanged(true);         /* then force resume.                */
+TRACE("Main changed\n");
+
 /*{
    // long lghfd = pEffect->EffGetPlugCategory()  ;//kPlugCategUnknown possible
     char * buffer = (char *)malloc(1000);
@@ -136,9 +168,6 @@ pEffect->EffOpen();                     /* open the effect                   */
 
       delete [] buffer;
   }*/
-pEffect->EffSetSampleRate(fSampleRate); /* adjust its sample rate            */
-pEffect->EffSetBlockSize(lBlockSize);   /* and block size                    */
-pEffect->EffMainsChanged(true);         /* then force resume.                */
 
  return nIndex;
 }
@@ -309,9 +338,7 @@ bool CCVSTHost::OnIoChanged(int nEffect)
     SetAPP();
     if(APP)
     {
-      InitDelay = APP->chaine_eff->CalculDelay(APP->current_chaine);
-      APP->effect->setInitialDelay(InitDelay);
-      APP->effect->ioChanged();
+      APP->chaine_eff->IoChanged(APP->current_chaine);
       return 1;
     }
     else
@@ -322,9 +349,7 @@ bool CCVSTHost::OnIoChanged(int nEffect)
   }
   else
   {
-      InitDelay = pEffect->APP->chaine_eff->CalculDelay(pEffect->APP->current_chaine);
-      pEffect->APP->effect->setInitialDelay(InitDelay);
-      pEffect->APP->effect->ioChanged();
+      pEffect->APP->chaine_eff->IoChanged(pEffect->APP->current_chaine);
       return 1;
   }
 }

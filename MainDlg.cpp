@@ -175,7 +175,7 @@ void CMainDlg::SetEffect(int nbeffstk)
     effstk = APP->chaine_eff->get(APP->current_chaine,nbeffstk);
     ASSERT(effstk);
     nbeff  = effstk->effect_nb;
-    m_btnbypass.SetValue(effstk->bypass);
+    m_btnbypass.SetValue(!effstk->bypass);
     m_txteff.Format("%d:%s",nbeffstk+1,APP->chaine_eff->Get_Name(APP->current_chaine,nbeffstk));
   }
 
@@ -248,6 +248,7 @@ void CMainDlg::InitialiseSkin()
 
 
   m_btnbypass.LoadBitmap(IDB_BYPASS,true,7,27);
+  m_btnbypass.SetBitmapDisp(2,0,1,1,2,0);
   text=_T("Bypass un effet");
   m_btnbypass.SetToolTipText(&text);
 
@@ -449,7 +450,7 @@ void CMainDlg::OpenEffect(int chaine,int nbeffectstk)
 
       ((CSmpEffect *)pEffect)->SetEditWnd(pWnd);
       lResult = APP->host->EffEditOpen(nEffect, pWnd->GetSafeHwnd());
-      long lResult = APP->host->EffEditGetRect(nEffect, &prc);
+      /*long lResult =*/ APP->host->EffEditGetRect(nEffect, &prc);
       pWnd->SetEffSize(prc);
 
       ChildNotify(pWnd);
@@ -486,7 +487,7 @@ void CMainDlg::OpenEffectTxT(int chaine,int nbeffectstk)
 
   {
   int nEffect = APP->chaine_eff->get_effect(APP->current_chaine,nbeffectstk);
-  CEffect *pEffect = APP->host->GetAt(nEffect);
+  //CEffect *pEffect = APP->host->GetAt(nEffect);
 
 
   CEffectTxTDlg  *pWnd = (CEffectTxTDlg *) new CEffectTxTDlg(this,APP);
@@ -1116,7 +1117,7 @@ void CMainDlg::UpdateBouton(int btn)
 void CMainDlg::OnBnClickedBtnbypass()
 {
   bool bypass = APP->chaine_eff->GetByPass(APP->current_chaine,nbeffstk);
-  APP->chaine_eff->SetByPass(APP->current_chaine,nbeffstk,!bypass);
+  APP->chaine_eff->SetByPass(APP->current_chaine,nbeffstk,bypass);
 }
 
 //void CMainDlg::OnBnClickedBtneffecttxt2()

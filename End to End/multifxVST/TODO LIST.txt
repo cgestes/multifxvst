@@ -3,10 +3,23 @@ MultiFXVST - CTAF Audio - version 0.7.6
 //####################################################################
 //########### HISTORY ################################################
 //####################################################################
+//-- 22/08/2004
+     - improve : restaure la chaine active dans les sauvegardes du projet de l'hote (setchunk/getchunk)
+     
+//-- 19/08/2004
+     - improve : interface graphique
+     - bug : recalcul le delay quand on supprime un effet, change de chaine, ... (initialdelay)
+     - bug : multifxchunk => restaure la chaine qu'il y avait avant... et la sauvegarde aussi :-)
+     - improve : les fichiers de sauvegarde a partir de maintenant seront toujours lisible par
+                 les nouvelles version de multifxVST
+     
+//-- 16/08/2004
+     - bug : changement de chaine non mis a jour dans certain cas
+
 //-- 15/08/2004 (version 0.7.6)
      - improve : amelioration du moteur audio (fade,load,loadall...)
      - bug : un bon tas de bug dûe au multithread
-     
+
 //-- 12/08/2004
      - ajout : gestion du fade pour les changements de chaine
 
@@ -241,10 +254,10 @@ MultiFXVST - CTAF Audio - version 0.7.6
 /#/- fxidle
 // - getTailSize (process aprés un suspend,pour les reverbs...)
 // - getTailSize transmettre les queues de reverbs et autres entre les chaines si possible
-// - toujours réinitialisé le fade dans stockeffect (loadchaine,setchunk,...,remove)
-// - ne calcul le delay dans le cas d'une suppression d'effet ou autre... (initialdelay)
-// - critical_section => suspend/resume (processing) , ...
 // - effMainsChanged => qd on active dézactive un effet pour qu'il vide ses buffers
+// - startprocess / stopprocess beginedit/stopedit et d'autres
+
+
 
 //####################################################################
 //########### CONTACT ################################################

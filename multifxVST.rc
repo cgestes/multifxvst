@@ -182,12 +182,12 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
     RTEXT           "0.7.6",IDC_STATIC,378,230,18,8,0,WS_EX_TRANSPARENT
     LTEXT           "MultifxVST - CTAF Audio\nhttp://www.ctaf.free.fr\n\nProgrammation : Cédric GESTES\nDesign : Valery HERLAUD",
-                    IDC_STATIC1,17,17,104,46,SS_NOTIFY
+                    IDC_STATIC1,17,17,104,51,SS_NOTIFY
     GROUPBOX        "Configuration",IDC_STATIC,7,160,389,44,BS_FLAT,
                     WS_EX_TRANSPARENT
     LTEXT           "Chain Fade Time (ms):",IDC_STATIC,18,173,107,8
     LTEXT           "Bypass Fade Time (ms):",IDC_STATIC,18,185,106,9
-    LTEXT           "This plug-ins is donationware\nI have spend a lot of time doing this software,\nIf you want to support it please make a donation\n",
+    LTEXT           "This plug-ins is donationware\nI have spend a lot of time doing this software,\nIf you want to support it please make a donation\n\n\nMail me for feedback and support at : ctaf.bob@laposte.net",
                     IDC_STATIC2,145,17,237,49,SS_NOTIFY
 END
 

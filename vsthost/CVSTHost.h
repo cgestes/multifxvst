@@ -676,7 +676,7 @@ public:
 	virtual void OnUpdateSampleRate(int nEffect);
 	virtual bool OnSizeWindow(int nEffect, long width, long height);
 	virtual bool OnNeedIdle(int nEffect);
-	virtual long OnAudioMasterCallback(int nEffect, long opcode, long index, long value, void *ptr, float opt);
+	virtual long OnAudioMasterCallback(AEffect *effect, long opcode, long index, long value, void *ptr, float opt);
     virtual long OnGetVersion(int nEffect);
 	virtual bool OnCanDo(const char *ptr);
 	virtual bool OnWantEvents(int nEffect, long filter);
@@ -687,7 +687,7 @@ public:
     virtual bool OnProcessEvents(int nEffect, VstEvents* events) { return false; }
     virtual VstTimeInfo *OnGetTime(int nEffect,long filter) { return &vstTimeInfo; }
     virtual bool OnSetTime(int nEffect, long filter, VstTimeInfo *timeInfo) { return false; }
-    virtual long OnGetNumAutomatableParameters(int nEffect) { return 0; }
+    virtual long OnGetNumAutomatableParameters(int nEffect) { return 32; }
     virtual long OnGetParameterQuantization(int nEffect) { return 0x40000000; }
     virtual bool OnIoChanged(int nEffect) { return false; }
     virtual long OnHostVendorSpecific(int nEffect, long lArg1, long lArg2, void* ptrArg, float floatArg) { return 0; }

@@ -170,7 +170,7 @@ if (!CEffect::Load(name))               /* do basic stuff                    */
   return false;
 }
 
-//if(!(pEffect->flags & kPlugCategShell))
+if(!(pEffect->flags & kPlugCategShell))
   DefParam.saveToMem(this);
 
 return true;

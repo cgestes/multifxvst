@@ -26,6 +26,7 @@
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
+				OptimizeForProcessor="0"
 				AdditionalIncludeDirectories="E:\CTAF\Cpp\Guitaromatic"
 				PreprocessorDefinitions="WIN32;_RELEASE;_WINDOWS;_USRDLL"
 				RuntimeLibrary="2"
@@ -96,6 +97,7 @@
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
+				OptimizeForProcessor="0"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;_RELEASE"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="1"
@@ -158,9 +160,10 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				OptimizeForProcessor="1"
+				OptimizeForProcessor="0"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL"
 				BasicRuntimeChecks="3"
+				SmallerTypeCheck="TRUE"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile="$(IntDir)/$(TargetName).pch"
@@ -183,6 +186,7 @@
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\Debug\$(ProjectName).pdb"
 				SubSystem="2"
+				LargeAddressAware="0"
 				ImportLibrary=".\Debug/multifxVST.lib"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -221,7 +225,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				OptimizeForProcessor="1"
+				OptimizeForProcessor="0"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"

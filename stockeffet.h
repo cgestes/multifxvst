@@ -29,8 +29,10 @@ public :
   ~CEffectStk();
 	CEffectStk(CEffectStk & eff);
 
+  //on sevegarde toujours dans la derniere version..
 	void save(CArchive &ar);
-	void load(CArchive &ar);
+
+	void load(CArchive &ar,int version);
 
   void loadFromMem(CEffect *ceff);
   void saveToMem(CEffect *ceff);
@@ -96,7 +98,9 @@ public:
 
 	//sauve  une liste d'effet
 	void save(CArchive &ar);
-	void load(CArchive &ar);
+	
+  //retourne la chaine à activer
+  int load(CArchive &ar);
 
   	//sauve  une liste d'effet
 	void save_chaine(int chaine,CArchive &ar);
@@ -150,10 +154,19 @@ public:
   void processReplace(int chaine,float **inputs, float **outputs, long sampleFrames);
   void suspend(int chaine);
   void resume(int chaine);
+
+  void startProcess(){m_processingcalled = TRUE;};	// Called one time before the start of process call
+  void stopProcess(){m_processingcalled = FALSE;};	// Called after the stop of process call
+
   void SetBlockSize(long size);
   void SetSampleRate(float size);
   long CalculDelay(int chaine);
 
+  int InitDelay; //correspond a initialdelay
+  void IoChanged(int chaine);
+
+
+  
 
   void SetByPass(int chaine,int nbeffstk,bool bypass);
   bool GetByPass(int chaine,int nbeffstk);
@@ -204,6 +217,8 @@ protected:
   enum fadetype{FD_NOTHING = 0,FD_FADEOUT,FD_FADEIN,FD_CHANGING};
   volatile fadetype  /*int*/ fadestate; //0 = pas de fade, 1 = fadeout ,2 = fadein  ,3 = changement de cahine 
   float increment; // increment pour le fade (calculer a partir du samplerate)
+  
+  volatile BOOL m_processingcalled; //true si process doit etre appelé (d'aprés startprocess / stopprocess)
 
   volatile bool m_changing_chain;
   CCriticalSection CS_Processing;

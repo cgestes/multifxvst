@@ -136,12 +136,14 @@ long multifxVST::setChunk(void *data,long byteSize,bool isPreset)
   }
 
   APP.chaine_eff->RemoveAll(false);
-  APP.chaine_eff->load(ar);
-  APP.chaine_eff->LoadParamsFromMem(APP.current_chaine);
+  int newchain = APP.chaine_eff->load(ar);
+  APP.chaine_eff->ChangeChaine(APP.current_chaine,newchain);
+
+  APP.chaine_eff->LoadParamsFromMem(newchain);
 
   if(b)
   {
-    APP.chaine_eff->resume(APP.current_chaine);
+    APP.chaine_eff->resume(newchain);
   }
   ar.Close();
   f.Detach();//sinon memory leak! car ca detruit le buffer et Boumm
@@ -210,6 +212,18 @@ void multifxVST::resume ()
 void multifxVST::suspend ()
 {
   APP.chaine_eff->suspend(APP.current_chaine);
+}
+
+long multifxVST::startProcess()	// Called one time before the start of process call
+{
+  APP.chaine_eff->startProcess();
+  return 0; //default
+}
+
+long multifxVST::stopProcess()	// Called after the stop of process call
+{
+  APP.chaine_eff->stopProcess();
+  return 0;//default
 }
 
 //-----------------------------------------------------------------------------
