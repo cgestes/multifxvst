@@ -97,6 +97,7 @@
 #define IDC_TXTUSED                     179
 #define IDC_BTNABOUT                    179
 #define IDC_BUTTON6                     180
+#define IDC_TXTUSED2                    180
 #define IDC_BTNBYPASS                   181
 #define IDC_TXTCOPIED                   182
 #define IDC_BTNVALIDATE                 183
@@ -119,7 +120,7 @@
 #define IDC_PARMVAL                     200
 #define IDC_PARMTEXT                    201
 #define IDC_RVALUE                      202
-#define IDC_FADETIME                    204
+#define IDC_TXTMEM                      205
 #define IDM_EFF_PROGRAM_0               1029
 #define ID_PLUG_PROGRAMS                32771
 #define ID_PLUG_FXB                     32772
@@ -142,7 +143,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        160
 #define _APS_NEXT_COMMAND_VALUE         32785
-#define _APS_NEXT_CONTROL_VALUE         205
+#define _APS_NEXT_CONTROL_VALUE         206
 #define _APS_NEXT_SYMED_VALUE           303
 #endif
 #endif

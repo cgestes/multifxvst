@@ -18,7 +18,7 @@ public:
 // Données de boîte de dialogue
 	enum { IDD = IDD_MAIN };
 
-  void ChildNotify(CWnd * child/*,bool bAlwaisResize = false*/);
+  void ChildNotify(CWnd * child,int sizex = -1,int sizey = -1);
   void SetAPP(CAppPointer * m_APP){APP = m_APP;};
 
   void KillAll();   //détruit toutes les fenetres

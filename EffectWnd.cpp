@@ -219,9 +219,9 @@ SetEffSize(&rc);
 
 void CEffectWnd::OnSize(UINT nType, int cx, int cy) 
 {
-  CWnd::OnSize(nType, cx, cy);
+  //CWnd::OnSize(nType, cx, cy);
   if((cx != 0)&&(cy != 0))
-    APP->pMainDlg->ChildNotify(this/*,true*/);
+    APP->pMainDlg->ChildNotify(this,cx,cy/*,true*/);
 }
 
 /*****************************************************************************/

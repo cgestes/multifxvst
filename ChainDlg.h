@@ -131,6 +131,7 @@ public:
   afx_msg void OnEffectsShellplug();
 
   afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+  //afx_msg void OnTimer(UINT nIDEvent);
 };
 
 #endif

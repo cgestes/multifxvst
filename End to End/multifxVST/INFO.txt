@@ -1,4 +1,4 @@
-MultiFXVST - CTAF Audio - version 0.7.6
+MultiFXVST - CTAF Audio - version 0.7.9
 
 MultifxVST est un plug-ins VST qui permet de gérer des chaines d'effets.
 
@@ -11,10 +11,11 @@ Principales caractéristiques :
  - fonctionne en insert comme en send
  - gestion de la synchronisation avec l'hote
  - automation des paramètres (32)
-
+ - gestion du midi
+ 
 A venir :
  - gestion des plug-ins shell (waves notamment) et dx
- - gestion du midi
+
 
 Installation :
  - dezipper "multifxVST.dll" dans votre repertoire vstplugins
@@ -25,67 +26,12 @@ En plus est fournit Midistick qui permet de générer des événements midi à partir
 
 
 ## CONTROLEUR MIDI ##
+CC0 = chain number
+CC1 --> CC32 = params
 
--#- Préambule:
-value = valeur du controleur en interne (celle donné proportionnelement au plug-ins)
-Controleur Input = On recoit un message de ce controleur
-NoteX NoteON = on recoit un message NOTE_ON de cette note
-
-
-
--#- Controleur
-/* controleur normal => affect la valeur midi du controleur au controleur */
-Controleur Set        :  value = controleur
-                        si simple On/off
-                         controleur >= 64 => value = 127
-                         controleur < 64  => value = 0
-
-/* augmente ou decremente la valeur d'un controleur grace à deux controleur
-   pas trés utiles pour du hardware normalement */
-Controleur Plus/Moins :  controleur1 => value += <increment>
-                         controleur2 => value -= <increment>
-                        si simple On/off
-                         controleur1 => value = 0
-                         controleur2 => value = 127
-
-/* toggle value between 0 and 127 : ex => allume / eteint un effet */
-Controleur Toggle     :  Controleur Input  => value = 127
-                         Controleur Input  => value = 0
-                         Controleur Input  => value = 127
-                         [et ainsi desuite]
-                        si simple On/Off
-                         Controleur Input  => value = 127
-                         Controleur Input  => value = 0
-
-
--#- Note :
-/* mouais pas trés utiles à par pour des programmes qui générent des notes
-   mais pas pour du HardWare */
-Note Set              :  value = note_velocity
-                        si simple On/off
-                         note_velocity >= 64 => value = 127
-                         note_velocity < 64  => value = 0
-
-/* augmente ou reduit un controleur grace à deux notes*/
-Note Plus/Moins       :  Note1 NoteON => value +=  <increment>
-                         Note2 NoteON => value -=  <increment>
-                        si simple On/Off
-                         Note1 NoteON => value = 0
-                         Note2 NoteON => value = 127
-
-/* toggle value between 0 and 127 : ex => allume / eteint un effet*/
-Note Toggle           :  NoteON  => value = 127
-                         NoteON  => value = 0
-                         NoteON  => value = 127
-                         [et ainsi desuite]
-                        si simple On/Off
-                         NoteON  => value = 127
-                         NoteOFF => value = 0
-
--#- Program Change :
-Program Change        : euh!je sais pas encore comment ca marche!
-
-
+## Params ##
+you can assign parameters automation and midi controleur (it's the same number)
+in the effect 2 windows.
 
 
 remerciement à H Heib pour sa mise à disposition d'un hote VST MDI exemple.

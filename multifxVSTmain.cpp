@@ -50,7 +50,7 @@ BOOL CChainApp::InitInstance()
     //Enable3dControls();
 
     HRESULT result = 0;;
-    result=CoInitializeEx(NULL,COINIT_MULTITHREADED   | COINIT_SPEED_OVER_MEMORY);
+    result=CoInitialize(NULL);//Ex(NULL,COINIT_MULTITHREADED   | COINIT_SPEED_OVER_MEMORY);
     if(result != S_OK)
     {//RPC_E_CHANGED_MODE 
       TRACE("Ole init error\n");

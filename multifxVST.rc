@@ -83,7 +83,7 @@ BEGIN
     CONTROL         "",IDC_BTNPASTETO,"Button",BS_OWNERDRAW | BS_FLAT | 
                     WS_TABSTOP,299,171,37,12
     CTEXT           "127",IDC_TXTCOPIED,373,217,12,8,SS_CENTERIMAGE
-    RTEXT           "0.7.6",IDC_STATIC,378,230,18,8,0,WS_EX_TRANSPARENT
+    RTEXT           "0.7.9",IDC_STATIC,378,230,18,8,0,WS_EX_TRANSPARENT
 END
 
 IDD_PARMS DIALOGEX 0, 0, 400, 240
@@ -110,37 +110,8 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     CONTROL         "",IDC_LSTCONTROLER,"SysListView32",LVS_REPORT | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | 
-                    WS_TABSTOP,7,7,319,165
-    PUSHBUTTON      "Validate",IDC_BTNVALIDATE,341,164,52,9,BS_FLAT
-    COMBOBOX        IDC_CBCHANNEL,65,195,44,179,CBS_DROPDOWNLIST | 
-                    WS_VSCROLL | WS_TABSTOP
-    LTEXT           "Midi Channel",IDC_STATIC1,65,182,44,10,SS_SUNKEN | 
-                    SS_PATHELLIPSIS | NOT WS_GROUP
-    LTEXT           "Controleur/Note 1/2",IDC_TXTDESC1,199,182,86,10,
-                    SS_SUNKEN | SS_PATHELLIPSIS | NOT WS_GROUP
-    LTEXT           "Action",IDC_STATIC2,111,182,86,10,SS_SUNKEN | 
-                    SS_PATHELLIPSIS | NOT WS_GROUP
-    COMBOBOX        IDC_CBACTION,111,195,86,202,CBS_DROPDOWNLIST | 
-                    WS_VSCROLL | WS_TABSTOP
-    PUSHBUTTON      "Load",IDC_BTNLOADMIDI,341,7,52,9,BS_FLAT
-    PUSHBUTTON      "save",IDC_BTNSAVE,341,20,52,9,BS_FLAT
-    CONTROL         "Simple On/Off",IDC_CKSIMPLE,"Button",BS_AUTOCHECKBOX | 
-                    BS_FLAT | WS_TABSTOP,295,182,98,9
-    EDITTEXT        IDC_TXTINCREMENT,344,195,49,13,ES_AUTOHSCROLL
-    LTEXT           "Description",IDC_TXTDESC3,7,211,386,23,SS_SUNKEN
-    PUSHBUTTON      "Add",IDC_BTNLOADMIDI2,341,65,52,9,BS_FLAT
-    PUSHBUTTON      "Del",IDC_BTNSAVE3,341,79,52,9,BS_FLAT
-    COMBOBOX        IDC_CBNOTE,199,195,86,202,CBS_DROPDOWNLIST | WS_VSCROLL | 
-                    WS_TABSTOP
-    LTEXT           "Controleur #:",IDC_STATIC3,7,182,55,10,SS_SUNKEN | 
-                    SS_PATHELLIPSIS | NOT WS_GROUP
-    COMBOBOX        IDC_CB_CONTROLEUR,7,195,55,86,CBS_DROPDOWNLIST | 
-                    WS_VSCROLL | WS_TABSTOP
-    SCROLLBAR       IDC_SCROLLBAR1,381,116,12,12,SBS_VERT
-    EDITTEXT        IDC_EDIT1,342,117,40,12,ES_AUTOHSCROLL
-    LTEXT           "NB Controler",IDC_STATIC,342,106,51,9
-    LTEXT           "Value:",IDC_DESC2,296,195,45,13,SS_SUNKEN | 
-                    SS_PATHELLIPSIS | NOT WS_GROUP
+                    WS_TABSTOP,7,21,376,202
+    LTEXT           "This windows is for futur use",IDC_STATIC,7,7,264,10
 END
 
 IDD_MAIN DIALOGEX 0, 0, 400, 68
@@ -180,15 +151,13 @@ IDD_ABOUT DIALOGEX 0, 0, 400, 240
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
 FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
-    RTEXT           "0.7.6",IDC_STATIC,378,230,18,8,0,WS_EX_TRANSPARENT
+    RTEXT           "0.7.9",IDC_STATIC,378,230,18,8,0,WS_EX_TRANSPARENT
     LTEXT           "MultifxVST - CTAF Audio\nhttp://www.ctaf.free.fr\n\nProgrammation : Cédric GESTES\nDesign : Valery HERLAUD",
                     IDC_STATIC1,17,17,104,51,SS_NOTIFY
-    GROUPBOX        "Configuration",IDC_STATIC,7,160,389,44,BS_FLAT,
-                    WS_EX_TRANSPARENT
-    LTEXT           "Chain Fade Time (ms):",IDC_STATIC,18,173,107,8
-    LTEXT           "Bypass Fade Time (ms):",IDC_STATIC,18,185,106,9
-    LTEXT           "This plug-ins is donationware\nI have spend a lot of time doing this software,\nIf you want to support it please make a donation\n\n\nMail me for feedback and support at : ctaf.bob@laposte.net",
+    LTEXT           "MultifxVST is donationware as long as it's a beta version\nIf you make a donation you will benefit of lifetime upgrade\n",
                     IDC_STATIC2,145,17,237,49,SS_NOTIFY
+    LTEXT           "If you need help, post your question on www.ctaf.free.fr/phpbb2/\nor mail me for feedback and support at : ctaf.audio@laposte.net",
+                    IDC_STATIC,22,182,362,38,SS_SUNKEN
 END
 
 
@@ -354,77 +323,6 @@ IDC_CURSOR_HAND         CURSOR                  "res\\cursor1.cur"
 //
 // Dialog Info
 //
-
-IDD_CONTROLER DLGINIT
-BEGIN
-    IDC_CBCHANNEL, 0x403, 4, 0
-0x4c41, 0x004c, 
-    IDC_CBCHANNEL, 0x403, 2, 0
-0x0031, 
-    IDC_CBCHANNEL, 0x403, 2, 0
-0x0032, 
-    IDC_CBCHANNEL, 0x403, 2, 0
-0x0033, 
-    IDC_CBCHANNEL, 0x403, 2, 0
-0x0034, 
-    IDC_CBCHANNEL, 0x403, 2, 0
-0x0035, 
-    IDC_CBCHANNEL, 0x403, 2, 0
-0x0036, 
-    IDC_CBCHANNEL, 0x403, 2, 0
-0x0037, 
-    IDC_CBCHANNEL, 0x403, 2, 0
-0x0038, 
-    IDC_CBCHANNEL, 0x403, 2, 0
-0x0039, 
-    IDC_CBCHANNEL, 0x403, 3, 0
-0x3031, "\000" 
-    IDC_CBCHANNEL, 0x403, 3, 0
-0x3131, "\000" 
-    IDC_CBCHANNEL, 0x403, 3, 0
-0x3231, "\000" 
-    IDC_CBCHANNEL, 0x403, 3, 0
-0x3331, "\000" 
-    IDC_CBCHANNEL, 0x403, 3, 0
-0x3431, "\000" 
-    IDC_CBCHANNEL, 0x403, 3, 0
-0x3531, "\000" 
-    IDC_CBCHANNEL, 0x403, 3, 0
-0x3631, "\000" 
-    IDC_CBACTION, 0x403, 15, 0
-0x6f43, 0x746e, 0x6f72, 0x656c, 0x7275, 0x5320, 0x7465, "\000" 
-    IDC_CBACTION, 0x403, 15, 0
-0x6f43, 0x746e, 0x6f72, 0x656c, 0x7275, 0x2b20, 0x2d2f, "\000" 
-    IDC_CBACTION, 0x403, 18, 0
-0x6f43, 0x746e, 0x6f72, 0x656c, 0x7275, 0x5420, 0x676f, 0x6c67, 0x0065, 
-
-    IDC_CBACTION, 0x403, 9, 0
-0x6f4e, 0x6574, 0x5320, 0x7465, "\000" 
-    IDC_CBACTION, 0x403, 9, 0
-0x6f4e, 0x6574, 0x2b20, 0x2d2f, "\000" 
-    IDC_CBACTION, 0x403, 12, 0
-0x6f4e, 0x6574, 0x5420, 0x676f, 0x6c67, 0x0065, 
-    IDC_CBACTION, 0x403, 15, 0
-0x7250, 0x676f, 0x6172, 0x206d, 0x6843, 0x6e61, 0x6567, "\000" 
-    IDC_CBNOTE, 0x403, 15, 0
-0x6f43, 0x746e, 0x6f72, 0x656c, 0x7275, 0x5320, 0x7465, "\000" 
-    IDC_CBNOTE, 0x403, 15, 0
-0x6f43, 0x746e, 0x6f72, 0x656c, 0x7275, 0x2b20, 0x2d2f, "\000" 
-    IDC_CBNOTE, 0x403, 18, 0
-0x6f43, 0x746e, 0x6f72, 0x656c, 0x7275, 0x5420, 0x676f, 0x6c67, 0x0065, 
-
-    IDC_CBNOTE, 0x403, 9, 0
-0x6f4e, 0x6574, 0x5320, 0x7465, "\000" 
-    IDC_CBNOTE, 0x403, 9, 0
-0x6f4e, 0x6574, 0x2b20, 0x2d2f, "\000" 
-    IDC_CBNOTE, 0x403, 12, 0
-0x6f4e, 0x6574, 0x5420, 0x676f, 0x6c67, 0x0065, 
-    IDC_CBNOTE, 0x403, 15, 0
-0x7250, 0x676f, 0x6172, 0x206d, 0x6843, 0x6e61, 0x6567, "\000" 
-    IDC_CB_CONTROLEUR, 0x403, 2, 0
-0x0031, 
-    0
-END
 
 IDD_PARMS DLGINIT
 BEGIN

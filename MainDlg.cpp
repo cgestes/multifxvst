@@ -109,7 +109,7 @@ if (pEffect)
 
 //place la fenetre a sa place,redimentionne decoupe cisaille tronconne etc...
 static const OFFSETY =64;
-void CMainDlg::ChildNotify(CWnd * child)
+void CMainDlg::ChildNotify(CWnd * child,int sizex,int sizey)
 {
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -117,33 +117,58 @@ void CMainDlg::ChildNotify(CWnd * child)
   
   int posx=0,posy=OFFSETY;
 
-  CloseAll();
+  if(pActiv != child)
+  {
+    CloseAll();
 
-  if(!child)return;
+  }
+
+  if(!child)
+  {
+    CloseAll();
+    return;
+  }
 
   ::CRect r;
-  child->GetClientRect(&r);
+  if(sizex == -1 || sizey == -1)
+    child->GetClientRect(&r);
+  else
+  {
+    r.top = r.left = 0;
+    r.bottom = sizey;
+    r.right = sizex;
+  }
+  
+  //child->GetWindowRect(&r);
 
   WinRect.bottom = WinRect.top  + OFFSETY + r.Height(); 
   WinRect.right  = WinRect.left + r.Width();
 
   if(WinRect.Width() < WinRectInit.Width())
     WinRect.right = WinRect.left  + WinRectInit.Width(); 
-  APP->editor->frame->setSize(WinRect.Width(),WinRect.Height());
-  SetWindowPos(NULL,0,0,WinRect.Width(),WinRect.Height(),SWP_NOMOVE|SWP_NOOWNERZORDER|SWP_NOZORDER|SWP_NOREDRAW);
+
+
+  //APP->editor->frame->setSize(WinRect.Width(),WinRect.Height());
   
+  SetWindowPos(NULL,0,0,WinRect.Width(),WinRect.Height(),SWP_NOMOVE| SWP_NOOWNERZORDER|SWP_NOZORDER/*|SWP_NOREDRAW*/);
+  
+
   posx =  (WinRect.Width() - r.Width()) >> 1;
-  posy =  OFFSETY + (((WinRect.Height()- OFFSETY) - r.Height()) >> 1 );
+  posy =  OFFSETY; //+ (((WinRect.Height()- OFFSETY) - r.Height()) >> 1 );
 
   //positionne la fenetre enfant
-  child->SetWindowPos(NULL,posx,posy ,0,0,SWP_NOSIZE|SWP_NOOWNERZORDER|SWP_NOZORDER|SWP_NOREDRAW);
+  child->SetWindowPos(NULL,posx,posy ,0,0,SWP_NOSIZE|SWP_NOOWNERZORDER|SWP_NOZORDER/*|SWP_NOREDRAW*/);
 
-  child->ShowWindow(SW_SHOW);
+
  
   //pointeur sur la fenetre active
   pActiv = child;
+  
+  child->ShowWindow(SW_SHOW);
 
   UpdateBouton(GetActiveWindows());
+
+
 }
 
 
@@ -1005,8 +1030,9 @@ void CMainDlg::OnSize(UINT nType, int cx, int cy)
   CDialog::OnSize(nType, cx, cy);
   if(APP)
     APP->editor->frame->setSize(cx,cy);
-  Invalidate();
-  UpdateWindow();
+  //Invalidate();
+  RedrawWindow();
+  //UpdateWindow();
 }
 
 
@@ -1117,13 +1143,9 @@ void CMainDlg::UpdateBouton(int btn)
 void CMainDlg::OnBnClickedBtnbypass()
 {
   bool bypass = APP->chaine_eff->GetByPass(APP->current_chaine,nbeffstk);
-  APP->chaine_eff->SetByPass(APP->current_chaine,nbeffstk,bypass);
+  APP->chaine_eff->SetByPass(APP->current_chaine,nbeffstk,!bypass);
 }
 
-//void CMainDlg::OnBnClickedBtneffecttxt2()
-//{
-//  //ViewWindow(
-//}
 
 void CMainDlg::OnBnClickedBtnabout()
 {

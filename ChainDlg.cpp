@@ -8,6 +8,7 @@
 #include "CCVSThost.h"
 #include "stockeffet.h"
 #include "multifxVSTEditor.h"
+//#include "CPUMemCount.h"
 
 //#include "vsthost/CVSThost.h"
 #include "vsthost/SmpEffect.h"
@@ -116,6 +117,7 @@ ON_BN_CLICKED(IDC_BTNPASTETO, OnBnClickedBtnpasteto)
 ON_COMMAND(ID_EFFECTS_BROWSE, OnEffectsBrowse)
 ON_COMMAND(ID_EFFECTS_SHELLPLUG, OnEffectsShellplug)
 ON_WM_ERASEBKGND()
+ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -178,6 +180,8 @@ BOOL CChainDlg::OnInitDialog()
   TRACE(buf);
   
   InitialiseSkin();
+
+  //SetTimer(1,1000,NULL);
 
   return TRUE;  // return TRUE unless you set the focus to a control
 }
@@ -668,3 +672,21 @@ BOOL CChainDlg::OnEraseBkgnd(CDC* pDC)
   return TRUE;
 
 }
+
+/*void CChainDlg::OnTimer(UINT nIDEvent)
+{
+
+  if(nIDEvent == 1)
+  {
+    CString value;
+
+    int val = 0;//CCPUMemCount::GetMemUsage(APP->pMainDlg->GetSafeHwnd());
+
+    value.Format("%d",val);
+    GetDlgItem(IDC_TXTMEM)->SetWindowText(value);
+
+  }
+
+
+  CDialog::OnTimer(nIDEvent);
+}*/

@@ -1,8 +1,24 @@
-MultiFXVST - CTAF Audio - version 0.7.6
+MultiFXVST - CTAF Audio - version 0.7.9
 
 //####################################################################
 //########### HISTORY ################################################
 //####################################################################
+//-- 30/08/2004
+     - bug redimmensionnement (1er partie!!!) (le code était bon mais des redimentionnements
+       se faisait de maniere asynchrone (celui du VSTSDK ce qui engendrer des trucs bizarres) 
+     
+//-- 28/08/2004 (version 0.7.8)
+     - bug : bypass ne fonctionnait plus (problème due au l'utilisation de CTAFadeInOut)
+   
+//-- 27/08/2004 (version 0.7.7)
+     - improve : resume => thread
+ 
+//-- 26/08/2004
+     - ajout : gestion du midi (CC0 = chain number , CC1 --> CC32 = params)
+     
+//-- 25/08/2004
+     - improve : multithread sur le changement de chaine / load / setchunk
+     
 //-- 22/08/2004
      - improve : restaure la chaine active dans les sauvegardes du projet de l'hote (setchunk/getchunk)
      

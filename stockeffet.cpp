@@ -285,87 +285,273 @@ void CEffectStk::load(CArchive &ar,int version)
  
 }
 
+
+
+//worker thread pour le changement de chaine
+UINT TDLoadAll(LPVOID Param) 
+{
+
+  CAppPointer * APP = (CAppPointer *)Param;
+  //une seule thread de changement de chaine a la fois
+  APP->chaine_eff->CS_ChangingChain.Lock();
+
+
+  //########################### FD_CHTOFADEOUT ###################
+  //on recup la chaine a traiter
+  APP->chaine_eff->CS_newchaine.Lock();
+  int futur_chaine = APP->chaine_eff->GetNextChaine();
+  APP->chaine_eff->ResetNextChaine();
+  APP->chaine_eff->CS_newchaine.Unlock();
+
+  //rien a faire on se casse...
+  if(futur_chaine == -1 || futur_chaine == APP->current_chaine)
+  {
+    APP->chaine_eff->CS_fade.Lock();
+    APP->chaine_eff->fadestate = FD_NOTHING;
+    APP->chaine_eff->CS_fade.Unlock();
+    APP->chaine_eff->SetWorkingThread(FALSE);
+    return FALSE;
+  }
+
+
+  //on reset l'evenement
+  APP->m_waitfade->ResetEvent();
+
+
+
+  //########################### FD_FADEOUT #######################
+  //on lui di de faire un fadeout
+  APP->chaine_eff->fader.SetFadeOut();
+  APP->chaine_eff->CS_fade.Lock();
+  APP->chaine_eff->fadestate = FD_FADEOUT;
+  APP->chaine_eff->CS_fade.Unlock();
+
+  //on attend 1sec max que process ait fini le fadeout
+  APP->m_waitfade->Lock(1000);
+
+
+  APP->chaine_eff->CS_newchaine.Lock();
+  int futur_chaine2 = APP->chaine_eff->GetNextChaine();
+  APP->chaine_eff->ResetNextChaine();
+  APP->chaine_eff->CS_newchaine.Unlock();
+
+  //rien a faire on se casse...
+  if(futur_chaine2 != -1)
+  {
+    futur_chaine = futur_chaine2;
+  }
+
+  //########################### FD_CHTOFADEIN ####################
+  if(futur_chaine != APP->current_chaine)
+  {
+      APP->chaine_eff->CS_fade.Lock();
+      APP->chaine_eff->fadestate = FD_CHTOFADEIN;
+      APP->chaine_eff->CS_fade.Unlock();
+
+      BOOL b =APP->chaine_eff->m_processing;
+      //on arrete de les plugins
+      //APP->chaine_eff->SetChangingFlag(true);
+      if(b)
+        APP->chaine_eff->suspend(APP->current_chaine);
+
+      //on sauvegarde les parametres de l'anciens chaine (de cq plug)
+      APP->chaine_eff->SaveParamsToMem(APP->current_chaine);
+
+      APP->chaine_eff->CS_fade.Lock();
+      APP->current_chaine = futur_chaine;
+      APP->chaine_eff->CS_fade.Unlock();
+
+      //on met a jours l'affichage graphique
+      if(APP->editor)
+      {
+        //fait le travail pendant l'idle
+        APP->editor->setParameter(0,NBChaine2float(APP->current_chaine));
+      }
+
+      //on charge les params de l'autre chaine
+      APP->chaine_eff->LoadParamsFromMem(APP->current_chaine);
+
+      APP->chaine_eff->IoChanged(APP->current_chaine);
+      //on lance les autres
+      if(b)
+        APP->chaine_eff->resume(APP->current_chaine);
+  }
+
+  //on signale a process que le changement est effectif
+  APP->chaine_eff->SetChangingFlag(false);
+
+
+  //########################### FD_FADEIN ########################
+  APP->chaine_eff->CS_fade.Lock();
+  APP->chaine_eff->fadestate = FD_FADEIN;
+  APP->chaine_eff->CS_fade.Unlock();
+
+  APP->chaine_eff->fader.SetFadeIn();
+
+
+  // en dernier point on verifie si ya aps de demande de changement de chaine
+  APP->chaine_eff->CS_newchaine.Lock();
+  futur_chaine2 = APP->chaine_eff->GetNextChaine();
+  APP->chaine_eff->ResetNextChaine();
+  APP->chaine_eff->CS_newchaine.Unlock();
+
+  //on signale que nous ne travaillons plus
+  APP->chaine_eff->SetWorkingThread(FALSE);
+
+  //rien a faire on se casse...
+  if(futur_chaine2 != -1)
+  {
+    APP->chaine_eff->ChangeChaine(APP->current_chaine,futur_chaine2);
+  }
+
+
+
+  //une seule thread de changement de chaine a la fois
+  APP->chaine_eff->CS_ChangingChain.Unlock();
+
+
+  return false;//default
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //##############################################################################
 
-
 //worker thread pour le changement de chaine
-/*UINT WorkerThreadProcLoadChaine(LPVOID Param) 
+UINT TD_ChangeChain(LPVOID Param) 
 {
   CAppPointer * APP = (CAppPointer *)Param;
+  //une seule thread de changement de chaine a la fois
+  APP->chaine_eff->CS_ChangingChain.Lock();
 
-  m_hNobodyIsReading = CreateEvent(NULL, FALSE, true, "LoadChaine");
-  //on cree un evenement 
-  //set changingchaine = true
-  //on attend la liberation de cette evenement par process
-  //on 
-  //on change la chaine
-  //set changingchaine = false*/
-/*
-  BOOL b =APP->chaine_eff->m_processing;
-  //on arrete de les plugins
-  APP->chaine_eff->SetChangingFlag(true);
-  if(b)
-    APP->chaine_eff->suspend(APP->current_chaine);
 
-  //on sauvegarde les parametres de l'anciens chaine (de cq plug)
-  APP->chaine_eff->SaveParamsToMem(APP->current_chaine);
+  //########################### FD_CHTOFADEOUT ###################
+  //on recup la chaine a traiter
+  APP->chaine_eff->CS_newchaine.Lock();
+  int futur_chaine = APP->chaine_eff->GetNextChaine();
+  APP->chaine_eff->ResetNextChaine();
+  APP->chaine_eff->CS_newchaine.Unlock();
 
-  APP->current_chaine = APP->chaine_eff->GetNextChaine();
-
-  //on met a jours l'affichage graphique
-  if(APP->editor)
+  //rien a faire on se casse...
+  if(futur_chaine == -1 || futur_chaine == APP->current_chaine)
   {
-    //fait le travail pendant l'idle
-    APP->editor->setParameter(0,NBChaine2float(APP->current_chaine));
+    APP->chaine_eff->CS_fade.Lock();
+    APP->chaine_eff->fadestate = FD_NOTHING;
+    APP->chaine_eff->CS_fade.Unlock();
+    APP->chaine_eff->SetWorkingThread(FALSE);
+    return FALSE;
   }
 
-  //on charge les params de l'autre chaine
-  APP->chaine_eff->LoadParamsFromMem(APP->current_chaine);
 
-  APP->chaine_eff->IoChanged(APP->current_chaine);
-  //on lance les autres
-  if(b)
-    APP->chaine_eff->resume(APP->current_chaine);
+  //on reset l'evenement
+  APP->m_waitfade->ResetEvent();
 
-  APP->chaine_eff->SetChangingFlag(false);
-*/
- /* return false;//default
-}*/
 
-//worker thread pour le changement de chaine
-UINT WorkerThreadProc(LPVOID Param) 
-{
-  CAppPointer * APP = (CAppPointer *)Param;
-  //APP->m_waitforchanging.Lock();
-  //m_hNobodyIsReading = CreateEvent(NULL, FALSE, true, "LoadChaine");
 
-  BOOL b =APP->chaine_eff->m_processing;
-  //on arrete de les plugins
-  APP->chaine_eff->SetChangingFlag(true);
-  if(b)
-    APP->chaine_eff->suspend(APP->current_chaine);
+  //########################### FD_FADEOUT #######################
+  //on lui di de faire un fadeout
+  APP->chaine_eff->fader.SetFadeOut();
+  APP->chaine_eff->CS_fade.Lock();
+  APP->chaine_eff->fadestate = FD_FADEOUT;
+  APP->chaine_eff->CS_fade.Unlock();
 
-  //on sauvegarde les parametres de l'anciens chaine (de cq plug)
-  APP->chaine_eff->SaveParamsToMem(APP->current_chaine);
+  //on attend 1sec max que process ait fini le fadeout
+  BOOL retval = APP->m_waitfade->Lock(500);
 
-  APP->current_chaine = APP->chaine_eff->GetNextChaine();
 
-  //on met a jours l'affichage graphique
-  if(APP->editor)
+  APP->chaine_eff->CS_newchaine.Lock();
+  int futur_chaine2 = APP->chaine_eff->GetNextChaine();
+  APP->chaine_eff->ResetNextChaine();
+  APP->chaine_eff->CS_newchaine.Unlock();
+
+  //rien a faire on se casse...
+  if(futur_chaine2 != -1)
   {
-    //fait le travail pendant l'idle
-    APP->editor->setParameter(0,NBChaine2float(APP->current_chaine));
+    futur_chaine = futur_chaine2;
   }
 
-  //on charge les params de l'autre chaine
-  APP->chaine_eff->LoadParamsFromMem(APP->current_chaine);
+  //########################### FD_CHTOFADEIN ####################
+  if(futur_chaine != APP->current_chaine)
+  {
+      APP->chaine_eff->CS_fade.Lock();
+      APP->chaine_eff->fadestate = FD_CHTOFADEIN;
+      APP->chaine_eff->CS_fade.Unlock();
 
-  APP->chaine_eff->IoChanged(APP->current_chaine);
-  //on lance les autres
-  if(b)
-    APP->chaine_eff->resume(APP->current_chaine);
+      BOOL b =APP->chaine_eff->m_processing;
+      //on arrete de les plugins
+      //APP->chaine_eff->SetChangingFlag(true);
+      if(b)
+        APP->chaine_eff->suspend(APP->current_chaine);
 
+      //on sauvegarde les parametres de l'anciens chaine (de cq plug)
+      APP->chaine_eff->SaveParamsToMem(APP->current_chaine);
+
+      APP->chaine_eff->CS_fade.Lock();
+      APP->current_chaine = futur_chaine;
+      APP->chaine_eff->CS_fade.Unlock();
+
+      //on met a jours l'affichage graphique
+      if(APP->editor)
+      {
+        //fait le travail pendant l'idle
+        APP->editor->setParameter(0,NBChaine2float(APP->current_chaine));
+      }
+
+      //on charge les params de l'autre chaine
+      APP->chaine_eff->LoadParamsFromMem(APP->current_chaine);
+
+      APP->chaine_eff->IoChanged(APP->current_chaine);
+      //on lance les autres
+      if(b)
+        APP->chaine_eff->resume(APP->current_chaine);
+  }
+
+  //on signale a process que le changement est effectif
   APP->chaine_eff->SetChangingFlag(false);
+
+
+  //########################### FD_FADEIN ########################
+  APP->chaine_eff->CS_fade.Lock();
+  APP->chaine_eff->fadestate = FD_FADEIN;
+  APP->chaine_eff->CS_fade.Unlock();
+
+  APP->chaine_eff->fader.SetFadeIn();
+
+
+  // en dernier point on verifie si ya aps de demande de changement de chaine
+  APP->chaine_eff->CS_newchaine.Lock();
+  futur_chaine2 = APP->chaine_eff->GetNextChaine();
+  APP->chaine_eff->ResetNextChaine();
+  APP->chaine_eff->CS_newchaine.Unlock();
+
+  //on signale que nous ne travaillons plus
+  APP->chaine_eff->SetWorkingThread(FALSE);
+
+  //rien a faire on se casse...
+  if(futur_chaine2 != -1)
+  {
+    APP->chaine_eff->ChangeChaine(APP->current_chaine,futur_chaine2);
+  }
+
+
+
+  //une seule thread de changement de chaine a la fois
+  APP->chaine_eff->CS_ChangingChain.Unlock();
+
 
   return false;//default
 }
@@ -392,8 +578,9 @@ CStockEffetLst::CStockEffetLst()
   fadechainenext= 0;
   fadestate = FD_NOTHING;
   m_changing_chain = false;
-  m_processingcalled = TRUE;
+//  m_processingcalled = TRUE;
   InitDelay = 0;
+  m_workingthread = FALSE;
 }//constructeur
 
 
@@ -433,8 +620,6 @@ void CStockEffetLst::LoadParamsFromMem(int chaine)
          if(controleur != -1)
            APP->parameter->ParamAddParam(controleur-1,i,k);
        }
-
-      
     }
   }
 }
@@ -1039,10 +1224,15 @@ void CStockEffetLst::resume(int chaine)
       }
     }
     m_processing = TRUE;
-    
-    fadestate = FD_FADEIN;
+    /*APP->chaine_eff->CS_fade.Lock();
+    if(!m_workingthread)  // pas de thread en cours
+    {
+      fadestate = FD_FADEIN;
+    }
+    APP->chaine_eff->CS_fade.Unlock();
+
     fadechainenext = chaine;
-    fader.SetFadeIn();
+    fader.SetFadeIn();*/
     CS_Processing.Unlock();
 }
 
@@ -1065,28 +1255,24 @@ void CStockEffetLst::resume(int chaine)
 
 void CStockEffetLst::process(int chaine,float **inputs, float **outputs, long sampleFrames,bool replace)
 {
-    if(!VCH(chaine))return ;
+    if(!VCH(chaine))return;
+
     CS_Processing.Lock();
     int i =0,k = 0,j = get_count(chaine);
     CEffectStk * effst;
     float ** out1,** out2;
-    //bool replace = false;
-
-    /*if(!j) //aucun plug-ins => on met l'entrée dans la sortie et tayo
-    {
-      if(replace)
-        CTAFadeInOut::CopyBuffer(outputs,inputs,sampleFrames);
-      else 
-        CTAFadeInOut::AddBuffer(outputs,inputs,sampleFrames);
-      return; //on se casse ya rien a faire de plus
-    }*/
-        
 
     out1 = processbuffer;
     out2 = processreplacebuffer;
 
     //par sécurité on copy notre buffer d'entrées dans out1
     CTAFadeInOut::CopyBuffer(out1,inputs,sampleFrames);
+
+    //changement de chaine on ne traite pas le signal
+    if(fadestate == FD_CHTOFADEIN)//signal dry
+    {
+      j = -1; //on empeche le process
+    }
     
     bool processeed = false;
     while(i < j)
@@ -1108,8 +1294,6 @@ void CStockEffetLst::process(int chaine,float **inputs, float **outputs, long sa
       i++;
     }
 
-
-
     if(k%2) //on inverse les buffers si nécessaire
     {
       float **buf = out1;
@@ -1117,64 +1301,12 @@ void CStockEffetLst::process(int chaine,float **inputs, float **outputs, long sa
       out2 = buf;
     }
 
-    //la sortie se trouve obligatoirement dans out1
-    //on gere les fades pr les changement de chaine
-    if(newchaine != -1)
+
+ 
+
+
+    if(fadestate == FD_FADEIN || fadestate == FD_FADEOUT)
     {
-      if(fadestate == FD_NOTHING)//il n'y avait pas de fade
-      {
-        fadechaineanc = APP->current_chaine;
-        fadechainenext = newchaine;
-        fader.SetFadeOut();
-        fadestate = FD_FADEOUT;
-      }else if(fadestate == FD_FADEOUT) //pendant un fade out
-      {
-        if(newchaine == fadechaineanc)//on revient sur la mm chaine
-        {
-          fadechainenext = newchaine;
-          fader.SetFadeIn();
-          fadestate = FD_FADEIN;
-        }else
-        {
-          fadechainenext = newchaine;
-        }
-      }else if(fadestate == FD_FADEIN) //pendant un fade in (on a deja changé de chaine
-      {
-        if(fadechainenext != newchaine)//chaine différente donc on change ,sinon rien
-        {
-          fadechaineanc = fadechainenext;
-          fadechainenext = newchaine;
-          fader.SetFadeOut();
-          fadestate = FD_FADEOUT;
-        }
-      }
-      
-      //on efface pas la demande de nouvelle chaine =>
-      //on attend que FD_CHANGING est changéé
-      if(fadestate != FD_CHANGING)
-      {
-        newchaine = -1;
-      }
-      
-    }
-
-    if(fadestate == FD_CHANGING && m_changing_chain == false)
-    {
-      //chaine changée
-      ASSERT(APP->current_chaine == fadechainenext);
-      fadestate = FD_FADEIN;
-      fader.SetFadeIn();
-    }
-
-
-
-    if(fadestate != FD_NOTHING && fadestate != FD_CHANGING) //on doit faire un fade
-    {
-      //if(fadestate == FD_FADEOUT /*&& chainchanged*/)//si on vient de changer de chaine
-      //{
-      //  fader.SetFadeIn();
-      //  fadestate = FD_CHANGING;
-      //}
       bool finish = fader.FonduBuffer(out2,out1,inputs,sampleFrames);
       //on inverse les buffers
       {
@@ -1182,20 +1314,24 @@ void CStockEffetLst::process(int chaine,float **inputs, float **outputs, long sa
         out1 = out2;
         out2 = buf;
       }
+
       if(finish)
       {
         if(fadestate == FD_FADEIN)
+        {
           fadestate = FD_NOTHING;
+        }
         else if(fadestate == FD_FADEOUT)
         {
           SetChangingFlag(true);
-          fadestate = FD_CHANGING;   
-          //on commense une thread qui va changer de chaine
-          AfxBeginThread(WorkerThreadProc,(LPVOID)APP,THREAD_PRIORITY_NORMAL,0,0,NULL);             
+      
+          //on precise a la thread de changemnet de chaine que notre fadein est fini
+          APP->m_waitfade->SetEvent();
         }
 
       }
     }
+
     //on gere le fade des chaines
     if(replace)
     {
@@ -1207,23 +1343,25 @@ void CStockEffetLst::process(int chaine,float **inputs, float **outputs, long sa
     }
         
 
-CS_Processing.Unlock();
+    CS_Processing.Unlock();
 }
 
 
-
+//lance le changement d'une chaine
 void CStockEffetLst::ChangeChaine(int from,int to)
 {
-  //on lui dit de faire un fade out
-  //fader.SetFadeOut();
-  if(m_processing && m_processingcalled)
-    newchaine = to;
-  else  //on change la chaine par nous meme
+  //on annonce le changement de chaine
+  CS_newchaine.Lock();
+  newchaine = to;
+  CS_newchaine.Unlock();
+
+  if(!m_workingthread) //pas de changement en cours
   {
-    SetChangingFlag(true);
-    fadestate = FD_CHANGING;   
-    //on commense une thread qui va changer de chaine
-    AfxBeginThread(WorkerThreadProc,(LPVOID)APP,THREAD_PRIORITY_NORMAL,0,0,NULL);   
+    CS_fade.Lock();
+    fadestate = FD_CHTOFADEOUT;
+    SetWorkingThread(TRUE);
+    CS_fade.Unlock();
+    AfxBeginThread(TD_ChangeChain,(LPVOID)APP,THREAD_PRIORITY_NORMAL,0,0,NULL);  
   }
 }
 

@@ -671,7 +671,7 @@ if (!pHost)                             /* if no VST Host there              */
   return false;
 
 //ATTENTION THIS IS A CTAFINCONSCIENCE
-//EffClose();                             /* make sure it's closed             */
+EffClose();                             /* make sure it's closed             */
 pEffect = NULL;                         /* and reset the pointer             */
 
 #ifdef WIN32
@@ -1325,6 +1325,7 @@ bool CVSTHost::OnCanDo(const char *ptr)
 if ((!strcmp(ptr, "sendVstMidiEvent"))     ||
     (!strcmp(ptr, "receiveVstMidiEvent"))  ||
     (!strcmp(ptr, "sendVstTimeInfo"))      ||
+    (!strcmp(ptr, "sizeWindow" ))          ||
     (!strcmp(ptr, "supportShell")) )
   return true;
 

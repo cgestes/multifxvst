@@ -2,7 +2,7 @@
 //-
 //- Project     : Use different Controls of VSTGUI
 //- Filename    : multifxVST.cpp
-//- Created by  : Yvan Grabit
+//- Created by  : CTAF
 //- Description :
 //-
 //- © 2000-1999, Steinberg Soft und Hardware GmbH, All Rights Reserved
@@ -53,6 +53,7 @@ multifxVST::multifxVST (audioMasterCallback audioMaster) :
   APP.parameter  = new CParameterLst;
   APP.controleur = new CControleurLst;
   APP.chaine_eff = new CStockEffetLst;
+  APP.m_waitfade = new CEvent(0,0,"waitfade");
   APP.host       = &theApp.host;
   APP.mnu = new CMenu;
   APP.mnu->LoadMenu(IDR_MNUEFFECTS);
@@ -185,6 +186,14 @@ multifxVST::~multifxVST ()
     APP.mnu = NULL;
   }
 
+  if(APP.m_waitfade)
+  {
+    //APP.m_waitfade->Unlock
+    delete APP.m_waitfade;
+    APP.m_waitfade = NULL;
+  }
+
+
   CString buf;buf.Format("DESTROY :: multifxVST(%d) \n", this);  TRACE(buf);
 
 }
@@ -205,6 +214,7 @@ long multifxVST::vendorSpecific (long lArg1, long lArg2, void* ptrArg, float flo
 //-----------------------------------------------------------------------------
 void multifxVST::resume ()
 {
+  wantEvents ();// on veut qu'il nous envoie du midi
   APP.chaine_eff->resume(APP.current_chaine);
 }
 
@@ -216,13 +226,13 @@ void multifxVST::suspend ()
 
 long multifxVST::startProcess()	// Called one time before the start of process call
 {
-  APP.chaine_eff->startProcess();
+//  APP.chaine_eff->startProcess();
   return 0; //default
 }
 
 long multifxVST::stopProcess()	// Called after the stop of process call
 {
-  APP.chaine_eff->stopProcess();
+//  APP.chaine_eff->stopProcess();
   return 0;//default
 }
 
@@ -383,6 +393,43 @@ void multifxVST::process (float **inputs, float **outputs, long sampleFrames)
   APP.chaine_eff->process(APP.current_chaine,inputs,outputs,sampleFrames);
 }
 
+long multifxVST::processEvents(VstEvents *ev)
+{
+	for (long i = 0; i < ev->numEvents; i++)
+	{
+		if ((ev->events[i])->type != kVstMidiType)
+			continue;
+
+		VstMidiEvent* event = (VstMidiEvent*)ev->events[i];
+		char* midiData = event->midiData;
+		long status = midiData[0] & 0xf0;		// ignoring channel
+		if (status == 0xB0)	// we only look at controleur
+		{
+			long controleur = midiData[1] & 0x7f;
+			long value = midiData[2] & 0x7f;
+      setParameterAutomated(controleur,NBChaine2float(value));
+		}
+
+	}
+	return 1;	// want more
+}
+
+long multifxVST::canDo (char* text)
+{
+	//if (!strcmp (text, "receiveVstEvents"))  	return 1;
+  //if (!strcmp (text, "sendVstEvents"))      return 1;
+
+	if (!strcmp (text, "receiveVstMidiEvent"))return 1;
+	//if (!strcmp (text, "sendVstMidiEvent"))   return 1;
+
+  /*if (!strcmp (text, "receiveVstTimeInfo")) return 1;
+  if (!strcmp (text, "sendVstTimeInfo"))  	return 1;*/
+
+ // if (!strcmp (text, "receiveVstEvents"))		return 1;
+  //if (!strcmp (text, "midiProgramNames"))		return 1;
+
+	return -1;	// explicitly can't do; 0 => don't know
+}
 //-----------------------------------------------------------------------------
 void multifxVST::processReplacing (float **inputs, float **outputs, long sampleFrames)
 {

@@ -67,6 +67,9 @@ public :
   CParameterLst    * parameter;   //automatisation des parametres
   CMenu            * mnu;         //menu contenant les effets
   CAboutDlg        * pAboutDlg;   //fenetre about
+  
+  CEvent           * m_waitfade;
+
   int current_chaine;
 
 };
@@ -82,7 +85,9 @@ public:
 	virtual long vendorSpecific (long lArg1, long lArg2, void* ptrArg, float floatArg);
 	virtual void process (float **inputs, float **outputs, long sampleFrames);
 	virtual void processReplacing (float **inputs, float **outputs, long sampleFrames);
-	virtual void setBlockSize (long blockSize);
+	virtual long processEvents(VstEvents *events);
+  virtual long canDo (char* text);
+  virtual void setBlockSize (long blockSize);
 	virtual void setParameter (long index, float value);
 	virtual float getParameter (long index);
 	virtual void getParameterLabel(long index, char *label);

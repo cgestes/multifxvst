@@ -17,6 +17,8 @@ class CAppPointer;
 #pragma once
 #define MAX_CHAINE 128
 
+enum fadetype{FD_NOTHING = 0,FD_CHTOFADEOUT ,FD_FADEOUT,FD_CHTOFADEIN,FD_FADEIN};
+
 
 class CEffect;
 class CTAFadeInOut;
@@ -65,8 +67,21 @@ public :
 };
 
 
+struct TD_Arg
+{
+  CAppPointer * APP;
+  CString     * Param;
+};
+
 //changement de chaine
-UINT WorkerThreadProc(LPVOID Param) ;
+UINT TD_ChangeChain(LPVOID Param) ;
+
+UINT TDLoadAll(LPVOID Param) ;
+
+
+
+
+
 
 //#include
 class CCVSTHost;
@@ -154,10 +169,10 @@ public:
   void processReplace(int chaine,float **inputs, float **outputs, long sampleFrames);
   void suspend(int chaine);
   void resume(int chaine);
-
+/*
   void startProcess(){m_processingcalled = TRUE;};	// Called one time before the start of process call
   void stopProcess(){m_processingcalled = FALSE;};	// Called after the stop of process call
-
+*/
   void SetBlockSize(long size);
   void SetSampleRate(float size);
   long CalculDelay(int chaine);
@@ -188,7 +203,8 @@ public:
   //supprime tout!
   void RemoveAt(int chaine,bool killing_plug = false);
 
-  int  GetNextChaine(){return fadechainenext;}
+  int  GetNextChaine(){return newchaine;}//fadechainenext;}
+  void ResetNextChaine(){CS_newchaine.Lock(); newchaine = -1;CS_newchaine.Unlock(); }
   void SetChangingFlag(bool changing){m_changing_chain = changing;};
   volatile BOOL m_processing; //en mode resume ou suspend??? 
   int  nb_effect_used;
@@ -212,17 +228,30 @@ protected:
   float ** processreplacebuffer;
   float ** fadebuffer;
 
-  CTAFadeInOut fader;
+
   volatile int newchaine,fadechaineanc,fadechainenext;
-  enum fadetype{FD_NOTHING = 0,FD_FADEOUT,FD_FADEIN,FD_CHANGING};
-  volatile fadetype  /*int*/ fadestate; //0 = pas de fade, 1 = fadeout ,2 = fadein  ,3 = changement de cahine 
   float increment; // increment pour le fade (calculer a partir du samplerate)
   
-  volatile BOOL m_processingcalled; //true si process doit etre appelé (d'aprés startprocess / stopprocess)
-
   volatile bool m_changing_chain;
-  CCriticalSection CS_Processing;
+
+
+  CEvent m_fadeoutevent;  //synchro entre process et la thread de changment de chaine
+
+
+  BOOL m_workingthread;   //est ce qu'il y a une thread qui change de chaine
+
   //int            current_chaine;
+public:
+  CTAFadeInOut fader;
+  void SetWorkingThread(BOOL working){m_workingthread = working;}
+  CCriticalSection CS_Processing; //protege resume/suspend/process
+  CCriticalSection CS_fade;  //protege fadestate
+
+  CCriticalSection CS_ChangingChain; //protege les threads de changement de chaines
+
+  CCriticalSection CS_newchaine;//protege la variable newchaine
+  volatile fadetype  fadestate;
+
 
 };
 

@@ -30,27 +30,5 @@ public:
   virtual BOOL OnInitDialog();
   CSkinListCtrl m_lstcontroleur;
   afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
-  afx_msg void OnBnClickedBtnvalidate();
-  afx_msg void OnCbnSelchangeCbaction();
-//  afx_msg void OnLvnItemchangedLstcontroler(NMHDR *pNMHDR, LRESULT *pResult);
-  afx_msg void OnNMClickLstcontroler(NMHDR *pNMHDR, LRESULT *pResult);
-  int m_channel;
-  int m_action;
-  int nbsel;
-  bool initialied;
-  BOOL inited;
-  CString m_txtdesc1;
-  CString m_txtdesc2;
-  BOOL m_cksimple;
-  CString m_txtdesc3;
-  afx_msg void OnBnClickedCksimple();
-  CComboBox m_cbnote;
-  int m_controleur;
-  afx_msg void OnCbnSelchangeCombo2();
-  long m_value1;
-  CComboBox m_cbcontroleur;
-  afx_msg void OnBnClickedBtnloadmidi2();
-  afx_msg void OnBnClickedBtnsave3();
-  afx_msg void OnCbnDropdownCbControleur();
-  int m_controleurnb;
+
 };
