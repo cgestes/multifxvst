@@ -1,4 +1,4 @@
-MultiFXVST - CTAF Audio - version 0.6.4
+MultiFXVST - CTAF Audio - version 0.7.0
 
 MultifxVST est un plug-ins VST qui permet de gérer des chaines d'effets.
 
@@ -10,10 +10,11 @@ Principales caractéristiques :
  - gestion de la compensation du delay
  - fonctionne en insert comme en send
  - gestion de la synchronisation avec l'hote
+ - automation des paramètres (32)
 
 A venir :
- - automation des paramètres (autant que l'on veut)
  - gestion des plug-ins shell (waves notamment) et dx
+ - gestion du midi
 
 Installation :
  - dezipper "multifxVST.dll" dans votre repertoire vstplugins
