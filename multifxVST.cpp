@@ -42,7 +42,7 @@ extern bool oome;
 
 //-----------------------------------------------------------------------------
 multifxVST::multifxVST (audioMasterCallback audioMaster) :
-  AudioEffectX (audioMaster, 0, kNumParams)
+  AudioEffectX (audioMaster, 0, kNumParams+32)
 {
   TRACE("multifxVST::multifxVST \n");
   dat = NULL;
@@ -54,8 +54,8 @@ multifxVST::multifxVST (audioMasterCallback audioMaster) :
   APP.chaine_eff = new CStockEffetLst;
   APP.host       = &theApp.host;
   
-  APP.parameter->Init(16);
-  APP.controleur->Init(16);
+  APP.parameter->Init(32);
+  APP.controleur->Init(32);
 
   APP.controleur->Set_APP(&APP);
   APP.parameter->Set_APP(&APP);
@@ -258,9 +258,8 @@ void multifxVST::setSampleRate(float sampleRate)
 //-----------------------------------------------------------------------------
 void multifxVST::setParameter (long index, float value)
 {
-	switch (index)
+	if (index == kSliderHTag)
 	{
-			case kSliderHTag :
         BOOL b =APP.chaine_eff->m_processing;
         //on arrete de les plugins
         if(b)
@@ -277,8 +276,11 @@ void multifxVST::setParameter (long index, float value)
         //on lance les autres
         if(b)
           APP.chaine_eff->resume(APP.current_chaine);
-				break;
-	}
+	}else if((index >= kNumParams) && (index < kNumParams + APP.parameter->GetCount()))
+  {
+    APP.parameter->setParameter(index-kNumParams,value);
+  
+  }
 
   //on met l'affichage a jours
 	if (editor)

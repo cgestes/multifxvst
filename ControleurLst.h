@@ -4,7 +4,7 @@ class CControleurParam
 {
 public:
   CControleurParam(){value = 0;};
-
+  void Set(int value127){value = value127;}
   CArray <int,int> m_param;//liste des params associés
   int value;    //parametre associé
 };
@@ -13,17 +13,17 @@ public:
 class CParameterLst
 {
 public:
-  CParameterLst(){nb_controleur = 0;}
+  CParameterLst(){nb_controleur = 32;}
   void Init(int nbcontroleur);
 
   void Set();
   void Set_APP(CAppPointer * mapp){APP = mapp;}
-
+  void setParameter(long index, float value);
   int GetCount(){return nb_controleur;}
 protected:
   CAppPointer * APP;
   int nb_controleur;
-  CArray <CControleurParam,CControleurParam> controleur_value;
+  CArray <CControleurParam,CControleurParam &> controleur_value;
 };
 //####################################################################
 //####################################################################

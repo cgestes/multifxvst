@@ -3,41 +3,44 @@ MultiFXVST - CTAF Audio - version 0.6.4
 //####################################################################
 //########### HISTORY ################################################
 //####################################################################
-//-- 15/05/2004
+//-- 22/06/2004
+     - ajout : 32 controleurs automatisable (setparameter/getparameter)
+     
+//-- 15/06/2004
      - ajout : implementation ComboBox pour choisir le controleur
      
-//-- 14/05/2004
+//-- 14/06/2004
      - improve : interface
      - improve : CControleurLst / CControleurStk
      - ajout : come back du deuxieme bouton effet (effect2)!!!!
      - ajout : choix du controleur dans la fenetre d'effet générique
      
-//-- 11/05/2004 
+//-- 11/06/2004 
      - improve : interface pour l'ajout d'un controleur midi
      
-//-- 10/05/2004 : (version 0.6.3)
+//-- 10/06/2004 : (version 0.6.3)
      - bug : synchro (HostCanDo("SendVSTtimeInfo") retourne true maintenant)
      - bug : destructeur CControleurLst
      - improve : amélioration de la fenetre générique (Controleur #,...)
 
-//-- 09/05/2004
+//-- 09/06/2004
      - improve : amélioration de la fenetre générique (changement de CListBox en CSkinListCtrl)
 
-//-- 08/05/2004
+//-- 08/06/2004
      - improve : fichier d'aide
      - ajout : définition des controleurs et de leurs fonctionnements (CControleurLst,CControleurStk,CControleurDlg)
 
-//-- 06/05/2004 : (version 0.6.2)
+//-- 06/06/2004 : (version 0.6.2)
      - improve : passage du projet sous SVN (facilité de maintenance des versions)
      - improve : gestionnaire de controleur(midi)
      - ajout : interface controleur(midi)
 
-//-- 03/05/2004
+//-- 03/06/2004
      - ajout : affichage "used plug-ins"
      - ajout : fenetre "Controleur" + gestionnaire de controleur(base)
      - ajout : bouton "validate"
 
-//-- 02/05/2004
+//-- 02/06/2004
      - ajout : boutons "clear chain"/"copie chain"/"paste chain"
      - ajout : boutons "<<" / ">>"    (chaine--/chaine++)
      - ajout : affichage "copied chain"

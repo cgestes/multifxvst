@@ -317,6 +317,11 @@ void CEffectTxTDlg::OnSelchangeParmlist()
   m_lstparms.SetItemText(sel,2,sVal);
   GetParamDisp(pEffect,i,sVal);
   m_lstparms.SetItemText(sel,1,sVal);
+  
+  /*CString buf;
+  buf.Format("%d",pEffect->
+  GetParamDisp(pEffect,i,sVal);
+  m_lstparms.SetItemText(sel,3,sVal);*/
 
   m_lstparms.SetItemData(sel, i);
 

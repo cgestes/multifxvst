@@ -10,6 +10,12 @@ void CParameterLst::Init(int nbcontroleur)
   controleur_value.SetSize(nbcontroleur);
 }
 
+void CParameterLst::setParameter(long index, float value)
+{
+  int val = int( value *127);
+  controleur_value[index].Set(val);
+}
+
 //-------#############################################-------//
 //-------#############################################-------//
 //-------#############################################-------//
