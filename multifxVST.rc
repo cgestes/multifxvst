@@ -86,7 +86,7 @@ BEGIN
                     BS_FLAT | WS_TABSTOP,342,81,52,9
     LTEXT           "Copied chain :",IDC_STATIC,284,121,52,10,SS_SUNKEN
     LTEXT           "",IDC_TXTCOPIED,342,121,52,10,SS_SUNKEN
-    LTEXT           "MultifxVST version 0.6.3\nCTAF Audio - Cédric GESTES\nctaf.bob@laposte.net\nGO TO: http://www.ctaf.free.fr",
+    LTEXT           "MultifxVST version 0.6.4\nCTAF Audio - Cédric GESTES\nctaf.bob@laposte.net\nGO TO: http://www.ctaf.free.fr",
                     IDC_TXTINFOCTAF,284,195,110,33,SS_NOTIFY | NOT WS_GROUP
 END
 

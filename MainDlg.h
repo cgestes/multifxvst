@@ -1,8 +1,7 @@
 #pragma once
 #include "resource.h"
 #include "skin\hoverbutton.h"
-#include "skin\hoverbutton.h"
-#include "e:\ctaf\multifxvst - c3\multilocal\skin\hoverbutton.h"
+
 
 // Boîte de dialogue CMainDlg
 class CAppPointer;

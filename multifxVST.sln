@@ -1,24 +1,24 @@
-Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "multifxVST", "multifxVST.vcproj", "{656B64AC-792B-41A7-BC5F-3EF10F84A2FE}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
+Microsoft Visual Studio Solution File, Format Version 7.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "multifxVST", "multifxVST.vcproj", "{3A8F4570-3F00-47B0-8A33-B9A0CF36E2B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
-		Debug Dyn = Debug Dyn
-		Debug Stat = Debug Stat
-		Release Dyn = Release Dyn
-		Release Static = Release Static
+		ConfigName.0 = Debug Dyn
+		ConfigName.1 = Debug Stat
+		ConfigName.2 = Release Dyn
+		ConfigName.3 = Release Static
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
-		{656B64AC-792B-41A7-BC5F-3EF10F84A2FE}.Debug Dyn.ActiveCfg = Debug Dyn|Win32
-		{656B64AC-792B-41A7-BC5F-3EF10F84A2FE}.Debug Dyn.Build.0 = Debug Dyn|Win32
-		{656B64AC-792B-41A7-BC5F-3EF10F84A2FE}.Debug Stat.ActiveCfg = Debug Stat|Win32
-		{656B64AC-792B-41A7-BC5F-3EF10F84A2FE}.Debug Stat.Build.0 = Debug Stat|Win32
-		{656B64AC-792B-41A7-BC5F-3EF10F84A2FE}.Release Dyn.ActiveCfg = Release Dyn|Win32
-		{656B64AC-792B-41A7-BC5F-3EF10F84A2FE}.Release Dyn.Build.0 = Release Dyn|Win32
-		{656B64AC-792B-41A7-BC5F-3EF10F84A2FE}.Release Static.ActiveCfg = Release Static|Win32
-		{656B64AC-792B-41A7-BC5F-3EF10F84A2FE}.Release Static.Build.0 = Release Static|Win32
+		{3A8F4570-3F00-47B0-8A33-B9A0CF36E2B8}.Debug Dyn.ActiveCfg = Debug Dyn|Win32
+		{3A8F4570-3F00-47B0-8A33-B9A0CF36E2B8}.Debug Dyn.Build.0 = Debug Dyn|Win32
+		{3A8F4570-3F00-47B0-8A33-B9A0CF36E2B8}.Debug Stat.ActiveCfg = Debug Stat|Win32
+		{3A8F4570-3F00-47B0-8A33-B9A0CF36E2B8}.Debug Stat.Build.0 = Debug Stat|Win32
+		{3A8F4570-3F00-47B0-8A33-B9A0CF36E2B8}.Release Dyn.ActiveCfg = Release Dyn|Win32
+		{3A8F4570-3F00-47B0-8A33-B9A0CF36E2B8}.Release Dyn.Build.0 = Release Dyn|Win32
+		{3A8F4570-3F00-47B0-8A33-B9A0CF36E2B8}.Release Static.ActiveCfg = Release Static|Win32
+		{3A8F4570-3F00-47B0-8A33-B9A0CF36E2B8}.Release Static.Build.0 = Release Static|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
