@@ -68,8 +68,8 @@ LINK32=link.exe
 # PROP Output_Dir ".\$(ConfigurationName)"
 # PROP Intermediate_Dir ".\$(ConfigurationName)"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MT /W3 /O2 /Og /Ob2 /Oi /Ot /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /D "_RELEASE" /Yc"stdafx.h" /Fp"$(IntDir)/$(TargetName).pch" /Fo"$(IntDir)/" /Fd".\$(ConfigurationName)/" /TP /c /GA /GX 
-# ADD CPP /nologo /MT /W3 /O2 /Og /Ob2 /Oi /Ot /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /D "_RELEASE" /Yc"stdafx.h" /Fp"$(IntDir)/$(TargetName).pch" /Fo"$(IntDir)/" /Fd".\$(ConfigurationName)/" /TP /c /GA /GX 
+# ADD BASE CPP /nologo /MT /W3 /Og /Ob2 /Oi /Ot /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /D "_RELEASE" /Yc"stdafx.h" /Fp"$(IntDir)/$(TargetName).pch" /Fo"$(IntDir)/" /Fd".\$(ConfigurationName)/" /c /GA /GX 
+# ADD CPP /nologo /MT /W3 /Og /Ob2 /Oi /Ot /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /D "_RELEASE" /Yc"stdafx.h" /Fp"$(IntDir)/$(TargetName).pch" /Fo"$(IntDir)/" /Fd".\$(ConfigurationName)/" /c /GA /GX 
 # ADD BASE MTL /nologo /D"_DEBUG" /tlb".\Debug\multifxVST.tlb" /win32 
 # ADD MTL /nologo /D"_DEBUG" /tlb".\Debug\multifxVST.tlb" /win32 
 # ADD BASE RSC /l 1033 /d "_RELEASE" /d "_AFXDLL" 
@@ -78,8 +78,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo 
 # ADD BSC32 /nologo 
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /out:"VstPlugins\multifxVST_rs.dll" /incremental:no /def:".\multifxVST.def" /pdb:"ReleaseC\$(ProjectName).pdb" /pdbtype:sept /subsystem:windows /opt:ref /opt:noicf /release /implib:".\Release static/multifxVST.lib" /machine:ix86 
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /out:"VstPlugins\multifxVST_rs.dll" /incremental:no /def:".\multifxVST.def" /pdb:"ReleaseC\$(ProjectName).pdb" /pdbtype:sept /subsystem:windows /opt:ref /opt:noicf /release /implib:".\Release static/multifxVST.lib" /machine:ix86 
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /out:"VstPlugins\multifxVST_rs.dll" /incremental:no /def:".\multifxVST.def" /pdb:"ReleaseC\$(ProjectName).pdb" /pdbtype:sept /subsystem:windows /opt:ref /opt:noicf /release /implib:".\Release static/multifxVST.lib" 
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /out:"VstPlugins\multifxVST_rs.dll" /incremental:no /def:".\multifxVST.def" /pdb:"ReleaseC\$(ProjectName).pdb" /pdbtype:sept /subsystem:windows /opt:ref /opt:noicf /release /implib:".\Release static/multifxVST.lib" 
 
 !ELSEIF  "$(CFG)" == "multifxVST - Win32 Debug Dyn"
 
@@ -128,8 +128,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo 
 # ADD BSC32 /nologo 
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /out:"VstPlugins\MultifxVST_ds.dll" /incremental:no /def:".\multifxVST.def" /debug /pdb:".\Debug\$(ProjectName).pdb" /pdbtype:sept /subsystem:windows /implib:".\Debug/MultifxVST.lib" 
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /out:"VstPlugins\MultifxVST_ds.dll" /incremental:no /def:".\multifxVST.def" /debug /pdb:".\Debug\$(ProjectName).pdb" /pdbtype:sept /subsystem:windows /implib:".\Debug/MultifxVST.lib" 
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /out:"VstPlugins\MultifxVST_ds.dll" /incremental:no /def:".\multifxVST.def" /debug /pdb:".\Debug\$(ProjectName).pdb" /pdbtype:sept /subsystem:windows /implib:".\Debug/MultifxVST.lib" 
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /out:"VstPlugins\MultifxVST_ds.dll" /incremental:no /def:".\multifxVST.def" /debug /pdb:".\Debug\$(ProjectName).pdb" /pdbtype:sept /subsystem:windows /implib:".\Debug/MultifxVST.lib" 
 
 !ENDIF
 
@@ -144,85 +144,11 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\CCVSTHost.cpp
-
-!IF  "$(CFG)" == "multifxVST - Win32 Debug Dyn"
-
-# ADD CPP /nologo /GZ /GX 
-!ELSEIF  "$(CFG)" == "multifxVST - Win32 Debug Stat"
-
-# ADD CPP /nologo /GZ /GX 
-!ENDIF
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\CCVSTHost.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ControleurDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\ControleurDlg.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\ControleurLst.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\ControleurLst.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\GratomaticDlg.cpp
-
-!IF  "$(CFG)" == "multifxVST - Win32 Debug Dyn"
-
-# ADD CPP /nologo /GZ /GX 
-!ELSEIF  "$(CFG)" == "multifxVST - Win32 Debug Stat"
-
-# ADD CPP /nologo /GZ /GX 
-!ENDIF
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\GratomaticDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\MainDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MainDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\multifxVST.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\multifxVST.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\multifxVSTeditor.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\multifxVSTeditor.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\multifxVSTmain.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\multifxVSTmain.h
 # End Source File
 # Begin Source File
 
@@ -263,101 +189,33 @@ SOURCE=.\stockeffet.cpp
 SOURCE=.\stockeffet.h
 # End Source File
 # End Group
-# Begin Group "VST Files"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\AEffect.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\aeffectx.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vstsdk2.3\vstsdk2.3\source\common\AEffEditor.hpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\aeffguieditor.cpp
-
-!IF  "$(CFG)" == "multifxVST - Win32 Debug Dyn"
-
-# ADD CPP /nologo /GZ /GX 
-!ELSEIF  "$(CFG)" == "multifxVST - Win32 Debug Stat"
-
-# ADD CPP /nologo /GZ /GX 
-!ENDIF
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\aeffguieditor.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\AudioEffect.cpp
-
-!IF  "$(CFG)" == "multifxVST - Win32 Debug Dyn"
-
-# ADD CPP /nologo /GZ /GX 
-!ELSEIF  "$(CFG)" == "multifxVST - Win32 Debug Stat"
-
-# ADD CPP /nologo /GZ /GX 
-!ENDIF
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\AudioEffect.hpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\audioeffectx.cpp
-
-!IF  "$(CFG)" == "multifxVST - Win32 Debug Dyn"
-
-# ADD CPP /nologo /GZ /GX 
-!ELSEIF  "$(CFG)" == "multifxVST - Win32 Debug Stat"
-
-# ADD CPP /nologo /GZ /GX 
-!ENDIF
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\audioeffectx.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vstcontrols.cpp
-
-!IF  "$(CFG)" == "multifxVST - Win32 Debug Dyn"
-
-# ADD CPP /nologo /GZ /GX 
-!ELSEIF  "$(CFG)" == "multifxVST - Win32 Debug Stat"
-
-# ADD CPP /nologo /GZ /GX 
-!ENDIF
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vstcontrols.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vstgui.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\vstgui.h
-# End Source File
-# End Group
 # Begin Group "Fenetre VST"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\ChainDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ChainDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ControleurDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ControleurDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\EffectTxTDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\EffectTxTDlg.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\EffectWnd.cpp
@@ -377,58 +235,11 @@ SOURCE=.\EffectWnd.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\EffEditWnd.cpp
-
-!IF  "$(CFG)" == "multifxVST - Win32 Debug Dyn"
-
-# ADD CPP /nologo /GZ /GX 
-!ELSEIF  "$(CFG)" == "multifxVST - Win32 Debug Stat"
-
-# ADD CPP /nologo /GZ /GX 
-!ENDIF
-
+SOURCE=.\MainDlg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\EffEditWnd.h
-# End Source File
-# End Group
-# Begin Group "VSTHost"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\vsthost\CVSTHost.cpp
-
-!IF  "$(CFG)" == "multifxVST - Win32 Debug Dyn"
-
-# ADD CPP /nologo /GZ /GX 
-!ELSEIF  "$(CFG)" == "multifxVST - Win32 Debug Stat"
-
-# ADD CPP /nologo /GZ /GX 
-!ENDIF
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vsthost\CVSTHost.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vsthost\SmpVSTHost.cpp
-
-!IF  "$(CFG)" == "multifxVST - Win32 Debug Dyn"
-
-# ADD CPP /nologo /GZ /GX 
-!ELSEIF  "$(CFG)" == "multifxVST - Win32 Debug Stat"
-
-# ADD CPP /nologo /GZ /GX 
-!ENDIF
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vsthost\SmpVSTHost.h
+SOURCE=.\MainDlg.h
 # End Source File
 # End Group
 # Begin Group "Maintenance"
@@ -436,11 +247,11 @@ SOURCE=.\vsthost\SmpVSTHost.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\vstplugins\multifxVST\INFO.txt
+SOURCE=".\End to End\multifxVST\INFO.txt"
 # End Source File
 # Begin Source File
 
-SOURCE=".\vstplugins\multifxVST\TODO LIST.txt"
+SOURCE=".\End to End\multifxVST\TODO LIST.txt"
 # End Source File
 # End Group
 # Begin Group "Resource Files"
@@ -449,22 +260,6 @@ SOURCE=".\vstplugins\multifxVST\TODO LIST.txt"
 # Begin Source File
 
 SOURCE=.\res\bmp10001.bmp
-# End Source File
-# Begin Source File
-
-SOURCE=.\res\bmp10002.bmp
-# End Source File
-# Begin Source File
-
-SOURCE=.\res\bmp10004.bmp
-# End Source File
-# Begin Source File
-
-SOURCE=.\res\bmp10010.bmp
-# End Source File
-# Begin Source File
-
-SOURCE=.\res\bmp10016.bmp
 # End Source File
 # Begin Source File
 
@@ -477,6 +272,10 @@ SOURCE=.\Skin\ListCtrlSkin\ColumnHeaderSpan.bmp
 # Begin Source File
 
 SOURCE=.\Skin\ListCtrlSkin\ColumnHeaderStart.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\cursor1.cur
 # End Source File
 # Begin Source File
 
@@ -666,10 +465,172 @@ SOURCE=.\skinslider\ZipSliderCtl.cpp
 SOURCE=.\skinslider\ZipSliderCtl.h
 # End Source File
 # End Group
+# Begin Group "MultifxVST"
+
+# PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\res\cursor1.cur
+SOURCE=.\multifxVST.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\multifxVST.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\multifxVSTeditor.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\multifxVSTeditor.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\multifxVSTmain.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\multifxVSTmain.h
+# End Source File
+# Begin Group "VST Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\AEffect.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\aeffectx.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vstsdk2.3\vstsdk2.3\source\common\AEffEditor.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\aeffguieditor.cpp
+
+!IF  "$(CFG)" == "multifxVST - Win32 Debug Dyn"
+
+# ADD CPP /nologo /GZ /GX 
+!ELSEIF  "$(CFG)" == "multifxVST - Win32 Debug Stat"
+
+# ADD CPP /nologo /GZ /GX 
+!ENDIF
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\aeffguieditor.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\AudioEffect.cpp
+
+!IF  "$(CFG)" == "multifxVST - Win32 Debug Dyn"
+
+# ADD CPP /nologo /GZ /GX 
+!ELSEIF  "$(CFG)" == "multifxVST - Win32 Debug Stat"
+
+# ADD CPP /nologo /GZ /GX 
+!ENDIF
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\AudioEffect.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\audioeffectx.cpp
+
+!IF  "$(CFG)" == "multifxVST - Win32 Debug Dyn"
+
+# ADD CPP /nologo /GZ /GX 
+!ELSEIF  "$(CFG)" == "multifxVST - Win32 Debug Stat"
+
+# ADD CPP /nologo /GZ /GX 
+!ENDIF
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\audioeffectx.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vstcontrols.cpp
+
+!IF  "$(CFG)" == "multifxVST - Win32 Debug Dyn"
+
+# ADD CPP /nologo /GZ /GX 
+!ELSEIF  "$(CFG)" == "multifxVST - Win32 Debug Stat"
+
+# ADD CPP /nologo /GZ /GX 
+!ENDIF
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vstcontrols.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vstgui.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\vstgui.h
+# End Source File
+# End Group
+# Begin Group "VSTHost"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\CCVSTHost.cpp
+
+!IF  "$(CFG)" == "multifxVST - Win32 Debug Dyn"
+
+# ADD CPP /nologo /GZ /GX 
+!ELSEIF  "$(CFG)" == "multifxVST - Win32 Debug Stat"
+
+# ADD CPP /nologo /GZ /GX 
+!ENDIF
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\CCVSTHost.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsthost\CVSTHost.cpp
+
+!IF  "$(CFG)" == "multifxVST - Win32 Debug Dyn"
+
+# ADD CPP /nologo /GZ /GX 
+!ELSEIF  "$(CFG)" == "multifxVST - Win32 Debug Stat"
+
+# ADD CPP /nologo /GZ /GX 
+!ENDIF
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsthost\CVSTHost.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsthost\SmpEffect.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsthost\SmpEffect.h
+# End Source File
+# End Group
+# End Group
 # End Target
 # End Project
 
