@@ -3,7 +3,10 @@ MultiFXVST - CTAF Audio - version 0.6.2
 //####################################################################
 //########### HISTORY ################################################
 //####################################################################
-//-- 09/05/2004 :
+//-- 09/05/2004
+     - improve : amélioration de la fenetre générique (changement de CListBox en CSkinListCtrl)
+
+//-- 08/05/2004 :
      - improve : fichier d'aide
      - ajout : définition des controleurs et de leurs fonctionnements
 
