@@ -1301,10 +1301,27 @@ for (int i = 0; i < j; i++)
 
 bool CVSTHost::OnCanDo(const char *ptr)
 {
-if ((!strcmp(ptr, "sendVstMidiEvent")) ||
-    (!strcmp(ptr, "receiveVstMidiEvent")) /*||
-    (!strcmp(ptr, "sizeWindow"))*/ )
+if ((!strcmp(ptr, "sendVstMidiEvent"))     ||
+    (!strcmp(ptr, "receiveVstMidiEvent"))  ||
+    (!strcmp(ptr, "sendVstTimeInfo"))      /*||
+    (!strcmp(ptr, "supplyIdle")) */)
   return true;
+/*"sendVstEvents" 
+"sendVstMidiEvent" 
+"sendVstTimeInfo" 
+"receiveVstEvents" 
+"receiveVstMidiEvent" 
+"receiveVstTimeInfo" 
+"reportConnectionChanges" 
+"acceptIOChanges" 
+"sizeWindow" 
+"asyncProcessing" 
+"offline" 
+"supplyIdle" 
+"supportShell" 'shell' handling via uniqueID as suggested by Waves. 
+"editFile" (2.2) 
+"closeFileSelector" (2.2) 
+"startStopProcess" (2.3) */
 
 return false;                           /* per default, no.                  */
 }

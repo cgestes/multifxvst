@@ -133,6 +133,11 @@ multifxVST::~multifxVST ()
     delete APP.chaine_eff;
     APP.chaine_eff = NULL;
   }
+  if(APP.controleur)
+  {
+    delete APP.controleur;
+    APP.controleur = NULL;
+  }
   if(dat)
     delete dat;
 

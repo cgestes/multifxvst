@@ -1,8 +1,13 @@
-MultiFXVST - CTAF Audio - version 0.6.2
+MultiFXVST - CTAF Audio - version 0.6.3
 
 //####################################################################
 //########### HISTORY ################################################
 //####################################################################
+//-- 10/05/2004
+     - bug : synchro (HostCanDo("SendVSTtimeInfo") retourne true maintenant)
+     - bug : destructeur CControleurLst
+     - improve : amélioration de la fenetre générique (Controleur #,...)
+
 //-- 09/05/2004
      - improve : amélioration de la fenetre générique (changement de CListBox en CSkinListCtrl)
 
@@ -124,7 +129,7 @@ MultiFXVST - CTAF Audio - version 0.6.2
 // - fx processeur => problème de resize qd on revient sur le plug-ins
      (il remet la taille de la fenetre d'origine)(il conserve editor contrairement à cubase)
 // - qd on ajoute un plug-ins déja utilisé il ne met pas les paramètres par défault du plug mais ceux de la dernier config utilisé
-
+// bug resize (l'un dans l'autre dans l'un dans...)
 
 
 //####################################################################
@@ -152,7 +157,6 @@ MultiFXVST - CTAF Audio - version 0.6.2
 // - effecteditWnd => ne pas recréer à chaque fois...
 
 //############ HOST => PLUG => MultiFXHost => MultiFXPlug #############
-/#/- synchro? ( a verif juste)
 /#/- fxidle
 // - getTailSize (process aprés un suspend,pour les reverbs...)
 // - getTailSize transmettre les queues de reverbs et autres entre les chaines si possible

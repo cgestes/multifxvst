@@ -4,7 +4,7 @@ class CControleurParam
 {
 public:
   CControleurParam(){};
-  CControleurParam(CControleurParam & Param){};
+  //CControleurParam(CControleurParam & Param){};
   int nbeffectstk;//nb effect dans la chaine 
   int paramnb;    //parametre associé
 };
@@ -32,7 +32,7 @@ public:
   long min;              //minimum value
   long max;              //maximum value
   long controleur_value; //valeur du controleur
-  CArray <CControleurParam,CControleurParam &> m_lstparam[127];
+  CArray <CControleurParam,CControleurParam &> m_lstparam/*[127]*/;
 };
 
 

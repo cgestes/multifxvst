@@ -89,7 +89,7 @@ CDialog::OnInitDialog();
 
 	m_lstparms.InsertColumn(0, "Name", LVCFMT_LEFT, 150);
 	m_lstparms.InsertColumn(1, "Value", LVCFMT_LEFT, 60);
-  m_lstparms.InsertColumn(2, "Units", LVCFMT_LEFT, 60);
+  m_lstparms.InsertColumn(2, "Display", LVCFMT_LEFT, 60);
   m_lstparms.InsertColumn(3, "Controleur #", LVCFMT_LEFT, 60);
 
 	ListView_SetExtendedListViewStyle(m_lstparms.m_hWnd, LVS_EX_FULLROWSELECT  | LVS_EX_HEADERDRAGDROP);
@@ -120,7 +120,10 @@ if (pEffect)
     {
       GetParamName(pEffect,i,sParm);
       int idx =   m_lstparms.InsertItem(i,sParm);
-      m_lstparms.SetItemText(idx,1,"dd");
+      GetParamVal(pEffect,i,sParm);
+      m_lstparms.SetItemText(idx,1,sParm);
+      GetParamDisp(pEffect,i,sParm);
+      m_lstparms.SetItemText(idx,2,sParm);
 
       m_lstparms.SetItemData(idx, i);
     }
@@ -148,9 +151,9 @@ void  CEffEditDlg::GetParamName(CEffect *pEffect, int nParm,CString & param)
     pEffect->EffGetParamName(nParm, szTxt.GetBufferSetLength(65));
     szTxt.ReleaseBuffer();
     param += szTxt;
-    param += " = ";
+    /*param += " = ";
     GetParamDisp(pEffect,nParm,buf);
-    param += buf;
+    param += buf;*/
   }
 }
 
@@ -300,11 +303,18 @@ void CEffEditDlg::OnSelchangeParmlist()
 
   //on update la liste
   //m_lstparms.DeleteItem(i);
-  GetParamName(pEffect,i,sVal);
+
   m_lstparms.SetRedraw(FALSE);
+
+  GetParamName(pEffect,i,sVal);
   m_lstparms.SetItemText(sel,0,sVal);
-  //int idx = m_lstparms.InsertItem(i,sVal);
+  GetParamVal(pEffect,i,sVal);
+  m_lstparms.SetItemText(sel,1,sVal);
+  GetParamDisp(pEffect,i,sVal);
+  m_lstparms.SetItemText(sel,2,sVal);
+
   m_lstparms.SetItemData(sel, i);
+
   //m_lstparms.SetCurSel(sel);
   m_lstparms.SetRedraw(TRUE);
   //on update l'affichage en bas a gauche

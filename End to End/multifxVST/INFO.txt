@@ -1,4 +1,4 @@
-MultiFXVST - CTAF Audio - version 0.6.2
+MultiFXVST - CTAF Audio - version 0.6.3
 
 MultifxVST est un plug-ins VST qui permet de gérer des chaines d'effets.
 

@@ -100,9 +100,9 @@ public:
 	virtual void resume ();
   virtual void setSampleRate(float sampleRate);
 	virtual bool keysRequired ();
-  virtual bool getProductString(char *text){strcpy(text,"Gratomatic"); return TRUE;}
-  virtual bool getVendorString (char* text){strcpy(text,"Cédric GESTES");return TRUE;}
-  virtual bool getEffectName (char* name){strcpy(name,"Gratomatic");return TRUE;}
+  virtual bool getProductString(char *text){strcpy(text,"MultifxVST"); return TRUE;}
+  virtual bool getVendorString (char* text){strcpy(text,"CTAF Audio - Cédric GESTES");return TRUE;}
+  virtual bool getEffectName (char* name){strcpy(name,"MultifxVST");return TRUE;}
   virtual void close();
 
   virtual void open();
