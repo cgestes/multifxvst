@@ -93,4 +93,5 @@ pour tout commentaire et/ou pour signaler un bug non listé dans TODO LIST.txt :
 
 Copyright CTAF Audio
 ctaf.bob@laposte.net
+http://www.ctaf.free.fr
 Cédric GESTES

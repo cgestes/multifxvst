@@ -153,4 +153,5 @@ MultiFXVST - CTAF Audio - version 0.6.2
 
 Copyright CTAF Audio
 ctaf.bob@laposte.net
+http://www.ctaf.free.fr
 Cédric GESTES
