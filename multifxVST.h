@@ -14,8 +14,6 @@
 #include "audioeffectx.h"
 #endif
 
-//#include <string.h>
-
 enum
 {
   kSliderHTag = 0,
@@ -37,7 +35,7 @@ class multifxVSTEditor;
 class multifxVST;
 class CControleurDlg;
 class CControleurLst;
-
+class CParameterLst;
 //pointeur global qui stoque les object pour chaque instance
 class CAppPointer
 {
@@ -45,26 +43,28 @@ public :
   CAppPointer(){
     chaine_eff     = 0;
     host           = 0;
-    pChain    = 0;
+    pChain         = 0;
     pEffEditDlg    = 0;
     pEffParmDlg    = 0;
     pMainDlg       = 0;
     editor         = 0;
     effect         = 0;
     current_chaine = 0;
+    parameter      = 0;
   }
 
 
-  CStockEffetLst   * chaine_eff;
-  CCVSTHost        * host;
-  CChainDlg   * pChain;
-  CControleurDlg   * pControleur;
-  CControleurLst   * controleur;
-  CEffectWnd       * pEffEditDlg;
-  CEffectTxTDlg      * pEffParmDlg;
-  CMainDlg         * pMainDlg;
-  multifxVSTEditor * editor; 
-  multifxVST       * effect; 
+  CStockEffetLst   * chaine_eff;//chaines d'effet
+  CCVSTHost        * host;      //host VST virtuel (pr effet fils)
+  CChainDlg        * pChain;    //dlg avec les listes de chaines
+  CControleurDlg   * pControleur;//dlg azvec les controleurs midis
+  CControleurLst   * controleur;  //liste des controleurs midi
+  CEffectWnd       * pEffEditDlg; //fenetre d'effet
+  CEffectTxTDlg    * pEffParmDlg; //fenetre d'effet générique
+  CMainDlg         * pMainDlg;    //fenetre principale
+  multifxVSTEditor * editor;      //fenetre VST contenant la fenetre principale
+  multifxVST       * effect;      //Notre effet 
+  CParameterLst    * parameter;   //automatisation des parametres
 
   int current_chaine;
 
@@ -82,11 +82,6 @@ public:
 	virtual void process (float **inputs, float **outputs, long sampleFrames);
 	virtual void processReplacing (float **inputs, float **outputs, long sampleFrames);
 	virtual void setBlockSize (long blockSize);
-	/*virtual void setProgram (long program);
-	virtual void setProgramName (char *name);
-	virtual void getProgramName (char *name);
-	virtual bool getProgramNameIndexed (long category, long index, char* text);*/
-
 	virtual void setParameter (long index, float value);
 	virtual float getParameter (long index);
 	virtual void getParameterLabel(long index, char *label);
@@ -117,13 +112,6 @@ public:
   virtual long setChunk(void *data,long byteSize,bool isPreset);
 
 protected:
-
-	//Program *programs;
-	//float fSliderValue;
-  
-  /*CStockEffetLst * chaine_eff;
-  CCVSTHost      * host;
-  int            current_chaine;*/
   CAppPointer APP;
   void * dat; //pour les sauvegardes dans l'hote
 };

@@ -22,6 +22,8 @@ CControleurDlg::CControleurDlg(CWnd* pParent /*=NULL*/)
   , m_txtdesc3(_T(""))
   , m_controleur()
   , m_value1(0)
+  , inited(0)
+  , m_controleurnb(0)
 {
 }
 
@@ -75,6 +77,7 @@ void CControleurDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Text(pDX, IDC_TXTINCREMENT, m_value1);
   DDV_MinMaxLong(pDX, m_value1, 0, 127);
   DDX_Control(pDX, IDC_CB_CONTROLEUR, m_cbcontroleur);
+  DDX_CBIndex(pDX, IDC_CB_CONTROLEUR, m_controleurnb);
 }
 
 BEGIN_MESSAGE_MAP(CControleurDlg, CDialog)
@@ -85,6 +88,7 @@ BEGIN_MESSAGE_MAP(CControleurDlg, CDialog)
   ON_BN_CLICKED(IDC_CKSIMPLE, OnBnClickedCksimple)
   ON_BN_CLICKED(IDC_BTNLOADMIDI2, OnBnClickedBtnloadmidi2)
   ON_BN_CLICKED(IDC_BTNSAVE3, OnBnClickedBtnsave3)
+  ON_CBN_DROPDOWN(IDC_CB_CONTROLEUR, OnCbnDropdownCbControleur)
 END_MESSAGE_MAP()
 
 // Gestionnaires de messages CControleurDlg
@@ -126,8 +130,12 @@ BOOL CControleurDlg::OnInitDialog()
 	m_lstcontroleur.InsertColumn(7, "Max", LVCFMT_LEFT, 60);
 	m_lstcontroleur.InsertColumn(9, "Controleur value", LVCFMT_LEFT, 60);
 
+
+
 	ListView_SetExtendedListViewStyle(m_lstcontroleur.m_hWnd, LVS_EX_FULLROWSELECT  | LVS_EX_HEADERDRAGDROP);
+  inited = true;
   OnCbnSelchangeCbaction();
+  inited = false;
   return TRUE;  // return TRUE unless you set the focus to a control
   // EXCEPTION : les pages de propriétés OCX devraient retourner FALSE
 }
@@ -173,6 +181,9 @@ void CControleurDlg::OnBnClickedBtnvalidate()
 
 void CControleurDlg::OnCbnSelchangeCbaction()
 {
+
+
+
   bool note =  m_action > 2;
   UpdateData();
   if (m_action<0)return;
@@ -276,7 +287,6 @@ void CControleurDlg::OnBnClickedCksimple()
 void CControleurDlg::OnBnClickedBtnloadmidi2()
 {
   CControleurStk clf;
-  
   int nb = APP->controleur->Add(clf);
   APP->controleur->ViewControleur(m_lstcontroleur,nb);
 }
@@ -289,4 +299,24 @@ void CControleurDlg::OnBnClickedBtnsave3()
   if(nbafft < 0) nbafft = 0;
   APP->controleur->Suppr(nb);
   APP->controleur->ViewControleur(m_lstcontroleur,nbafft);
+}
+
+void CControleurDlg::OnCbnDropdownCbControleur()
+{
+  if(!inited)
+  { inited = true;
+    CString buf;
+    m_cbcontroleur.ResetContent();
+    m_cbcontroleur.SetRedraw(FALSE);
+    int i,j = APP->parameter->GetCount();
+
+    for(i= 0; i < j;i++)
+    {
+      buf.Format("%d",i+1);
+      m_cbcontroleur.AddString(buf);
+    }
+    m_cbcontroleur.SetRedraw();
+    m_cbcontroleur.SetCurSel(0);
+  }
+  // TODO : ajoutez ici le code de votre gestionnaire de notification de contrôle
 }

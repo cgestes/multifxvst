@@ -3,11 +3,12 @@
 class CControleurParam
 {
 public:
-  CControleurParam(){};
-  //CControleurParam(CControleurParam & Param){};
-  int nbeffectstk;//nb effect dans la chaine 
-  int paramnb;    //parametre associé
+  CControleurParam(){value = 0;};
+
+  CArray <int,int> m_param;//liste des params associés
+  int value;    //parametre associé
 };
+
 
 class CParameterLst
 {
@@ -16,34 +17,39 @@ public:
   void Init(int nbcontroleur);
 
   void Set();
+  void Set_APP(CAppPointer * mapp){APP = mapp;}
 
   int GetCount(){return nb_controleur;}
 protected:
+  CAppPointer * APP;
   int nb_controleur;
-  CArray <int,int> controleur_value;
+  CArray <CControleurParam,CControleurParam> controleur_value;
 };
 //####################################################################
 //####################################################################
 //####################################################################
-  enum{ACTION_C_SET =0,ACTION_C_PM,ACTION_C_TOGGLE, ACTION_N_SET, ACTION_N_PM, ACTION_N_TOGGLE,ACTION_PGCH};
+enum{ACTION_C_SET =0,ACTION_C_PM,ACTION_C_TOGGLE, ACTION_N_SET, ACTION_N_PM, ACTION_N_TOGGLE,ACTION_PGCH};
   
-  class CControleurStk
+class CControleurStk
 {
 public:
   CControleurStk();
-  CControleurStk(CControleurStk & controleur);
-  void operator=(CControleurStk & controleur);
+  CControleurStk(CControleurStk & controleur){
+   midi_channel    =controleur.midi_channel;   //cannal midi
+   midi_controleur =controleur.midi_controleur;//controleur ou note
+   action          =controleur.action;         
+   value1          =controleur.value1;         //depend de action
+   invert          =controleur.invert;         //inverse les valeurs en entrée
+   controleurnb      =controleur.controleurnb;     //numero du controleur
+  };
+  //void operator=(CControleurStk & controleur);
   void ViewControleur(CListCtrl & lst,int pos = 0);
   long midi_channel;     //cannal midi
   long midi_controleur;  //controleur ou note
   long action;           
   long value1;           //depend de action
   BOOL invert;           //inverse les valeurs en entrée
-
-  //long min;              //UNUSED minimum value
-  //long max;              //UNUSED maximum value
-  long controleur;      //numero du controleur
-  //CArray <CControleurParam,CControleurParam &> m_lstparam/*[127]*/;
+  long controleurnb;      //numero du controleur
 };
 
 

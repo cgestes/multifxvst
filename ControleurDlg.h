@@ -38,6 +38,7 @@ public:
   int m_action;
   int nbsel;
   bool initialied;
+  BOOL inited;
   CString m_txtdesc1;
   CString m_txtdesc2;
   BOOL m_cksimple;
@@ -50,4 +51,6 @@ public:
   CComboBox m_cbcontroleur;
   afx_msg void OnBnClickedBtnloadmidi2();
   afx_msg void OnBnClickedBtnsave3();
+  afx_msg void OnCbnDropdownCbControleur();
+  int m_controleurnb;
 };

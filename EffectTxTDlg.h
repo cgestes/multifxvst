@@ -12,6 +12,7 @@
 //#include "EffectWnd.h"
 #include "resource.h"
 #include "skin\skinlistctrl.h"
+#include "afxwin.h"
 /*****************************************************************************/
 /* CEffectTxTDlg dialog                                                        */
 /*****************************************************************************/
@@ -61,6 +62,10 @@ public:
   ::CFont font;
   afx_msg void OnLvnItemchangedListparms(NMHDR *pNMHDR, LRESULT *pResult);
   afx_msg void OnNMClickListparms(NMHDR *pNMHDR, LRESULT *pResult);
+  CComboBox m_cbcontroleurnb;
+  afx_msg void OnCbnDropdownCombo1();
+  BOOL inited;
+  int m_controleurnb;
 };
 
 #endif // !defined(AFX_EffectTxTDlg_H__45274173_9C71_11D5_8162_4000001054B2__INCLUDED_)

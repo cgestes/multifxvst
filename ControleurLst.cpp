@@ -1,6 +1,15 @@
 #include "stdafx.h"
 #include "multifxvst.h"
 #include ".\controleurlst.h"
+
+
+
+void CParameterLst::Init(int nbcontroleur)
+{
+  nb_controleur = nbcontroleur;
+  controleur_value.SetSize(nbcontroleur);
+}
+
 //-------#############################################-------//
 //-------#############################################-------//
 //-------#############################################-------//
@@ -39,31 +48,21 @@ CString long2Channel(long channel)
 //-------#############################################-------//
 CControleurStk::CControleurStk()
 {
-  long midi_channel = 0;
-  long midi_controleur = 0;
-  long action = 0;
-  long value1 = 0;
-  bool invert = 0;
-  long min = 0;
-  long max = 0;
-  long controleur_value = 0;
+   midi_channel    =0;   //cannal midi
+   midi_controleur =0;//controleur ou note
+   action          =0;         
+   value1          =0;         //depend de action
+   invert          =0;         //inverse les valeurs en entrée
+   controleurnb    =0;     //numero du controleur
 }
 
-CControleurStk::CControleurStk(CControleurStk & controleur)
-{
-  midi_channel = controleur.midi_channel;
-  midi_controleur = controleur.midi_controleur;
-  action = controleur.action;
-  value1 = controleur.value1;
-  invert = controleur.invert;
-  this->controleur = controleur.controleur;
-}
+
 
 //affiche l'ensemble des controleurs dans une liste
 void CControleurStk::ViewControleur(CListCtrl & lst,int pos)
 {
   CString buf;
-  buf.Format("%d",controleur);
+  buf.Format("%d",controleurnb);
   int nItem = lst.InsertItem(pos,buf);
   buf = long2Channel(midi_channel);
   lst.SetItemText(pos,1,buf);
@@ -77,10 +76,7 @@ void CControleurStk::ViewControleur(CListCtrl & lst,int pos)
   lst.SetItemText(pos,5,buf);
 }
 
-void CControleurStk::operator=(CControleurStk & controleur)
-{
 
-}
 
 //-------#############################################-------//
 //-------#############################################-------//

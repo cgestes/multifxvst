@@ -8,7 +8,7 @@
 #include "CCVSThost.h"
 #include "EffectTxTDlg.h"
 #include ".\EffectTxTDlg.h"
-
+#include "controleurlst.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -20,9 +20,11 @@ IMPLEMENT_DYNAMIC(CEffectTxTDlg, CDialog)
 
 CEffectTxTDlg::CEffectTxTDlg(CWnd* pParent /*=NULL*/,CAppPointer * m_app)
 	: CDialog(CEffectTxTDlg::IDD, pParent)
+  , m_controleurnb(0)
 {
 nEffect = -1;                           /* initialize effect to nothing      */
 APP = m_app;
+inited = 0;
 }
 
 /*****************************************************************************/
@@ -45,6 +47,8 @@ void CEffectTxTDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_LISTPARMS, m_lstparms);
   //}}AFX_DATA_MAP
 
+  DDX_Control(pDX, IDC_COMBO1, m_cbcontroleurnb);
+  DDX_CBIndex(pDX, IDC_COMBO1, m_controleurnb);
 }
 
 void CEffectTxTDlg::Update()
@@ -64,6 +68,7 @@ BEGIN_MESSAGE_MAP(CEffectTxTDlg, CDialog)
   ON_WM_CTLCOLOR()
   ON_NOTIFY(LVN_ITEMCHANGED, IDC_LISTPARMS, OnLvnItemchangedListparms)
   ON_NOTIFY(NM_CLICK, IDC_LISTPARMS, OnNMClickListparms)
+  ON_CBN_DROPDOWN(IDC_COMBO1, OnCbnDropdownCombo1)
 END_MESSAGE_MAP()
 
 /*****************************************************************************/
@@ -336,4 +341,25 @@ void CEffectTxTDlg::OnNMClickListparms(NMHDR *pNMHDR, LRESULT *pResult)
 {
   OnSelchangeParmlist();
   *pResult = 0;
+}
+
+void CEffectTxTDlg::OnCbnDropdownCombo1()
+{
+
+  if(!inited)
+  { inited = true;
+    CString buf;
+    m_cbcontroleurnb.ResetContent();
+    m_cbcontroleurnb.SetRedraw(FALSE);
+    int i,j = APP->parameter->GetCount();
+    m_cbcontroleurnb.AddString(buf);
+    for(i= 0; i < j;i++)
+    {
+      buf.Format("%d",i+1);
+      m_cbcontroleurnb.AddString(buf);
+    }
+    m_cbcontroleurnb.SetRedraw();
+    m_cbcontroleurnb.SetCurSel(0);
+  }
+
 }

@@ -45,16 +45,22 @@ multifxVST::multifxVST (audioMasterCallback audioMaster) :
   AudioEffectX (audioMaster, 0, kNumParams)
 {
   TRACE("multifxVST::multifxVST \n");
-
   dat = NULL;
+
+  APP.effect     = this;
   APP.current_chaine = 0;
+  APP.parameter  = new CParameterLst;
+  APP.controleur = new CControleurLst;
   APP.chaine_eff = new CStockEffetLst;
   APP.host       = &theApp.host;
-  APP.effect     = this;
-  APP.controleur = new CControleurLst;
+  
+  APP.parameter->Init(16);
+  APP.controleur->Init(16);
 
   APP.controleur->Set_APP(&APP);
-  APP.controleur->Init(16);
+  APP.parameter->Set_APP(&APP);
+
+
 
 
   APP.chaine_eff->Set(&APP);
@@ -135,6 +141,11 @@ multifxVST::~multifxVST ()
   if(APP.controleur)
   {
     delete APP.controleur;
+    APP.controleur = NULL;
+  }
+  if(APP.parameter)
+  {
+    delete APP.parameter;
     APP.controleur = NULL;
   }
   if(dat)
