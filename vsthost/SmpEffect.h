@@ -1,5 +1,5 @@
 /*****************************************************************************/
-/* SmpVSTHost.h: Interface for classes CSmpVSTHost / CSmpEffect              */
+/* SmpEffect.h: Interface for classes CSmpVSTHost / CSmpEffect              */
 /*****************************************************************************/
 
 #if !defined(AFX_SMPVSTHOST_H__EA642421_A9AF_11D5_B6BD_004F4E003207__INCLUDED_)

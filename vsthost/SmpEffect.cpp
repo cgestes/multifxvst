@@ -3,7 +3,7 @@
 /*****************************************************************************/
 
 #include "stdafx.h"
-#include "SmpVSTHost.h"
+#include "SmpEffect.h"
 #include "../EffectWnd.h"
 #include "../EffectTxTDlg.h"
 
