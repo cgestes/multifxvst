@@ -109,6 +109,8 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // Prise en charge DDX/DDV
 	virtual void PostNcDestroy();
 	DECLARE_MESSAGE_MAP()
+  ::CBitmap mybitmap;//fond
+  BOOL LoadBitmap(UINT bitmapid);
   //int current_chaine;
 
 public:
@@ -124,9 +126,11 @@ public:
   CHoverButton m_btncopy;
   CHoverButton m_btnpaste;
   int m_used;
-  afx_msg void OnStnClickedTxtinfoctaf();
+//  afx_msg void OnStnClickedTxtinfoctaf();
   afx_msg void OnEffectsBrowse();
   afx_msg void OnEffectsShellplug();
+
+  afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 };
 
 #endif

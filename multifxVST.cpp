@@ -109,7 +109,6 @@ long multifxVST::getChunk(void **data,bool isPreset)
 
   *data = dat;
 
-
   f.Close();
 
 
@@ -179,20 +178,12 @@ long multifxVST::vendorSpecific (long lArg1, long lArg2, void* ptrArg, float flo
 void multifxVST::resume ()
 {
   APP.chaine_eff->resume(APP.current_chaine);
-
-	/*if (editor)
-		((multifxVSTEditor*)editor)->resume ();*/
 }
 
 //-----------------------------------------------------------------------------
 void multifxVST::suspend ()
 {
-  /*AFX_MANAGE_STATE(AfxGetStaticModuleState());
-  CChainApp * theApp =(CChainApp *) AfxGetApp();*/
   APP.chaine_eff->suspend(APP.current_chaine);
-
-	/*if (editor)
-		((multifxVSTEditor*)editor)->suspend ();*/
 }
 
 //-----------------------------------------------------------------------------
@@ -212,9 +203,7 @@ bool multifxVST::string2parameter (long index, char* text)
 	
 	switch (index)
 	{
-//		case kSliderVTag :
-		case kSliderHTag :
-//		case kKnobTag :
+		case kChainTag :
 			if (text)
 			{
 				sscanf (text, "%d", &val);
@@ -266,7 +255,7 @@ void multifxVST::setSampleRate(float sampleRate)
 //-----------------------------------------------------------------------------
 void multifxVST::setParameter (long index, float value)
 {
-	if (index == kSliderHTag)
+	if (index == kChainTag)
 	{
         BOOL b =APP.chaine_eff->m_processing;
         //on arrete de les plugins
@@ -299,7 +288,7 @@ float multifxVST::getParameter (long index)
 {
 	float v = 1.0;
 
-	if (index == kSliderHTag )
+	if (index == kChainTag )
 		v = NBChaine2float(APP.current_chaine);
   else
   {
@@ -313,7 +302,7 @@ float multifxVST::getParameter (long index)
 //-----------------------------------------------------------------------------
 void multifxVST::getParameterDisplay (long index, char *text)
 {
-	if (index == kSliderHTag )
+	if (index == kChainTag )
 		sprintf (text, "%d",APP.current_chaine);
   else
 		sprintf (text, "%f",getParameter(index));
@@ -325,7 +314,7 @@ void multifxVST::getParameterLabel (long index, char *text)
 {
 	switch (index)
 	{
-	case kSliderHTag :
+	case kChainTag :
     strcpy (text, "");
 		break;
 
@@ -338,7 +327,7 @@ void multifxVST::getParameterLabel (long index, char *text)
 //-----------------------------------------------------------------------------
 void multifxVST::getParameterName (long index, char *text)
 {
-	if (index == kSliderHTag)
+	if (index == kChainTag)
 		strcpy (text, "Chain number");
   else
 		sprintf (text, "Parameter %d",index - kNumParams +1);

@@ -1,8 +1,22 @@
-MultiFXVST - CTAF Audio - version 0.7.4
+MultiFXVST - CTAF Audio - version 0.7.5
 
 //####################################################################
 //########### HISTORY ################################################
 //####################################################################
+//-- 10/08/2004
+     - ajout : bypass
+     
+//-- 09/08/2004 (version 0.7.4)
+     - improve : nettoyage, optimisation de tout le code "graphique" (load,update,changement de fenetre)
+     - ajout : fenetre about
+     - improve : calage exact des elements du skin
+     
+//-- 08/08/2004
+     - bug : pendant le changement de chaine (affichage instable sur la fenetre chaine)
+     
+//-- 07/08/2004
+     - improve : skin (boutons)    
+     
 //-- 04/08/2004
      - ajout : skin de l'interface graphique (MainDlg pour l'instant)
      

@@ -106,9 +106,9 @@ BOOL CControleurDlg::OnInitDialog()
     //INITIALISE LA LISTE
   initialied = false;
   m_lstcontroleur.Init();
-	m_lstcontroleur.g_MyClrFgHi = RGB(35,12,200);
+	/*m_lstcontroleur.g_MyClrFgHi = RGB(35,12,200);
 	m_lstcontroleur.g_MyClrBgHi = RGB(20,242,0);
-  m_lstcontroleur.g_MyClrBg   = RGB(130,120,240);
+  m_lstcontroleur.g_MyClrBg   = RGB(130,120,240);*/
 	/*m_listvst.SetBkColor(RGB(60,45,20));
 	m_listvst.SetTextColor(RGB(52,242,22));*/
 
@@ -140,13 +140,10 @@ BOOL CControleurDlg::OnInitDialog()
   // EXCEPTION : les pages de propriétés OCX devraient retourner FALSE
 }
 
-static CBrush brush(RGB(204,204,255));
+static CBrush brush(RGB(50,67,90));
 static CBrush brush2(RGB(132,121,247));
 HBRUSH CControleurDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 {
-  HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
-
-  // TODO :  Modifier ici les attributs du DC
 	pDC->SetBkMode(TRANSPARENT);
   pDC->SetBkColor(RGB(132,121,247));
   if(pWnd == this || pWnd->GetDlgCtrlID() == IDC_STATIC || pWnd->GetDlgCtrlID() == IDC_CKSIMPLE)
@@ -154,9 +151,6 @@ HBRUSH CControleurDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
     return brush;
   }
 	return brush2;
-
-  // TODO :  Retourner une autre brosse si la brosse par défaut n'est pas souhaitée
-  return hbr;
 }
 
 void CControleurDlg::OnBnClickedBtnvalidate()

@@ -34,9 +34,17 @@ CChainDlg::CChainDlg( CWnd* pParent)
   TRACE("CREATE::CChainDlg\n");
 }
 
+// Load a bitmap
+BOOL CChainDlg::LoadBitmap(UINT bitmapid)
+{
+	mybitmap.Attach(::LoadImage(::AfxGetInstanceHandle(),MAKEINTRESOURCE(bitmapid), IMAGE_BITMAP,0,0,LR_LOADMAP3DCOLORS));
+	BITMAP	bitmapbits;
+	mybitmap.GetBitmap(&bitmapbits);
+	return TRUE;
+}
+
 void CChainDlg::OnUpdate(int nb)
 {
-
   APP->chaine_eff->ViewChaine(APP->current_chaine,m_listvst,nb);
   UpdateData();
     m_used = APP->chaine_eff->nb_effect_used;
@@ -104,9 +112,10 @@ BEGIN_MESSAGE_MAP(CChainDlg, CDialog)
 ON_BN_CLICKED(IDC_BTNCLRCHAIN, OnBnClickedBtnclrchain)
 ON_BN_CLICKED(IDC_BTNCOPIETO, OnBnClickedBtncopieto)
 ON_BN_CLICKED(IDC_BTNPASTETO, OnBnClickedBtnpasteto)
-ON_STN_CLICKED(IDC_TXTINFOCTAF, OnStnClickedTxtinfoctaf)
+//ON_STN_CLICKED(IDC_TXTINFOCTAF, OnStnClickedTxtinfoctaf)
 ON_COMMAND(ID_EFFECTS_BROWSE, OnEffectsBrowse)
 ON_COMMAND(ID_EFFECTS_SHELLPLUG, OnEffectsShellplug)
+ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
 
@@ -171,61 +180,61 @@ BOOL CChainDlg::OnInitDialog()
   InitialiseSkin();
 
   return TRUE;  // return TRUE unless you set the focus to a control
-  // EXCEPTION : les pages de propriétés OCX devraient retourner FALSE
 }
 
 void CChainDlg::InitialiseSkin()
 {
+  LoadBitmap(IDB_CHAIN);
  //INITIALISATION DES BOUTONS
-  m_btnUP.LoadBitmap(IDB_HOVERBUTTON);
+  m_btnUP.LoadBitmap(IDB_CHAIN_UP,false,431,18);
   CString text=_T("Fait monter l'effet sélectionné");
   m_btnUP.SetToolTipText(&text);
 
-  m_btnDown.LoadBitmap(IDB_HOVERBUTTON);
+  m_btnDown.LoadBitmap(IDB_CHAIN_DOWN,false,431,41);
   text=_T("Fait descendre l'effet sélectionné");
   m_btnDown.SetToolTipText(&text);
 
-  m_btnAdd.LoadBitmap(IDB_HOVERBUTTON);
+  m_btnAdd.LoadBitmap(IDB_CHAIN_ADD,false,431,64);
   text=_T("Ajoute un effet à la chaine");
   m_btnAdd.SetToolTipText(&text);
 
-  m_btnSuppr.LoadBitmap(IDB_HOVERBUTTON);
+  m_btnSuppr.LoadBitmap(IDB_CHAIN_DEL,false,431,87);
   text=_T("Supprime un effet de la chaine");
   m_btnSuppr.SetToolTipText(&text);
 
-  m_btnSaveAll.LoadBitmap(IDB_HOVERBUTTON);
+  m_btnSaveAll.LoadBitmap(IDB_CHAIN_SAVEALL,false,449,203);
   text=_T("Sauvegarde toutes les chaines");
   m_btnSaveAll.SetToolTipText(&text);
 
-  m_btnLoadAll.LoadBitmap(IDB_HOVERBUTTON);
+  m_btnLoadAll.LoadBitmap(IDB_CHAIN_LOADALL,false,449,180);
   text=_T("Charge toutes les chaines");
   m_btnLoadAll.SetToolTipText(&text);
 
-  m_btnSavechaine.LoadBitmap(IDB_HOVERBUTTON);
+  m_btnSavechaine.LoadBitmap(IDB_CHAIN_SAVE,false,449,157);
   text=_T("Sauvegarde une chaine");
   m_btnSavechaine.SetToolTipText(&text);
 
-  m_btnLoadchaine.LoadBitmap(IDB_HOVERBUTTON);
+  m_btnLoadchaine.LoadBitmap(IDB_CHAIN_LOAD,false,449,134);
   text=_T("Charge une chaine");
   m_btnLoadchaine.SetToolTipText(&text);
 
-  m_btnpaste.LoadBitmap(IDB_HOVERBUTTON);
+  m_btnpaste.LoadBitmap(IDB_CHAIN_PASTE,false,449,279);
   text=_T("Colle une chaine");
   m_btnpaste.SetToolTipText(&text);
 
-  m_btnclear.LoadBitmap(IDB_HOVERBUTTON);
+  m_btnclear.LoadBitmap(IDB_CHAIN_CLEAR,false,449,233);
   text=_T("Efface une chaine");
   m_btnclear.SetToolTipText(&text);
 
-  m_btncopy.LoadBitmap(IDB_HOVERBUTTON);
+  m_btncopy.LoadBitmap(IDB_CHAIN_COPY,false,449,256);
   text=_T("Copie une chaine");
   m_btncopy.SetToolTipText(&text);
 
   //INITIALISE LA LISTE
   m_listvst.Init();
-	m_listvst.g_MyClrFgHi = RGB(35,12,200);
+	/*m_listvst.g_MyClrFgHi = RGB(35,12,200);
 	m_listvst.g_MyClrBgHi = RGB(20,242,0);
-  m_listvst.g_MyClrBg   = RGB(130,120,240);
+  m_listvst.g_MyClrBg   = RGB(130,120,240);*/
 	/*m_listvst.SetBkColor(RGB(60,45,20));
 	m_listvst.SetTextColor(RGB(52,242,22));*/
 
@@ -245,11 +254,6 @@ void CChainDlg::InitialiseSkin()
 
 	ListView_SetExtendedListViewStyle(m_listvst.m_hWnd, LVS_EX_FULLROWSELECT  | LVS_EX_HEADERDRAGDROP);
 	
-/*
-  //initialisation du slider
-	m_sld.SetSkin(IDB_CBBAR, IDB_CBN, IDB_CBH, BG_STARTATICK| BG_STRETCH_VERT );
-	//m_sld.SetRange(0,31);*/
-
 }
 
 
@@ -260,7 +264,7 @@ void CChainDlg::OnBnClickedBtnup()
   if(n<0)return ;
   // TODO : ajoutez ici le code de votre gestionnaire de notification de contrôle
   APP->chaine_eff->Up_eff(APP->current_chaine,n);
-  OnUpdate(n-1);
+    OnUpdate(n-1);
 }
 
 
@@ -520,7 +524,7 @@ if (dlg.DoModal() == IDOK)
 }
 
 //static CBrush brush(RGB(230,220,12));
-static CBrush brush(RGB(204,204,255));
+static CBrush brush(RGB(148,174,189));
 HBRUSH CChainDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 {
 	HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
@@ -533,92 +537,6 @@ HBRUSH CChainDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	}
 	return hbr;
 }
-
-
-/*
-void CChainDlg::OnLButtonDown(UINT nFlags, ::CPoint point) 
-{
-	
-	// START DRAGGING 
-	SetCapture();
-	m_bDragging = TRUE;
-	m_ptDragFrom = point;
-    ::SetCursor(AfxGetApp()->LoadCursor (IDC_CURSOR_HAND));
-	CDialog::OnLButtonDown(nFlags, point);
-
-}
-
-void CChainDlg::OnLButtonUp(UINT nFlags, ::CPoint point) 
-{
-	/// IF WE WHERE DRAGGING THEN RELEASE THE MOUSE CAPTURE
-	if(m_bDragging)
-	{
-		ReleaseCapture();
-		m_bDragging = FALSE;
-	}
-	
-	CDialog::OnLButtonUp(nFlags, point);
-}*/
-
-/*void CChainDlg::OnMouseMove(UINT nFlags, ::CPoint point) 
-{
-
- int ydiff;
-
-	if(m_bDragging && nFlags & MK_LBUTTON)
-	{
-	   // GET DIALOGS WINDOW SCREEN COORDINATES
-    ::CRect rcWnd;
-	   GetWindowRect(&rcWnd);
-
-	   // GET PARENTS CLIENT RECTANGLE
-     ::CRect prect;
-	   GetParent()->GetClientRect (prect);
-
-	   // IF WE HAVE TO GO DOWN OR UP // 
-	   if (m_ptDragFrom.y>point.y) {	
-		  ydiff = point.y - m_ptDragFrom.y;
-		   posY+=ydiff;
-	   }
-
-	   if (m_ptDragFrom.y<point.y) {	
-		  ydiff = m_ptDragFrom.y -point.y;
-		   posY-=ydiff;
-	   }
-	   //////////////////////////////
-
-
-       // CALCULATE IF WE ARE GOING TO EXCEED BOTTOM DIALOG BORDER
-	   int tmp=prect.Height ()-rcWnd.Height ();
-	   
-	   // CONSTRAINTS !
-	   if (posY<tmp+1) posY=tmp+1;
-	   if (posY>-1) posY=-1;
-
-	   // MOVE THE DIALOG 
-		SetWindowPos(NULL, 0, 
-			         posY, 
-					 rcWnd.Width(), 
-					 rcWnd.Height(), SWP_SHOWWINDOW|SWP_NOSIZE);
-
-
-	}	
-	
-	CDialog::OnMouseMove(nFlags, point);
-}*/
-
-
-
-//void CChainDlg::OnLvnOdstatechangedListvst(NMHDR *pNMHDR, LRESULT *pResult)
-//{
-//  LPNMLVODSTATECHANGE pStateChanged = reinterpret_cast<LPNMLVODSTATECHANGE>(pNMHDR);
-//  // TODO : ajoutez ici le code de votre gestionnaire de notification de contrôle
-//  if(pStateChanged->uNewState | LVIS_SELECTED)
-//  {
-//    int i = pStateChanged->iFrom;
-//  }
-//  *pResult = 0;
-//}
 
 void CChainDlg::OnLvnItemchangedListvst(NMHDR *pNMHDR, LRESULT *pResult)
 {
@@ -668,12 +586,6 @@ void CChainDlg::OnBnClickedBtnpasteto()
   }
 }
 
-void CChainDlg::OnStnClickedTxtinfoctaf()
-{
-  ShellExecute(NULL,"open","http://www.ctaf.free.fr","","",0);
-  // TODO : ajoutez ici le code de votre gestionnaire de notification de contrôle
-}
-
 void CChainDlg::OnEffectsBrowse()
 {
 
@@ -712,4 +624,41 @@ if (dlg.DoModal() == IDOK)
   AfxGetApp()->WriteProfileString("Load", "Path", sStartAt);
   LoadEffect(dlg.GetPathName());
   }
+}
+
+BOOL CChainDlg::OnEraseBkgnd(CDC* pDC)
+{
+  // TODO : ajoutez ici le code de votre gestionnaire de messages et/ou les paramètres par défaut des appels
+	CDC * pMemDC = new CDC;
+	pMemDC -> CreateCompatibleDC(pDC);
+  
+  //CRect r;
+	//GetClientRect(&r);
+
+
+
+  ::CBitmap * pOldBitmap;
+	pOldBitmap = pMemDC -> SelectObject(&mybitmap);
+	
+  BITMAP	bitmapbits;
+	mybitmap.GetBitmap(&bitmapbits);
+
+	//CPoint point(0,0);	
+	//pDC->SetStretchBltMode(HALFTONE);
+  pDC->BitBlt(0,0,bitmapbits.bmWidth/* getWidth()*/,bitmapbits.bmHeight,pMemDC,0,0,SRCCOPY);
+
+
+	// clean up
+	pMemDC -> SelectObject(pOldBitmap);
+	delete pMemDC;
+
+  /*if(WinRect.Width() > bitmapbits.bmWidth)
+  {
+    pDC->FillSolidRect(bitmapbits.bmWidth,0,WinRect.Width()-bitmapbits.bmWidth,27,RGB(255,153,0));
+    pDC->FillSolidRect(bitmapbits.bmWidth,27,WinRect.Width()-bitmapbits.bmWidth,18,RGB(239,205,69));
+    pDC->FillSolidRect(bitmapbits.bmWidth,45,WinRect.Width()-bitmapbits.bmWidth,19,RGB(113,153,175));
+  }
+  pDC->FillSolidRect(0,OFFSETY,WinRect.Width(),WinRect.Height()-OFFSETY,RGB(204,204,255));*/
+  return TRUE;
+
 }

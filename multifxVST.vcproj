@@ -330,6 +330,12 @@
 			Name="Fenetre VST"
 			Filter="">
 			<File
+				RelativePath=".\AboutDlg.cpp">
+			</File>
+			<File
+				RelativePath=".\AboutDlg.h">
+			</File>
+			<File
 				RelativePath=".\ChainDlg.cpp">
 			</File>
 			<File
@@ -386,7 +392,34 @@
 			Name="Resource Files"
 			Filter=".rc">
 			<File
+				RelativePath=".\Artwork\bitmap3.bmp">
+			</File>
+			<File
 				RelativePath=".\res\bmp10001.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Boutons pages - about copie.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Boutons pages - CHAIN copie.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Boutons pages - CONTROLER copie.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Boutons pages - EFFET copie.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Boutons pages - EFFET2 copie.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\bypass.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Chain - compteur - flèche droite copie.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Chain - compteur - flèche gauche copie.bmp">
 			</File>
 			<File
 				RelativePath=".\Skin\ListCtrlSkin\ColumnHeaderEnd.bmp">
@@ -416,10 +449,67 @@
 				RelativePath=".\Skin\HoverButton.bmp">
 			</File>
 			<File
+				RelativePath=".\Artwork\left_fleche_effet.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\main.bmp">
+			</File>
+			<File
 				RelativePath=".\multifxVST.def">
 			</File>
 			<File
 				RelativePath=".\multifxVST.rc">
+			</File>
+			<File
+				RelativePath=".\Artwork\Page CHAIN - bouton ADD.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Page CHAIN - bouton CLEAR.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Page CHAIN - bouton COPY.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Page CHAIN - bouton DEL.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Page CHAIN - bouton DOWN.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Page CHAIN - bouton LOAD ALL.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Page CHAIN - bouton LOAD.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Page CHAIN - bouton PASTE.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Page CHAIN - bouton SAVE ALL.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Page CHAIN - bouton Save.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Page CHAIN - bouton UP.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Page CHAIN.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Plug-in - (on-off).bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Plug-in - flèche droite.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\Plug-in - flèche gauche.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\preset_button.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\right_fleche_effet.bmp">
 			</File>
 			<File
 				RelativePath=".\skinslider\track_back.bmp">
@@ -447,6 +537,9 @@
 			</File>
 			<File
 				RelativePath=".\Skin\ListCtrlSkin\VerticleScrollBarUpArrow.bmp">
+			</File>
+			<File
+				RelativePath=".\Artwork\windows_button.bmp">
 			</File>
 		</Filter>
 		<Filter
@@ -748,24 +841,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath=".\Artwork\bypass.bmp">
-		</File>
-		<File
-			RelativePath=".\Artwork\left_fleche_effet.bmp">
-		</File>
-		<File
-			RelativePath=".\Artwork\main.bmp">
-		</File>
-		<File
-			RelativePath=".\Artwork\preset_button.bmp">
-		</File>
-		<File
-			RelativePath=".\Artwork\right_fleche_effet.bmp">
-		</File>
-		<File
-			RelativePath=".\Artwork\windows_button.bmp">
-		</File>
 	</Files>
 	<Globals>
 		<Global

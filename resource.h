@@ -20,15 +20,13 @@
 #define IDB_VERTICLE_SCROLLBAR_THUMB    116
 #define IDB_VERTICLE_SCROLLBAR_TOP      117
 #define IDB_VERTICLE_SCROLLBAR_UPARROW  118
-#define IDB_CBN                         119
-#define IDB_CBH                         120
-#define IDB_CBBAR                       121
 #define IDR_MENU1                       122
 #define IDR_MNUVST                      123
 #define IDD_CONTROLER                   124
 #define IDD_DIALOG2                     125
 #define IDD_MAIN                        126
 #define IDB_BITMAP2                     127
+#define IDD_ABOUT                       127
 #define IDB_BITMAP16                    128
 #define IDM_VSTMNU                      130
 #define IDR_MNUEFFECTS                  131
@@ -37,27 +35,45 @@
 #define IDB_BYPASS                      134
 #define IDB_PRESET                      135
 #define IDB_RIGHT_ARROW_EFFECT          136
-#define IDB_BITMAP4                     137
 #define IDB_LEFT_ARROW_EFFECT           137
+#define IDB_CHAIN_UP                    138
+#define IDB_CHAIN_CLEAR                 139
 #define IDC_CURSOR_HAND                 140
+#define IDB_CHAIN_COPY                  140
 #define IDC_LSTPLUG                     141
+#define IDB_CHAIN_DEL                   141
 #define IDC_BTNUP                       142
+#define IDB_CHAIN_DOWN                  142
 #define IDC_BTNDOWN                     143
+#define IDB_CHAIN_LOADALL               143
 #define IDC_BTNE                        144
+#define IDB_CHAIN_LOAD                  144
 #define IDC_BTNE2                       145
+#define IDB_CHAIN_PASTE                 145
 #define IDC_BTNADD                      146
+#define IDB_CHAIN_SAVEALL               146
 #define IDC_BTNSUPPR                    147
+#define IDB_CHAIN_SAVE                  147
 #define IDC_SLDCHAINE                   148
+#define IDB_CHAIN_ADD                   148
 #define IDC_EDIT1                       149
 #define IDC_SLDCHAINE2                  150
 #define IDC_TXTCONTROLEUR_NOTE          151
+#define IDB_CHAIN                       151
 #define IDC_TXTCHAINE                   152
+#define IDB_BTN_CHAIN                   152
 #define IDC_BTNCOPIETO                  153
+#define IDB_BTN_CONTROLER               153
 #define IDC_TXTINCREMENT                154
+#define IDB_BTN_EFF                     154
 #define IDC_BTNSAVE                     155
+#define IDB_BTN_EFF2                    155
 #define IDC_BUTTON2                     156
+#define IDB_CHAIN_RIGHT                 156
 #define IDC_BTNLOAD                     157
+#define IDB_CHAIN_LEFT                  157
 #define IDC_BTNSAVE3                    158
+#define IDB_BTN_ABOUT                   158
 #define IDC_BTNSAVE2                    159
 #define IDC_BTNLOAD2                    160
 #define IDC_LISTVST                     161
@@ -79,7 +95,7 @@
 #define IDC_BUTTON5                     177
 #define IDC_BTNCHPLUS                   178
 #define IDC_TXTUSED                     179
-#define IDC_BTNEFFECTTXT2               179
+#define IDC_BTNABOUT                    179
 #define IDC_BUTTON6                     180
 #define IDC_BTNBYPASS                   181
 #define IDC_TXTCOPIED                   182
@@ -103,6 +119,7 @@
 #define IDC_PARMVAL                     200
 #define IDC_PARMTEXT                    201
 #define IDC_RVALUE                      202
+#define IDC_FADETIME                    204
 #define IDM_EFF_PROGRAM_0               1029
 #define ID_PLUG_PROGRAMS                32771
 #define ID_PLUG_FXB                     32772
@@ -123,9 +140,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        138
+#define _APS_NEXT_RESOURCE_VALUE        160
 #define _APS_NEXT_COMMAND_VALUE         32785
-#define _APS_NEXT_CONTROL_VALUE         204
+#define _APS_NEXT_CONTROL_VALUE         205
 #define _APS_NEXT_SYMED_VALUE           303
 #endif
 #endif

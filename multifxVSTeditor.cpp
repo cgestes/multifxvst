@@ -207,10 +207,8 @@ void multifxVSTEditor::close ()                               //AFFFF normalemen
 //-----------------------------------------------------------------------------
 void multifxVSTEditor::idle ()                                        //AFFAIREEEEEE
 {
-
+  AEffGUIEditor::idle ();		// always call this to ensure update
   APP->pMainDlg->EnterIdle();
-	AEffGUIEditor::idle ();		// always call this to ensure update
-    //OutputDebugString("idle\n");
 }
 
 void multifxVSTEditor::update()                                       
@@ -219,35 +217,13 @@ void multifxVSTEditor::update()
   switch(UpdateType)
   {
   case 1:  //changement de chaine
-      APP->pMainDlg->ChangeChaine(APP->current_chaine);
-      //if(APP->chaine_eff->get_count(APP->current_chaine)>0)
-      APP->pMainDlg->SetEffect(0);
-      if(APP->pMainDlg->pActiv == APP->pControleur)
-      {
-
-      }
-      //pas d'effete a ouvrir donc on remet la fenetre main
-      else if(APP->chaine_eff->get_count(APP->current_chaine) == 0)
-      {
-         APP->pMainDlg->KillEffect();
-         APP->pMainDlg->ChildNotify(APP->pChain);
-      }
-      else
-      {
-        if(APP->pMainDlg->pActiv == (CWnd *)APP->pEffEditDlg)
-        { APP->pMainDlg->OpenEffect(APP->current_chaine,0);
-        }
-        else if (APP->pMainDlg->pActiv == (CWnd *)APP->pEffParmDlg)
-        {APP->pMainDlg->OpenEffectTxT(APP->current_chaine,0);
-          
-         //APP->pEffParmDlg->SetEffect(0);
-        }
-      }
+      APP->pMainDlg->OnUpdate();
       break;
   case 2:  //parametre de l'automation
     break;
   }
   UpdateType = 0;
+
   //APP->pMainDlg->OnUpdate();
 
   OutputDebugString("Update\n");
@@ -264,7 +240,7 @@ void multifxVSTEditor::setParameter (long index, float value)
 	if (!frame)
 		return;
 
-	if (index == kSliderHTag)
+	if (index == kChainTag)
   {
      UpdateType = 1;
   }else if((index >= kNumParams) && (index < kNumParams + APP->parameter->GetCount()))

@@ -107,9 +107,9 @@ BOOL CEffectTxTDlg::OnInitDialog()
 CDialog::OnInitDialog();
 
   m_lstparms.Init();
-	m_lstparms.g_MyClrFgHi = RGB(35,12,200);
+	/*m_lstparms.g_MyClrFgHi = RGB(35,12,200);
 	m_lstparms.g_MyClrBgHi = RGB(20,242,0);
-  m_lstparms.g_MyClrBg   = RGB(130,120,240);
+  m_lstparms.g_MyClrBg   = RGB(130,120,240);*/
 
 	LOGFONT lf;
 	memset(&lf, 0, sizeof(LOGFONT));
@@ -362,7 +362,7 @@ void CEffectTxTDlg::OnDestroy()
 }
 
 
-static CBrush brush(RGB(204,204,255));
+static CBrush brush(RGB(140,4,8));
 HBRUSH CEffectTxTDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 {
   HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);

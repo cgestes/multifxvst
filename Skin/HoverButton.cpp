@@ -126,27 +126,24 @@ void CHoverButton::ActivateTooltip(BOOL bActivate)
 
 void CHoverButton::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct) 
 {
-	// TODO: Add your code to draw the specified item
-
 	CDC *mydc=CDC::FromHandle(lpDrawItemStruct->hDC);
-
 	CDC * pMemDC = new CDC;
+
 	pMemDC -> CreateCompatibleDC(mydc);
     CRect r;
 	GetClientRect(&r);
-
-
 
 	CBitmap * pOldBitmap;
 	pOldBitmap = pMemDC -> SelectObject(&mybitmap);
 	
 	CPoint point(0,0);	
-	mydc->SetStretchBltMode(HALFTONE);
+	//mydc->SetStretchBltMode(HALFTONE);
 	if(lpDrawItemStruct->itemState & ODS_SELECTED)
 	{
-      mydc->BitBlt(0,0,/*r.right,r.bottom*/m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx*2,0,SRCCOPY);
-		//mydc->StretchBlt(0,0,r.right,r.bottom,pMemDC,m_ButtonSize.cx*2,0,m_ButtonSize.cx,m_ButtonSize.cy,SRCCOPY);
-
+    if(OnOff)
+      mydc->BitBlt(0,0,m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx,0,SRCCOPY);
+    else
+      mydc->BitBlt(0,0,m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx*2,0,SRCCOPY);
   }
 	else
 	{
@@ -154,28 +151,27 @@ void CHoverButton::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 		{
       if(OnOff)
       {
-        if(m_value)
-			    mydc->BitBlt(0,0,/*r.right,r.bottom*/m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx,0,SRCCOPY);
-        else
-			    mydc->BitBlt(0,0,/*r.right,r.bottom*/m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx*3,0,SRCCOPY);
+        /*if(m_value) //activé
+			    mydc->BitBlt(0,0,m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx*2,0,SRCCOPY);
+        else        //desactivé*/
+			    mydc->BitBlt(0,0,m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,0,0,SRCCOPY);
       }
       else
       {
-			  mydc->BitBlt(0,0,/*r.right,r.bottom*/m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx,0,SRCCOPY);
+			  mydc->BitBlt(0,0,m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx,0,SRCCOPY);
       }
-			//mydc->StretchBlt(0,0,r.right,r.bottom,pMemDC,m_ButtonSize.cx,0,m_ButtonSize.cx,m_ButtonSize.cy,SRCCOPY);
 		}else
 		{
       if(OnOff)
       {
-        if(m_value)
-          mydc->BitBlt(0,0,/*r.right,r.bottom*/m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx*2,0,SRCCOPY);
-        else
-          mydc->BitBlt(0,0,/*r.right,r.bottom*/m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,0,0,SRCCOPY);
+        if(!m_value)//desactivé
+          mydc->BitBlt(0,0,m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,m_ButtonSize.cx*2,0,SRCCOPY);
+        else        //activé
+          mydc->BitBlt(0,0,m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,0,0,SRCCOPY);
       }
       else
       {
-			   mydc->BitBlt(0,0,/*r.right,r.bottom*/m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,0,0,SRCCOPY);
+			   mydc->BitBlt(0,0,m_ButtonSize.cx,m_ButtonSize.cy,pMemDC,0,0,SRCCOPY);
       }
     }	
 	}
@@ -194,7 +190,7 @@ void CHoverButton::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 }
 
 // Load a bitmap from the resources in the button, the bitmap has to have 3 buttonsstates next to each other: Up/Down/Hover
-BOOL CHoverButton::LoadBitmap(UINT bitmapid,bool OnOff)
+BOOL CHoverButton::LoadBitmap(UINT bitmapid,bool OnOff,int x,int y)
 {
 	mybitmap.Attach(::LoadImage(::AfxGetInstanceHandle(),MAKEINTRESOURCE(bitmapid), IMAGE_BITMAP,0,0,LR_LOADMAP3DCOLORS));
 	BITMAP	bitmapbits;
@@ -202,10 +198,15 @@ BOOL CHoverButton::LoadBitmap(UINT bitmapid,bool OnOff)
 	m_ButtonSize.cy=bitmapbits.bmHeight;
   this->OnOff = OnOff;
   if(OnOff)
-    m_ButtonSize.cx=bitmapbits.bmWidth/4;
+    m_ButtonSize.cx=bitmapbits.bmWidth/3;
   else
 	  m_ButtonSize.cx=bitmapbits.bmWidth/3;
-	//SetWindowPos( NULL, 0,0, m_ButtonSize.cx,m_ButtonSize.cy,SWP_NOMOVE   |SWP_NOOWNERZORDER   );
+
+  if(x > 0 && y > 0)
+	  SetWindowPos( NULL, x,y, m_ButtonSize.cx,m_ButtonSize.cy,SWP_NOOWNERZORDER   );
+  else
+	  SetWindowPos( NULL, 0,0, m_ButtonSize.cx,m_ButtonSize.cy,SWP_NOMOVE   |SWP_NOOWNERZORDER   );
+
 	return TRUE;
 }
 

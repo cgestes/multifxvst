@@ -30,6 +30,22 @@ protected:
   long   lenght;
 
 }*/
+/*class FadeStruct
+{
+  FadeStruct(){fade = false;fadein = false;stop = 0.0;start = 1.0;current = 0.0;}
+  bool fade;    //fade actif
+  bool fadein;  //fade in or fade out
+
+  //value between 0.0f and 1.0f
+  float current;  //current fade value 
+  float start;    //start fade value
+  float stop;     //stop fade value
+
+  int sample_left_to_proceed = 
+
+
+
+};*/
 
 class CEffect;
 //stock des info sur un plug-ins
@@ -137,7 +153,9 @@ public:
 
   //###VST Implementation###
 	//fait un process de la chaine
-	void process(int chaine,float **inputs, float **outputs, long sampleFrames);
+	void process(int chaine,float **inputs, float **outputs, long sampleFrames,bool replace=false);
+  //return false si il n'a rien fait
+  bool ProcessEffect(CEffectStk * effst,float **inputs, float **outputs, long sampleFrames);
   void CopyBuffer(float ** dest,float ** source,long size);
   void AddBuffer(float ** dest,float ** source,long size);
   //fait un fondu de afondre avec source dans dest 
@@ -191,6 +209,7 @@ protected:
   CAppPointer * APP;
   float ** processbuffer; 
   float ** processreplacebuffer;
+  float ** fadebuffer;
 
   //int            current_chaine;
 

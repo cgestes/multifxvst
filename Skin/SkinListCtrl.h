@@ -20,8 +20,9 @@ public:
 	CSkinListCtrl();
 	CSkinHeaderCtrl m_SkinHeaderCtrl;
 	COLORREF g_MyClrFgHi;
+	COLORREF g_MyClrBg1;
+  COLORREF g_MyClrBg2;
 	COLORREF g_MyClrBgHi;
-	COLORREF g_MyClrBg;
 
 	void EnableHighlighting(HWND hWnd, int row, bool bHighlight);
 	bool IsRowSelected(HWND hWnd, int row);
@@ -52,6 +53,7 @@ public:
 
 	// Generated message map functions
 protected:
+  bool the_color_inverter;
 	//{{AFX_MSG(CSkinListCtrl)
 	afx_msg void OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp);
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, ::CPoint pt);

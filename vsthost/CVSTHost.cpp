@@ -1135,6 +1135,7 @@ return pEffect->EffGetParameter(index);
 
 int CVSTHost::Search(AEffect *pEffect)
 {
+  if(!pEffect) return -1; //v 0.7.4
 for (int i = GetSize() - 1;
      i >= 0;
      i--)

@@ -90,13 +90,13 @@ void CWithoutSliderCtrl::OnPaint()
   CRect rc;
   GetClientRect(&rc);
   CBrush  br(RGB(0,0,0));
-    memDC.FillRect(&rc,&br);
+  memDC.FillRect(&rc,&br);
   memDC.SetBkMode(TRANSPARENT   );
   memDC.SetTextColor(RGB(250,10,10));
-  memDC.DrawText(buf,&rc,0);
-  	CString str;
+  memDC.DrawText(buf,&rc,DT_RIGHT | DT_VCENTER);
+  /*	CString str;
 	str.Format("bob");
-	::OutputDebugString(str);
+	::OutputDebugString(str);*/
 }
 
 
@@ -115,6 +115,7 @@ bool CWithoutSliderCtrl::SetKnobPos(float nPos)
 	pos = nPos;
 
   int scalepos = ConvertNOTIN400(pos); 
+  int scaleposold = ConvertNOTIN400(nOldPos); 
 
   DWORD wval = MAKEWPARAM(TB_THUMBPOSITION,scalepos);
   //DWORD w2val = MAKEWPARAM(TB_THUMBTRACK,scalepos);
@@ -122,10 +123,10 @@ bool CWithoutSliderCtrl::SetKnobPos(float nPos)
   GetParent()->SendMessage(WM_HSCROLL,wval,LPARAM(this->GetSafeHwnd()));
 
   //UpdateWindow();
-	CString str;
+	/*CString str;
 	str.Format(" Pos=%d OldPos=%d\r\n", nPos, nOldPos );
-	::OutputDebugString(str);
-	return(nOldPos != nPos);
+	::OutputDebugString(str);*/
+	return(scalepos != scaleposold);
 
 
 

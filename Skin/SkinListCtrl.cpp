@@ -15,9 +15,11 @@ static char THIS_FILE[] = __FILE__;
 
 CSkinListCtrl::CSkinListCtrl()
 {
-	g_MyClrBgHi = RGB(115,123,165);
+	g_MyClrBg1 = RGB(155,170,213);
+  g_MyClrBg2 = RGB(172,187,235);
 	g_MyClrFgHi = RGB(229,229,229);
-  g_MyClrBg   = RGB(76,76,112);
+  g_MyClrBgHi   = RGB(76,76,112);
+
 }
 
 CSkinListCtrl::~CSkinListCtrl()
@@ -65,6 +67,7 @@ void CSkinListCtrl::OnCustomDrawList ( NMHDR* pNMHDR, LRESULT* pResult )
 {
 	NMLVCUSTOMDRAW* pLVCD = reinterpret_cast<NMLVCUSTOMDRAW*>( pNMHDR );
 	static bool bHighlighted = false;
+
 	
     *pResult = CDRF_DODEFAULT;
 
@@ -75,15 +78,26 @@ void CSkinListCtrl::OnCustomDrawList ( NMHDR* pNMHDR, LRESULT* pResult )
     else if ( CDDS_ITEMPREPAINT == pLVCD->nmcd.dwDrawStage )
 	{
         int iRow = (int)pLVCD->nmcd.dwItemSpec;
-		
+
+		//the_color_inverter = !the_color_inverter;
 		bHighlighted = IsRowHighlighted(m_hWnd, iRow);
 		if (bHighlighted)
 		{
 			pLVCD->clrText   = g_MyClrFgHi; // Use my foreground hilite color
+      
 			pLVCD->clrTextBk = g_MyClrBgHi; // Use my background hilite color
 			
 			EnableHighlighting(m_hWnd, iRow, false);
-		}
+		}else
+    {
+      
+      if(iRow %2)
+        pLVCD->clrTextBk = g_MyClrBg1;
+      else
+        pLVCD->clrTextBk = g_MyClrBg2;
+       
+
+    }
 		
 		*pResult = CDRF_DODEFAULT | CDRF_NOTIFYPOSTPAINT;
 		
@@ -168,6 +182,25 @@ void CSkinListCtrl::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 BOOL CSkinListCtrl::OnEraseBkgnd(CDC* pDC) 
 {
+  /*CRect rc,clip;
+  pDC->GetClipBox(&clip);
+
+  rc.left = clip.left;
+  rc.right = rc.right;
+
+  int col = 0;
+  for(int i = clip.top; i < clip.bottom; i+=20 )
+  {
+    col++;
+    rc.top = i;
+    rc.bottom  = i + 20;
+    if(col % 2)
+      pDC->FillSolidRect(clip,g_MyClrBg1);
+    else
+      pDC->FillSolidRect(clip,g_MyClrBg2);
+
+  }*/
+
 	m_SkinVerticleScrollbar.UpdateThumbPosition();
 	m_SkinHorizontalScrollbar.UpdateThumbPosition();
 	return FALSE;
@@ -195,9 +228,25 @@ void CSkinListCtrl::OnPaint()
 	CRect clip;
 
 	memDC.GetClipBox(&clip);
-	memDC.FillSolidRect(clip,g_MyClrBg);
+  /*CRect rc;
+  rc.left = clip.left;
+  rc.right = rc.right;
+
+  int col = 0;
+  for(int i = clip.top; i < clip.bottom; i+=20 )
+  {
+    col++;
+    rc.top = i;
+    rc.bottom  = i + 20;
+    if(col % 2)
+      memDC.FillSolidRect(clip,g_MyClrBg1);
+    else
+	    memDC.FillSolidRect(clip,g_MyClrBg2);
+
+  }*/
+	memDC.FillSolidRect(clip,g_MyClrBg1);
 	   
-	SetTextBkColor(g_MyClrBg);
+	SetTextBkColor(g_MyClrBg1);
 	   
 	m_SkinVerticleScrollbar.UpdateThumbPosition();
 	m_SkinHorizontalScrollbar.UpdateThumbPosition();
@@ -249,8 +298,8 @@ void CSkinListCtrl::PositionScrollBars()
 	windowRect.left +=nDialogFrameWidth;
 	windowRect.right+=nDialogFrameWidth;
 
-	CRect vBar(windowRect.right-nDialogFrameWidth,windowRect.top-nTitleBarHeight-nDialogFrameHeight,windowRect.right+12-nDialogFrameWidth,windowRect.bottom+12-nTitleBarHeight-nDialogFrameHeight);
-	CRect hBar(windowRect.left-nDialogFrameWidth,windowRect.bottom-nTitleBarHeight-nDialogFrameHeight,windowRect.right+1-nDialogFrameWidth,windowRect.bottom+12-nTitleBarHeight-nDialogFrameHeight);
+	CRect vBar(windowRect.right-nDialogFrameWidth,windowRect.top-nTitleBarHeight-nDialogFrameHeight,windowRect.right+9-nDialogFrameWidth,windowRect.bottom+9-nTitleBarHeight-nDialogFrameHeight);
+	CRect hBar(windowRect.left-nDialogFrameWidth,windowRect.bottom-nTitleBarHeight-nDialogFrameHeight,windowRect.right+1-nDialogFrameWidth,windowRect.bottom+9-nTitleBarHeight-nDialogFrameHeight);
 	
 	m_SkinVerticleScrollbar.SetWindowPos(NULL,vBar.left,vBar.top,vBar.Width(),vBar.Height(),SWP_NOZORDER);
 	m_SkinHorizontalScrollbar.SetWindowPos(NULL,hBar.left,hBar.top,hBar.Width(),hBar.Height(),SWP_NOZORDER);

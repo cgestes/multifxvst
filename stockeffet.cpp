@@ -293,6 +293,8 @@ CStockEffetLst::CStockEffetLst()
 {
   processbuffer = NULL;
   processreplacebuffer = NULL;
+  fadebuffer = NULL;
+
   m_processing = FALSE;
   host = NULL;
   APP = NULL;
@@ -441,6 +443,12 @@ CStockEffetLst::~CStockEffetLst()
     delete [] processreplacebuffer[0];
     delete [] processreplacebuffer[1];
     delete [] processreplacebuffer;
+  }
+  if(fadebuffer)
+  {
+    delete [] fadebuffer[0];
+    delete [] fadebuffer[1];
+    delete [] fadebuffer;
   }
   CString buf;buf.Format("DESTROY :: CStockEffetLst(%d) \n", this);  TRACE(buf);
 
@@ -899,52 +907,102 @@ void CStockEffetLst::resume(int chaine)
 //CQFD!
 
 
-void CStockEffetLst::process(int chaine,float **inputs, float **outputs, long sampleFrames)
+void CStockEffetLst::process(int chaine,float **inputs, float **outputs, long sampleFrames,bool replace)
 {
     if(!VCH(chaine))return ;
-    int i =0,j = get_count(chaine);//get_count_withoutbypass
+    int i =0,k = 0,j = get_count(chaine);
     CEffectStk * effst;
     float ** out1,** out2;
+    //bool replace = false;
 
-    if(!j)return; //on se casse ya rien a faire;
-
-    if(j % 2) //nombre d'effet impair
+    if(!j) //aucun plug-ins => on met l'entrée dans la sortie et tayo
     {
-      out1 = processbuffer;
-      out2 = processreplacebuffer;
+      if(replace)
+        CopyBuffer(outputs,inputs,sampleFrames);
+      else 
+        AddBuffer(outputs,inputs,sampleFrames);
+      return; //on se casse ya rien a faire de plus
     }
-    else     //nombre d'effet pair
-    {
-      out1 = processreplacebuffer;
-      out2 = processbuffer;
-    }
+        
 
-    if(j == 1)  //obligé a cause de processreplace qui nous utilise et qui as pas forcément 
-      CopyBuffer(processreplacebuffer,inputs,sampleFrames); //2 buffers différents
+    out1 = processbuffer;
+    out2 = processreplacebuffer;
 
-    for (i = 0; i < j-1;i++)
+    //par sécurité on copy notre buffer d'entrées dans out1
+    CopyBuffer(out1,inputs,sampleFrames);
+    
+    bool processeed = false;
+    while(i < j)
     {
-      if((effst = get(chaine,i))){
-        if(!i)
+      if((effst = get(chaine,i)))
+      {
+
+        if(k%2)//impair
         {
-         host->EffProcessReplacing(effst->effect_nb ,inputs,out1,sampleFrames);
+          processeed = ProcessEffect(effst,out2,out1,sampleFrames);
         }
-        else
-        if(i%2)  //IMPAIR on inverse l'entrée et la sortie un coups sur deux (com en vrai koi!)
-         host->EffProcessReplacing(effst->effect_nb ,out1,out2,sampleFrames);
-        else
-         host->EffProcessReplacing(effst->effect_nb ,out2,out1,sampleFrames);
+        else   //pair
+        {
+          processeed = ProcessEffect(effst,out1,out2,sampleFrames);
+        }
+        if(processeed)
+          k++;
       }
+      i++;
     }
 
-    //dernier effect de la liste on applique le process
-    if((effst = get(chaine,i))){
-      host->EffProcess(effst->effect_nb ,processreplacebuffer,outputs,sampleFrames);
+
+
+    if(k%2) //on inverse les buffers si nécessaire
+    {
+      float **buf = out1;
+      out1 = out2;
+      out2 = buf;
     }
+
+    //la sortie se trouve obligatoirement dans out1
+    
+
+    //on gere le fade des chaines
+    if(replace)
+    {
+      if(k%2)
+        CopyBuffer(outputs,out1,sampleFrames);
+    }
+    else
+    {
+      AddBuffer(outputs,out1,sampleFrames);
+    }
+        
+
 
 }
 
+//process l'effet gere le softbypass 
+bool CStockEffetLst::ProcessEffect(CEffectStk * effst,float **inputs, float **outputs, long sampleFrames)
+{
+  if((effst->bypass == true) && (effst->fade == false))  return false;
 
+  int nbeff = effst->effect_nb;
+  CSmpEffect * eff = (CSmpEffect *)host->GetAt(nbeff);
+  ASSERT(eff);
+
+
+
+  if(effst->fade)
+  {
+    eff->EffProcessReplacing(inputs,fadebuffer,sampleFrames);
+    if(effst->bypass)
+      FonduBuffer(outputs,fadebuffer,inputs,sampleFrames,0.0,1.0);
+    else
+      FonduBuffer(outputs,fadebuffer,inputs,sampleFrames,1.0,0.0);
+
+    effst->fade = false;
+  }
+  else
+    eff->EffProcessReplacing(inputs,outputs,sampleFrames);
+  return true;
+}
 
 //remplace outputs
 
@@ -960,40 +1018,10 @@ void CStockEffetLst::processReplace(int chaine,float **inputs, float **outputs, 
   //pq peu yavoir des hosts qui nous donne le mm buffer en entrée et en sortie
   //et si on fait un process (dans le CEffect::processreplace) on efface input
   //et ca,C pas bon!
-  process(chaine,inputs, outputs, sampleFrames);
+  process(chaine,inputs, outputs, sampleFrames,true);
+ 
 
- /*   if(!VCH(chaine))return ;
-    int i =0,j = get_count(chaine);
-    CEffectStk * effst;
-    float ** out1,** out2;
 
-    if(!j)return; //on se casse ya rien a faire;
-
-    if(j % 2) //nombre d'effet impair
-    {
-      out1 = outputs;
-      out2 = processreplacebuffer;
-    }
-    else     //nombre d'effet pair
-    {
-      out1 = processreplacebuffer;
-      out2 = outputs;
-    }
-
-    for (i = 0; i < j;i++)
-    {
-      if((effst = get(chaine,i))){
-        if(!i)
-        {
-         host->EffProcessReplacing(effst->effect_nb ,inputs,out1,sampleFrames);
-        }
-        else
-        if(i%2)  //IMPAIR on inverse l'entrée et la sortie un coups sur deux (com en vrai koi!)
-         host->EffProcessReplacing(effst->effect_nb ,out1,out2,sampleFrames);
-        else
-         host->EffProcessReplacing(effst->effect_nb ,out2,out1,sampleFrames);
-      }
-    }*/
 }
 
 //on voit l'algo direct! (vive l'assembleur!)
@@ -1016,9 +1044,10 @@ void CStockEffetLst::AddBuffer(float ** dest,float ** source,long size)
   }
 }
 
-#define OPERATION_SCIENTIFIQUE(x,y,coef) ((y*coef) + (x*1.0f - coef))
+#define OPERATION_SCIENTIFIQUE(x,y,coef) ( (x*(1.0f - coef))+(y*coef) )
 //on voit l'algo direct! (vive l'assembleur!)
 //on realise un fondu de afondre avec source
+//dest //process  //clear
 void CStockEffetLst::FonduBuffer(float ** dest,float ** source,float ** afondre,long size,float start,float end)
 {
   float val = start;
@@ -1028,12 +1057,13 @@ void CStockEffetLst::FonduBuffer(float ** dest,float ** source,float ** afondre,
   {
     if(val < 0)val = 0;
     if(val > 1)val = 1;
-    dest[0][i] += OPERATION_SCIENTIFIQUE(source[0][i],afondre[1][i],val) ;
-    dest[1][i] += OPERATION_SCIENTIFIQUE(source[1][i],afondre[1][i],val);
+    dest[0][i] = OPERATION_SCIENTIFIQUE(source[0][i],afondre[1][i],val) ;
+    dest[1][i] = OPERATION_SCIENTIFIQUE(source[1][i],afondre[1][i],val);
     val += inc;
     
   }
 }
+
 void CStockEffetLst::SetByPass(int chaine,int nbeffstk,bool bypass)
 {
   CEffectStk * eff;
@@ -1120,8 +1150,14 @@ void CStockEffetLst::SetBlockSize(long size)
     delete processreplacebuffer[0];
     delete processreplacebuffer[1];
     delete []processreplacebuffer;
-  } 
+  }
 
+  if(fadebuffer)
+  {
+    delete fadebuffer[0];
+    delete fadebuffer[1];
+    delete []fadebuffer;
+  }
   processreplacebuffer = new float *[2]; //stereo only     //CTAFLEMARDISE
   //ouais ben le 5.1 on y est pas encore hein!! on va faire marcher le reste d'abord
   processreplacebuffer[0] = new float[size];
@@ -1132,6 +1168,10 @@ void CStockEffetLst::SetBlockSize(long size)
   processbuffer[0] = new float[size];
   processbuffer[1] = new float[size];
 
+  fadebuffer = new float *[2]; //stereo only     //CTAFLEMARDISE
+  //ouais ben le 5.1 on y est pas encore hein!! on va faire marcher le reste d'abord
+  fadebuffer[0] = new float[size];
+  fadebuffer[1] = new float[size];
     //host->SetBlockSize(size);
 }
 

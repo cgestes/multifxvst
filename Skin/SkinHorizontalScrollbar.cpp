@@ -2,7 +2,6 @@
 //
 
 #include "stdafx.h"
-#include "SkinList.h"
 #include "SkinHorizontalScrollbar.h"
 #include "../resource.h"
 #ifdef _DEBUG
@@ -13,10 +12,14 @@ static char THIS_FILE[] = __FILE__;
 
 /////////////////////////////////////////////////////////////////////////////
 // CSkinHorizontalScrollbar
+#define T_ARROW    19
+#define T_CARREBAS 11
+#define T_CURSOR   7
+#define LARGEUR    9
 
 CSkinHorizontalScrollbar::CSkinHorizontalScrollbar()
 {
-	nThumbLeft = 25;
+	nThumbLeft = T_ARROW-1;
 	dbThumbRemainder = 0.00f;
 
 	bMouseDown = false;
@@ -57,11 +60,11 @@ void CSkinHorizontalScrollbar::OnLButtonDown(UINT nFlags, CPoint point)
 	CRect clientRect;
 	GetClientRect(&clientRect);
 	
-	int nWidth = clientRect.Width()-26;
+	int nWidth = clientRect.Width()-T_ARROW;
 
-	CRect rectLeftArrow(0,0,26,20);
-	CRect rectRightArrow(nWidth,0,nWidth+26,20);
-	CRect rectThumb(nThumbLeft,0,nThumbLeft+26,20);
+	CRect rectLeftArrow(0,0,T_ARROW,LARGEUR);
+	CRect rectRightArrow(nWidth,0,nWidth+T_ARROW,LARGEUR);
+	CRect rectThumb(nThumbLeft,0,nThumbLeft+T_CURSOR,LARGEUR);
 	
 	if(rectThumb.PtInRect(point))
 	{
@@ -96,10 +99,11 @@ void CSkinHorizontalScrollbar::OnLButtonUp(UINT nFlags, CPoint point)
 	CRect clientRect;
 	GetClientRect(&clientRect);
 	
-	int nWidth = clientRect.Width()-26;
+	int nWidth = clientRect.Width()-T_ARROW;
 
-	CRect rectLeftArrow(0,0,26,20);
-	CRect rectThumb(nThumbLeft,0,nThumbLeft+26,20);
+	CRect rectLeftArrow(0,0,T_ARROW,LARGEUR);
+	CRect rectRightArrow(nWidth,0,nWidth+T_ARROW,LARGEUR);
+	CRect rectThumb(nThumbLeft,0,nThumbLeft+T_CURSOR,LARGEUR);
 
 	if(rectLeftArrow.PtInRect(point))
 	{
@@ -107,7 +111,7 @@ void CSkinHorizontalScrollbar::OnLButtonUp(UINT nFlags, CPoint point)
 		bInChannel = false;
 	}
 
-	CRect rectRightArrow(nWidth,0,nWidth+26,20);
+
 
 	
 	if(rectRightArrow.PtInRect(point))
@@ -151,18 +155,18 @@ void CSkinHorizontalScrollbar::OnMouseMove(UINT nFlags, CPoint point)
 
 	if(bDragging)
 	{	
-		nThumbLeft = point.x-13; //-13 so mouse is in middle of thumb
+		nThumbLeft = point.x-(T_CURSOR >> 1); //-13 so mouse is in middle of thumb
 
 		double nMax = pList->GetScrollLimit(SB_HORZ);
 		int nPos = pList->GetScrollPos(SB_HORZ);
 
-		double nWidth = clientRect.Width()-75;
+		double nWidth = clientRect.Width()-(((T_ARROW - 1)<<1)+(T_CURSOR -1));
 		double nVar = nMax;
 		dbThumbInterval = nWidth/nVar;
 
 		//figure out how many times to scroll total from top
 		//then minus the current position from it
-		int nScrollTimes = (int)((nThumbLeft-25)/dbThumbInterval)-nPos;
+		int nScrollTimes = (int)((nThumbLeft-(T_ARROW - 1))/dbThumbInterval)-nPos;
 		
 		CSize size;
 		size.cx = nScrollTimes;
@@ -228,7 +232,7 @@ void CSkinHorizontalScrollbar::UpdateThumbPosition()
 
 	double nPos = pList->GetScrollPos(SB_HORZ);
 	double nMax = pList->GetScrollLimit(SB_HORZ);
-	double nWidth = clientRect.Width()-75; 
+	double nWidth = clientRect.Width()-(((T_ARROW - 1)<<1)+(T_CURSOR -1)); 
 	double nVar = nMax;
 
 	dbThumbInterval = nWidth/nVar;
@@ -238,7 +242,7 @@ void CSkinHorizontalScrollbar::UpdateThumbPosition()
 	double nExtra = nNewdbValue - nNewValue;
 	dbThumbRemainder = nExtra;
 	
-	nThumbLeft = 25+nNewValue;
+	nThumbLeft = (T_ARROW - 1)+nNewValue;
 
 	LimitThumbPosition();
 	
@@ -272,9 +276,7 @@ void CSkinHorizontalScrollbar::Draw()
 	CBitmap bitmap;
 	bitmap.LoadBitmap(IDB_HORIZONTAL_SCROLLBAR_LEFTARROW);
 	CBitmap* pOldBitmap = bitmapDC.SelectObject(&bitmap);
-
-	memDC.BitBlt(clientRect.left,clientRect.top,26,12,&bitmapDC,0,0,SRCCOPY);
-
+	memDC.BitBlt(clientRect.left,clientRect.top,T_ARROW,LARGEUR,&bitmapDC,0,0,SRCCOPY);
 	bitmapDC.SelectObject(pOldBitmap);
 	bitmap.DeleteObject();
 	pOldBitmap = NULL;
@@ -285,9 +287,9 @@ void CSkinHorizontalScrollbar::Draw()
 	pOldBitmap = bitmapDC.SelectObject(&bitmap);
 	
 
-	int nWidth = clientRect.Width() - 26;
+	int nWidth = clientRect.Width() - T_ARROW ;
 
-	memDC.StretchBlt(clientRect.left+26, clientRect.top, nWidth,12,&bitmapDC, 0,0, 1, 12, SRCCOPY);
+	memDC.StretchBlt(clientRect.left+T_ARROW, clientRect.top, nWidth - T_ARROW,LARGEUR,&bitmapDC, 0,0, 1, LARGEUR, SRCCOPY);
 
 	bitmapDC.SelectObject(pOldBitmap);
 	bitmap.DeleteObject();
@@ -296,7 +298,7 @@ void CSkinHorizontalScrollbar::Draw()
 	bitmap.LoadBitmap(IDB_HORIZONTAL_SCROLLBAR_RIGHTARROW);
 
 	pOldBitmap = bitmapDC.SelectObject(&bitmap);
-	memDC.BitBlt(nWidth,clientRect.top,26,12,&bitmapDC,0,0,SRCCOPY);
+	memDC.BitBlt(nWidth,clientRect.top,T_ARROW,LARGEUR,&bitmapDC,0,0,SRCCOPY);
 
 	bitmapDC.SelectObject(pOldBitmap);
 	bitmap.DeleteObject();
@@ -309,7 +311,7 @@ void CSkinHorizontalScrollbar::Draw()
 		bitmap.LoadBitmap(IDB_HORIZONTAL_SCROLLBAR_THUMB);
 		
 		pOldBitmap = bitmapDC.SelectObject(&bitmap);
-		memDC.BitBlt(clientRect.left+nThumbLeft,clientRect.top,26,12,&bitmapDC,0,0,SRCCOPY);
+		memDC.BitBlt(clientRect.left+nThumbLeft,clientRect.top,T_CURSOR,LARGEUR,&bitmapDC,0,0,SRCCOPY);
 		
 		bitmapDC.SelectObject(pOldBitmap);
 		bitmap.DeleteObject();
@@ -322,13 +324,13 @@ void CSkinHorizontalScrollbar::LimitThumbPosition()
 	CRect clientRect;
 	GetClientRect(&clientRect);
 
-	if(nThumbLeft+26 > (clientRect.Width()-26))
+	if(nThumbLeft+T_CURSOR > (clientRect.Width()-T_ARROW))
 	{
-		nThumbLeft = clientRect.Width()-51;
+		nThumbLeft = clientRect.Width()-T_ARROW-T_CURSOR+1;
 	}
 
-	if(nThumbLeft < (clientRect.left+25))
+	if(nThumbLeft < (clientRect.left+T_ARROW - 1 ))
 	{
-		nThumbLeft = clientRect.left+25;
+		nThumbLeft = clientRect.left+T_ARROW - 1;
 	}
 }

@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "SkinList.h"
+
 #include "SkinHeaderCtrl.h"
 #include "memdc.h"
 #include "../resource.h"

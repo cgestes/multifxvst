@@ -3,22 +3,14 @@
 /*****************************************************************************/
 
 #include "stdafx.h"
-//#include "multifxVST.h" //deja inclus ds effect...
 #include "multifxVST.h"
 #include "multifxVSTmain.h"
-//#include "childfrm.h"
 #include "CCVSThost.h"
 #include "MAinDlg.h"
-
 #include "vsthost/SmpEffect.h"
-
-
 #include "EffectWnd.h"
 #include ".\effectwnd.h"
 
-
-//#include "prognamedlg.h"
-//#include "vsthost/cvsthost.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -102,6 +94,7 @@ BEGIN_MESSAGE_MAP(CEffectWnd, CWnd)
     ON_WM_ERASEBKGND()
     ON_WM_ENTERIDLE()
     ON_WM_DESTROY()
+    ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 /*****************************************************************************/
@@ -123,98 +116,18 @@ void CEffectWnd::FuckEffect()
       //pEffect->LeaveCritical();               /* re-enable processing                                               */
     }
   }
-
   CString buf;buf.Format("FuckEffect :: CEffectWnd(%d) \n", this);  TRACE(buf);
-
-  //CVSTHost &Host = theApp.host;
-  //Host.EffEditClose(nEffect);
-
-
-  //pEffect->EffEditOpen((void *)3211);
-  //pEffect->EffEditClose();                /* tell effect edit window's closed  */
-
-  //pEffect->SetEditWnd(NULL);
-  //pMain->EditClosed();                    /* tell main window it's gone        */
- 
-
-  //nEffect = -1;
- /* rcEffFrame.SetRectEmpty();
-  rcEffClient.SetRectEmpty();*/
 }
+
 void CEffectWnd::OnClose() 
 {
-  //FuckEffect();
   ShowWindow(FALSE);
-//CWnd::OnClose();
 }
 
-/*****************************************************************************/
-/* OnSetProgram : called to change to another program                        */
-/*****************************************************************************/
-
-void CEffectWnd::OnSetProgram(UINT nID)
-{
-//pMain->OnSetProgram(nID);
-}
-
-/*****************************************************************************/
-/* OnEffProgramName : called to change the program name                      */
-/*****************************************************************************/
-
-void CEffectWnd::OnEffProgramName() 
-{
-CEffect *pEffect = APP->host->GetAt(nEffect);
-if (pEffect)
-  {
-/*  CProgNameDlg dlg(this);
-  char szTxt[65] = "";
-  pEffect->EffGetProgramName(szTxt);
-  dlg.sPgName = szTxt;
-  if (dlg.DoModal() == IDOK)
-    {
-    strcpy(szTxt, dlg.sPgName.Left(64));
-    pEffect->EffSetProgramName(szTxt);
-    SetupTitle();
-    }*/;
-  }
-}
-
-/*****************************************************************************/
-/* SetupTitle : sets up the window title                                     */
-/*****************************************************************************/
-
-void CEffectWnd::SetupTitle()
-{
-CEffect *pEffect = APP->host->GetAt(nEffect);
-CString sName;
-if (pEffect)
-  {
-  sName.Format("%d %s: ", nEffect, GetEditType());
-  char szBuf[256] = "";
-                                   
-  if (pEffect->EffGetProductString(szBuf))
-    sName += szBuf;                   
-  else                              
-    {
-    CString sFile(pEffect->sName);
-    int nrbsl = sFile.ReverseFind('\\');
-    sName += sFile.Mid(nrbsl + 1);     
-    }
-
-  CString sProg;
-  pEffect->EffGetProgramName(szBuf);
-  sProg.Format(" Program %d: %s", pEffect->EffGetProgram(), szBuf);
-  sName += sProg;
-  }
-SetWindowText(sName);
-//SetTitle(sName);
-//OnUpdateFrameTitle(TRUE);
-}
 
 /*****************************************************************************/
 /* OnCreate : called when the window is created                              */
 /*****************************************************************************/
-
 int CEffectWnd::OnCreate(LPCREATESTRUCT lpCreateStruct) 
 {
 if (CWnd::OnCreate(lpCreateStruct) == -1)
@@ -308,7 +221,7 @@ void CEffectWnd::OnSize(UINT nType, int cx, int cy)
 {
   CWnd::OnSize(nType, cx, cy);
   if((cx != 0)&&(cy != 0))
-    APP->pMainDlg->ChildNotify(this,true);
+    APP->pMainDlg->ChildNotify(this/*,true*/);
 }
 
 /*****************************************************************************/
@@ -376,8 +289,8 @@ if (pRect->bottom - pRect->top >
 
 void CEffectWnd::Update()
 {
-SetupTitle();
-Invalidate(FALSE);
+//  SetupTitle();
+  Invalidate(FALSE);
 }
 
 /*****************************************************************************/
@@ -561,9 +474,6 @@ void CEffectWnd::EnterIdle()
 
 BOOL CEffectWnd::DestroyWindow()
 {
-  // TODO : ajoutez ici votre code spécialisé et/ou l'appel de la classe de base
-
-  
   return CWnd::DestroyWindow();
 }
 
@@ -571,6 +481,15 @@ void CEffectWnd::OnDestroy()
 {
   FuckEffect();
   CWnd::OnDestroy();
+}
 
-  // TODO : ajoutez ici le code de votre gestionnaire de messages
+static const CBrush br(RGB(175,10,14));
+HBRUSH CEffectWnd::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+
+
+  // TODO :  Modifier ici les attributs du DC
+
+  // TODO :  Retourner une autre brosse si la brosse par défaut n'est pas souhaitée
+  return br;
 }

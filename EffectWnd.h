@@ -43,7 +43,7 @@ public:
 public:
     virtual void SetEffect(int nEff) { nEffect = nEff; }
     int  GetEffect() { return nEffect; }
-    void SetupTitle();
+    //void SetupTitle();
     virtual LPCSTR GetEditType() { return "E"; }
 
 
@@ -106,6 +106,7 @@ public:
   afx_msg void EnterIdle();
   virtual BOOL DestroyWindow();
   afx_msg void OnDestroy();
+  afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 };
 
 /////////////////////////////////////////////////////////////////////////////

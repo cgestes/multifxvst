@@ -15,11 +15,8 @@
 
 enum
 {
-  kSliderHTag = 0,
-  kNumParams,
-	kOnOffTag,
-  kKickTag,
-  kDigitTag,
+  kChainTag = 0,
+  kNumParams
 };
 
 class CStockEffetLst;
@@ -35,6 +32,8 @@ class multifxVST;
 class CControleurDlg;
 class CControleurLst;
 class CParameterLst;
+class CAboutDlg;
+
 //pointeur global qui stoque les object pour chaque instance
 class CAppPointer
 {
@@ -51,6 +50,7 @@ public :
     current_chaine = 0;
     parameter      = 0;
     mnu            = 0;
+    pAboutDlg      = 0;
   }
 
 
@@ -65,7 +65,8 @@ public :
   multifxVSTEditor * editor;      //fenetre VST contenant la fenetre principale
   multifxVST       * effect;      //Notre effet 
   CParameterLst    * parameter;   //automatisation des parametres
-  CMenu            * mnu;
+  CMenu            * mnu;         //menu contenant les effets
+  CAboutDlg        * pAboutDlg;   //fenetre about
   int current_chaine;
 
 };

@@ -1,48 +1,39 @@
-// MainDlg.cpp : fichier d'implémentation
+//
 //
 
 #include "stdafx.h"
 #include "multifxVST.h"
 #include "MainDlg.h"
 #include "multifxVSTEditor.h"
-
-#include ".\maindlg.h"
-
-//#include "multifxVSTmain.h"
 #include "stockeffet.h"
 #include "CCVSThost.h"
 #include "ChainDlg.h"
-#include "multifxVSTEditor.h"
 #include "vsthost/SmpEffect.h"
 #include "effectwnd.h"
 #include "EffectTxTDlg.h"
 #include "Chaindlg.h"
-// Boîte de dialogue CMainDlg
 #include "controleurdlg.h"
+#include "aboutdlg.h"
+#include ".\maindlg.h"
 
 IMPLEMENT_DYNAMIC(CMainDlg, CDialog)
 CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CMainDlg::IDD, pParent)
   , m_txteff(_T(""))
 {
-  // m_txtchaine = "0";
     APP            = 0;
     pActiv         = NULL;
-    nbeff          = -1;
-    nbef           = -1;
+    nbeffstk       = -1;
+    nbeff           = -1;
 }
+
 void CMainDlg::ChangeChaine(int chaine,BOOL paramAutom)
 {
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
-
   if(!VCH(chaine))return ;
-
-  //APP->pMainDlg->KillEffect();
-  //ChildNotify(APP->pChain);
 
   //on affiche la nouvelle chaine
   APP->chaine_eff->ViewChaine(APP->current_chaine,APP->pChain->m_listvst,0);
- 
 
   UpdateData();
   //update le splider
@@ -52,17 +43,11 @@ void CMainDlg::ChangeChaine(int chaine,BOOL paramAutom)
   UpdateData(FALSE);
 }
 
-CMainDlg::~CMainDlg()
-{
-}
-
 void CMainDlg::DoDataExchange(CDataExchange* pDX)
 {
   CDialog::DoDataExchange(pDX);
   DDX_Slider(pDX, IDC_SLDCHAINE, m_sldchaine);
   DDX_Control(pDX, IDC_SLDCHAINE, m_sld);
-//  DDX_Text(pDX, IDC_TXTCHAINE, m_txtchaine);
-
   DDX_Control(pDX, IDC_BUTTON1, m_btnchaine);
   DDX_Control(pDX, IDC_BUTTON2, m_btncontroleur);
   DDX_Control(pDX, IDC_BUTTON3, m_btneff);
@@ -74,7 +59,7 @@ void CMainDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_BUTTON5, m_btnpreset);
   DDX_Control(pDX, IDC_BTNBYPASS, m_btnbypass);
   DDX_Control(pDX, IDC_BTNEFFECTTXT, m_btneffect2);
-  DDX_Control(pDX, IDC_BTNEFFECTTXT2, m_btnabout);
+  DDX_Control(pDX, IDC_BTNABOUT, m_btnabout);
 }
 
 
@@ -82,7 +67,6 @@ BEGIN_MESSAGE_MAP(CMainDlg, CDialog)
   ON_BN_CLICKED(IDC_BUTTON1, OnBnClickedButton1)
   ON_BN_CLICKED(IDC_BUTTON2, OnBnClickedButton2)
   ON_BN_CLICKED(IDC_BUTTON3, OnBnClickedButton3)
-//  ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLDCHAINE, OnNMReleasedcaptureSldchaine)
   ON_WM_CTLCOLOR()
   ON_WM_ERASEBKGND()
   ON_BN_CLICKED(IDC_BTNEFFUP, OnBnClickedBtneffup)
@@ -97,174 +81,197 @@ BEGIN_MESSAGE_MAP(CMainDlg, CDialog)
   ON_WM_SIZE()
   ON_BN_DOUBLECLICKED(IDC_BUTTON3, OnBnDoubleclickedButton3)
   ON_WM_HSCROLL()
-//  ON_WM_VSCROLL()
-ON_BN_CLICKED(IDC_BTNCHMOINS, OnBnClickedBtnchmoins)
-ON_BN_CLICKED(IDC_BTNCHPLUS, OnBnClickedBtnchplus)
-ON_BN_DOUBLECLICKED(IDC_BTNCHPLUS, OnBnDoubleclickedBtnchplus)
-ON_BN_DOUBLECLICKED(IDC_BTNCHMOINS, OnBnDoubleclickedBtnchmoins)
-ON_BN_DOUBLECLICKED(IDC_BTNEFFUP, OnBnDoubleclickedBtneffup)
-ON_BN_DOUBLECLICKED(IDC_BTNEFFDOWN, OnBnDoubleclickedBtneffdown)
-ON_WM_SHOWWINDOW()
-ON_BN_DOUBLECLICKED(IDC_BUTTON2, OnBnDoubleclickedButton2)
-
-ON_BN_CLICKED(IDC_BTNEFFECTTXT, OnBnClickedBtneffecttxt)
-//ON_COMMAND(ID_EFFECTS_SHELLPLUG, OnEffectsShellplug)
-ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLDCHAINE, OnNMCustomdrawSldchaine)
-ON_MESSAGE(WM_USER+ 200,OnBoutonUserMsg)
+  ON_BN_CLICKED(IDC_BTNCHMOINS, OnBnClickedBtnchmoins)
+  ON_BN_CLICKED(IDC_BTNCHPLUS, OnBnClickedBtnchplus)
+  ON_BN_DOUBLECLICKED(IDC_BTNCHPLUS, OnBnDoubleclickedBtnchplus)
+  ON_BN_DOUBLECLICKED(IDC_BTNCHMOINS, OnBnDoubleclickedBtnchmoins)
+  ON_BN_DOUBLECLICKED(IDC_BTNEFFUP, OnBnDoubleclickedBtneffup)
+  ON_BN_DOUBLECLICKED(IDC_BTNEFFDOWN, OnBnDoubleclickedBtneffdown)
+  ON_WM_SHOWWINDOW()
+  ON_BN_CLICKED(IDC_BTNEFFECTTXT, OnBnClickedBtneffecttxt)
+  ON_BN_CLICKED(IDC_BTNBYPASS, OnBnClickedBtnbypass)
+  ON_BN_CLICKED(IDC_BTNABOUT, OnBnClickedBtnabout)
 END_MESSAGE_MAP()
 
 
 void CMainDlg::OnSetProgram(UINT nID)
 {
-CEffect *pEffect = APP->host->GetAt(nbef);
+CEffect *pEffect = APP->host->GetAt(nbeff);
 if (pEffect)
   {
-  pEffect->EffSetProgram(nID - IDM_EFF_PROGRAM_0);
+    pEffect->EffSetProgram(nID - IDM_EFF_PROGRAM_0);
 
-  //rafraichi les plug-ins (affichage)
-  OnUpdate();
+    //rafraichi les plug-ins (affichage)
+    OnUpdate();
   }
-
   //pas oublier le update
 }
 
-//void CMainDlg::OnNMReleasedcaptureSldchaine(NMHDR *pNMHDR, LRESULT *pResult)
-//{
-///*
-//  UpdateData();
-//  if(APP->current_chaine == m_sldchaine)return;
-//  APP->effect->setParameterAutomated(0,NBChaine2float(m_sldchaine));
-//*/
-//  //ChangeChaine(m_sldchaine);
-//
-//  // TODO : ajoutez ici le code de votre gestionnaire de notification de contrôle
-//  *pResult = 0;
-//}
-
 //place la fenetre a sa place,redimentionne decoupe cisaille tronconne etc...
 static const OFFSETY =64;
-void CMainDlg::ChildNotify(CWnd * child,bool bAlwaisResize)
+void CMainDlg::ChildNotify(CWnd * child)
 {
-
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
-  bool Alwaisresize = (pActiv == child)  ;
-  
 
+  //bool Alwaisresize = true/*(pActiv == child)*/  ;
+  
   int posx=0,posy=OFFSETY;
+
   CloseAll();
 
   if(!child)return;
 
-  /*ERect *rect;
-
-  APP->editor->getRect(&rect);
-
-  WinRectInit.bottom = rect->bottom;
-  WinRectInit.top = rect->top;
-  WinRectInit.left = rect->left;
-  WinRectInit.right = rect->right;*/
-
   ::CRect r;
   child->GetClientRect(&r);
-  if(Alwaisresize)
-  {
-      WinRect.bottom = WinRect.top  + OFFSETY + r.Height(); 
-      WinRect.right  = WinRect.left + r.Width();
-      
-      /*if(WinRect.Height() < WinRectInit.Height())
-        WinRect.bottom = WinRect.top  + OFFSETY + WinRectInit.Height();*/ 
-      
-      if(WinRect.Width() < WinRectInit.Width())
-        WinRect.right = WinRect.left  + WinRectInit.Width(); 
 
-  }
-  else
-  {
-    if(r.Height() > (WinRect.Height()-OFFSETY))
-      WinRect.bottom = WinRect.top + OFFSETY + r.Height(); 
+  WinRect.bottom = WinRect.top  + OFFSETY + r.Height(); 
+  WinRect.right  = WinRect.left + r.Width();
 
-    if(r.Width() > WinRect.Width())
-      WinRect.right = WinRect.left + r.Width();
-
-
-  }
-
+  if(WinRect.Width() < WinRectInit.Width())
+    WinRect.right = WinRect.left  + WinRectInit.Width(); 
+  APP->editor->frame->setSize(WinRect.Width(),WinRect.Height());
+  SetWindowPos(NULL,0,0,WinRect.Width(),WinRect.Height(),SWP_NOMOVE|SWP_NOOWNERZORDER|SWP_NOZORDER|SWP_NOREDRAW);
+  
   posx =  (WinRect.Width() - r.Width()) >> 1;
   posy =  OFFSETY + (((WinRect.Height()- OFFSETY) - r.Height()) >> 1 );
 
-  //if(WinRect.Width < r.Width())Win
-  APP->editor->frame->setSize(WinRect.Width(),WinRect.Height());
-  SetWindowPos(NULL,0,0,WinRect.Width(),WinRect.Height(),SWP_NOMOVE|SWP_NOOWNERZORDER|SWP_NOZORDER|SWP_NOREDRAW);
-
   //positionne la fenetre enfant
   child->SetWindowPos(NULL,posx,posy ,0,0,SWP_NOSIZE|SWP_NOOWNERZORDER|SWP_NOZORDER|SWP_NOREDRAW);
-  //child->UpdateWindow();
+
   child->ShowWindow(SW_SHOW);
  
-
   //pointeur sur la fenetre active
-  if(!bAlwaisResize) //en fait pActiv windows ne sert que pour le size
-   pActiv = child;
+  pActiv = child;
 
-
+  UpdateBouton(GetActiveWindows());
 }
 
+
+//Implementation VST, idle pour l'affichage du plug-ins
 void CMainDlg::EnterIdle()
 {
   //IDLE DE L'host VST pour laffichage du plug enfant
   if(APP->pEffEditDlg)
     APP->pEffEditDlg->EnterIdle();
-  //if(pEditWnd)pEditWnd->EnterIdle();
-  return;
 }
 
-void CMainDlg::SetEffect(int nb)
+void CMainDlg::SetEffect(int nbeffstk)
 {
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
   //if(nb == nbeff)return;
   UpdateData();
   
-  if((nb < 0) || (APP->chaine_eff->get_count(APP->current_chaine)<=0))
+  if((nbeffstk < 0) || (APP->chaine_eff->get_count(APP->current_chaine)<=0))
   {
-    nbeff = -1;//un nb peu correspondr a un effet a t = 0 , et a un autre a t = +!!
-    nbef  = -1;
+    this->nbeffstk = -1;//un nb peu correspondr a un effet a t = 0 , et a un autre a t = +!!
+    nbeff  = -1;
     m_txteff = "";
   }
   else
   {
-    nbeff = nb;//un nb peu correspondr a un effet a t = 0 , et a un autre a t = +!!
-    nbef  = APP->chaine_eff->get_effect(APP->current_chaine,nb);
-    m_txteff.Format("%d:%s",nb+1,APP->chaine_eff->Get_Name(APP->current_chaine,nb));
+    this->nbeffstk = nbeffstk;//un nb peu correspondr a un effet a t = 0 , et a un autre a t = +!!
+    nbeff  = APP->chaine_eff->get_effect(APP->current_chaine,nbeffstk);
+    m_txteff.Format("%d:%s",nbeffstk+1,APP->chaine_eff->Get_Name(APP->current_chaine,nbeffstk));
   }
-
   UpdateData(FALSE);
-
 }
 
 void CMainDlg::Init()
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
-  //crée la fenetre du listing des effets
+
+  //On crée la fenetre chain
   APP->pChain = new CChainDlg(this);
   ASSERT(APP->pChain);
   BOOL b = APP->pChain->Create((UINT)CChainDlg::IDD ,this);
   ASSERT(b);
 
+  //On crée la fenetre controleur
   APP->pControleur = new CControleurDlg(this);
   ASSERT(APP->pControleur);
   b = APP->pControleur->Create((UINT)CControleurDlg::IDD,this);
   ASSERT(b);
 
+  //On crée la fenetre about
+  APP->pAboutDlg = new CAboutDlg(this);
+  ASSERT(APP->pAboutDlg);
+  b = APP->pAboutDlg->Create((UINT)CAboutDlg::IDD,this);
+  ASSERT(b);
+
   APP->pControleur->SetAPP(APP);
-
   APP->pChain->SetAPP(APP);
-  APP->pMainDlg->ChangeChaine(float2NBChaine( APP->effect->getParameter(0)),FALSE);
-  APP->pControleur->Update();
+  APP->pAboutDlg->SetAPP(APP);
 
+  ChangeChaine(float2NBChaine( APP->effect->getParameter(0)),FALSE);
+
+  //APP->pControleur->Update();
 
   APP->pChain->ShowWindow(SW_SHOW);
-  LoadBitmap(IDB_MAIN);
+
   ChildNotify(APP->pChain);
+}
+
+//initialise les skins
+void CMainDlg::InitialiseSkin()
+{
+  LoadBitmap(IDB_MAIN);
+
+  m_btnchaine.LoadBitmap(IDB_BTN_CHAIN,true);
+  CString text=_T("Gestion des chaines");
+  m_btnchaine.SetToolTipText(&text);
+
+
+  m_btncontroleur.LoadBitmap(IDB_BTN_CONTROLER,true);
+  text=_T("Gestion des controleurs");
+  m_btncontroleur.SetToolTipText(&text);
+
+
+  m_btneff.LoadBitmap(IDB_BTN_EFF,true);
+  text=_T("Affiche l'effet");
+  m_btneff.SetToolTipText(&text);
+
+
+  m_btneffect2.LoadBitmap(IDB_BTN_EFF2,true);
+  text=_T("Affiche l'effet en mode texte");
+  m_btneffect2.SetToolTipText(&text);
+
+
+  m_btnabout.LoadBitmap(IDB_BTN_ABOUT,true);
+  text=_T("Affiche la fenetre à propos");
+  m_btnabout.SetToolTipText(&text);
+
+
+  m_btnbypass.LoadBitmap(IDB_BYPASS,true,7,27);
+  text=_T("Bypass un effet");
+  m_btnbypass.SetToolTipText(&text);
+
+  m_btneffup.LoadBitmap(IDB_LEFT_ARROW_EFFECT,false,112,28);
+  text=_T("Sélectionne l'effet suivant dans la chaine actuelle");
+  m_btneffup.SetToolTipText(&text);
+
+  m_btneffdown.LoadBitmap(IDB_RIGHT_ARROW_EFFECT,false,272,28);
+  text=_T("Sélectionne l'effet précédent dans la chaine actuelle");
+  m_btneffdown.SetToolTipText(&text);
+
+  m_btnchplus.LoadBitmap(IDB_CHAIN_RIGHT,false,143,6);
+  text=_T("Sélectionne la chaine suivante");
+  m_btnchplus.SetToolTipText(&text);
+
+  m_btnchmoins.LoadBitmap(IDB_CHAIN_LEFT,false,104,6);
+  text=_T("Sélectionne la chaine précédente");
+  m_btnchmoins.SetToolTipText(&text);
+
+  m_btnpreset.LoadBitmap(IDB_PRESET);
+  text=_T("Configuration de l'effet");
+  m_btnpreset.SetToolTipText(&text);
+
+
+  //on initialise le slider de chaine
+  m_sld.SetRange(0,127);
+  m_sld.SetPageSize(10);
+  m_sld.SetLineSize(1);
+  //m_sld.SetTic(20);
+  m_sld.SetTicFreq(10);
 }
 
 void CMainDlg::CloseAll()
@@ -281,6 +288,9 @@ void CMainDlg::CloseAll()
 
   if(APP->pEffEditDlg)
     APP->pEffEditDlg->ShowWindow(SW_HIDE);
+
+  if(APP->pAboutDlg)
+    APP->pAboutDlg->ShowWindow(SW_HIDE);
 
   pActiv = NULL;
 }
@@ -314,6 +324,12 @@ void CMainDlg::KillAll()
     APP->pControleur = NULL;
   }
 
+  if(APP->pAboutDlg)
+  {
+    APP->pAboutDlg->ShowWindow(SW_HIDE);
+    APP->pAboutDlg->DestroyWindow();
+    APP->pAboutDlg = NULL;
+  }
   pActiv = NULL;
 }
 
@@ -347,62 +363,8 @@ BOOL CMainDlg::OnInitDialog()
 {
   CDialog::OnInitDialog();
 
-  m_btnchaine.LoadBitmap(IDB_WINDOWS_BUTTON,true);
-  CString text=_T("Gestion des chaines");
-  m_btnchaine.SetToolTipText(&text);
-
-
-  m_btncontroleur.LoadBitmap(IDB_WINDOWS_BUTTON,true);
-  text=_T("Gestion des controleurs");
-  m_btncontroleur.SetToolTipText(&text);
-
-
-  m_btneff.LoadBitmap(IDB_WINDOWS_BUTTON,true);
-  text=_T("Affiche l'effet");
-  m_btneff.SetToolTipText(&text);
-
-
-  m_btneffect2.LoadBitmap(IDB_WINDOWS_BUTTON,true);
-  text=_T("Affiche l'effet en mode texte");
-  m_btneffect2.SetToolTipText(&text);
-
-
-  m_btnabout.LoadBitmap(IDB_WINDOWS_BUTTON,true);
-  text=_T("Affiche la fenetre à propos");
-  m_btnabout.SetToolTipText(&text);
-
-
-  m_btnbypass.LoadBitmap(IDB_BYPASS);
-  text=_T("Bypass un effet");
-  m_btnbypass.SetToolTipText(&text);
-
-  m_btneffup.LoadBitmap(IDB_LEFT_ARROW_EFFECT);
-  text=_T("Sélectionne l'effet suivant dans la chaine actuelle");
-  m_btneffup.SetToolTipText(&text);
-
-  m_btneffdown.LoadBitmap(IDB_RIGHT_ARROW_EFFECT);
-  text=_T("Sélectionne l'effet précédent dans la chaine actuelle");
-  m_btneffdown.SetToolTipText(&text);
-
-  m_btnchplus.LoadBitmap(IDB_HOVERBUTTON);
-  text=_T("Sélectionne la chaine suivante");
-  m_btnchplus.SetToolTipText(&text);
-
-  m_btnchmoins.LoadBitmap(IDB_HOVERBUTTON);
-  text=_T("Sélectionne la chaine précédente");
-  m_btnchmoins.SetToolTipText(&text);
-
-  m_btnpreset.LoadBitmap(IDB_PRESET);
-  text=_T("Configuration de l'effet");
-  m_btnpreset.SetToolTipText(&text);
-
-
-  m_sld.SetRange(0,127);
-
-  m_sld.SetPageSize(10);
-  m_sld.SetLineSize(1);
-  //m_sld.SetTic(20);
-  m_sld.SetTicFreq(10);
+  //on initialise les skins
+  InitialiseSkin();
 
   //on récupere la taille des fenetres
 	GetWindowRect(&WinRect);
@@ -411,22 +373,39 @@ BOOL CMainDlg::OnInitDialog()
   // EXCEPTION : les pages de propriétés OCX devraient retourner FALSE
 }
 
+int CMainDlg::GetActiveWindows()
+{
+
+  int nbbtn = -1;
+  if(pActiv == APP->pAboutDlg)
+    nbbtn = WD_ABOUT;
+  else if(pActiv == APP->pChain)
+    nbbtn = WD_CHAIN;
+  else if(pActiv == APP->pControleur)
+    nbbtn = WD_CONTROLER;
+  else if(pActiv == APP->pEffEditDlg)
+    nbbtn = WD_EFFET;
+  else if(pActiv == APP->pEffParmDlg)
+    nbbtn = WD_EFFET2;
+
+  return nbbtn;
+}
 //n
 void CMainDlg::OpenEffect(int chaine,int nbeffectstk)
 {
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
-  //int nedit = m_listvst.GetCurSel();
-  //m_listvst.GetSele
-  if(nbeffectstk < 0)return;
+
+  if(nbeffectstk < 0)
+  {
+    UpdateBouton(GetActiveWindows());
+    return;
+  }
 
   if(APP->pEffEditDlg)
   {
     //c'est deja cette effect...on réactive la fenetre et tayo
     if(APP->chaine_eff->get_effect(chaine , nbeffectstk)== APP->pEffEditDlg->nEffect )
     {
-      /*CloseAll();
-      APP->pEffEditDlg->ShowWindow(SW_SHOW);
-      APP->pEffEditDlg->UpdateWindow();*/
       ChildNotify(APP->pEffEditDlg);
       return;
     }
@@ -452,119 +431,96 @@ void CMainDlg::OpenEffect(int chaine,int nbeffectstk)
     {  AfxMessageBox(_T("Couldn't register class! (Already registered?)"));
           pEx->Delete();
     }
-
-    //pWnd->Create( NULL,"Effect",WS_CAPTION | WS_VISIBLE ,CRect(0, 0, 20, 20),this,1234);
-    pWnd->CreateEx( WS_EX_TOPMOST, strMyClass,"Effect", /*WS_CAPTION |*/ /*WS_BORDER|*/ WS_VISIBLE | WS_CHILD/* | WS_SYSMENU*/  ,::CRect(0, 0, 0, 0),this,0);
-
-    //pWnd->CreateEx( WS_EX_TOPMOST,strMyClass,"Effect",WS_CAPTION | WS_VISIBLE  ,CRect(0, 0, 20, 20),GetDesktopWindow(),1234);
+    pWnd->CreateEx( WS_EX_TOPMOST, strMyClass,"Effect", WS_VISIBLE | WS_CHILD ,::CRect(0, 0, 0, 0),this,0);
  
     if (pWnd)
       {
-      //pWnd->ShowWindow(SW_SHOW);
       pWnd->SetEffect(nEffect);
-//      pWnd->SetMain(this);
       APP->pEffEditDlg = pWnd;
 
       ::CRect r;
-      
       pWnd->GetWindowRect(&r);
-
-
 
       ((CSmpEffect *)pEffect)->SetEditWnd(pWnd);
       lResult = APP->host->EffEditOpen(nEffect, pWnd->GetSafeHwnd());
       long lResult = APP->host->EffEditGetRect(nEffect, &prc);
       pWnd->SetEffSize(prc);
-      pWnd->SetupTitle();
 
       ChildNotify(pWnd);
-
-      //pWnd->ShowWindow(SW_SHOW);
-     // APP->pEffEditDlg->Update();
       }
-  }//if (prc)
-  else
+  }
+  else  //pas d'interface graphique!
   {
     OpenEffectTxT(chaine,nbeffectstk);
   }
-
 }
 
 void CMainDlg::OpenEffectTxT(int chaine,int nbeffectstk)
 {
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-  if(nbeffectstk < 0)return;
+  if(nbeffectstk < 0)
+  {
+    UpdateBouton(GetActiveWindows());
+    return;
+  }
 
 
+  
   if(APP->pEffParmDlg)
   {
     if(APP->chaine_eff->get_effect(APP->current_chaine ,nbeffectstk) == APP->pEffParmDlg->nEffect )
     {
-      /*CloseAll();
-      APP->pEffParmDlg->ShowWindow(SW_SHOW);
-      APP->pEffParmDlg->UpdateWindow();*/
+      //mm effet on réactive et tayo
       ChildNotify(APP->pEffParmDlg);
       return;
     }
   }
-  //close();
   KillEffect(2);
-//else
+
   {
   int nEffect = APP->chaine_eff->get_effect(APP->current_chaine,nbeffectstk);
-
   CEffect *pEffect = APP->host->GetAt(nEffect);
 
+
+  CEffectTxTDlg  *pWnd = (CEffectTxTDlg *) new CEffectTxTDlg(this,APP);
+  if(!pWnd->Create(this))
   {
-
-    CEffectTxTDlg  *pWnd = (CEffectTxTDlg *) new CEffectTxTDlg(this,APP);
-    if(!pWnd->Create(this))
-    {TRACE("ERREUR EFFEDITDLG->CREATEINDIRECT (OnbtnE2)");
+    TRACE("ERREUR EFFEDITDLG->CREATEINDIRECT (OnbtnE2)");
     return;
-    }
+  }
 
-    if (pWnd)
-      {
-      pWnd->SetEffect(/*nEffect,*/nbeffectstk);
-
-      APP->pEffParmDlg = pWnd;
-      
-      ::CRect r;
-      pWnd->GetWindowRect(&r);
-
-      //place la fentre au bon endroit
-      ChildNotify(pWnd);
-
-      //pWnd->ShowWindow(SW_SHOW);
-     //pWnd->Update();// NEEDDD
-      }
+  if (pWnd)
+    {
+    pWnd->SetEffect(nbeffectstk);
+    APP->pEffParmDlg = pWnd;
+    ::CRect r;
+    pWnd->GetWindowRect(&r);
+    //place la fentre au bon endroit
+    ChildNotify(pWnd);
     }
   }
+  
 }
 
 void CMainDlg::OnBnClickedButton1()
 {
-  APP->pMainDlg->ChildNotify(APP->pChain);
-  // TODO : ajoutez ici le code de votre gestionnaire de notification de contrôle
+  ChildNotify(APP->pChain);
 }
 
 void CMainDlg::OnBnClickedButton2()
 {
-  APP->pMainDlg->ChildNotify(APP->pControleur);
-  //APP->pMainDlg->ChildNotify(APP->pEffEditDlg,1);
-  //APP->pMainDlg->ChildNotify(APP->pEffEditDlg,2);
-  // TODO : ajoutez ici le code de votre gestionnaire de notification de contrôle
+  ChildNotify(APP->pControleur);
 }
 
 void CMainDlg::OnBnClickedButton3()
 {
-    OpenEffect(APP->current_chaine,nbeff);  
+  OpenEffect(APP->current_chaine,nbeffstk);  
 }
 
 void CMainDlg::OnBnClickedBtneffecttxt()
 {
-  OpenEffectTxT(APP->current_chaine,nbeff); 
+  OpenEffectTxT(APP->current_chaine,nbeffstk); 
 }
 
 void CMainDlg::PostNcDestroy()
@@ -573,7 +529,6 @@ void CMainDlg::PostNcDestroy()
   APP->pMainDlg = NULL;
   delete this;
 }
-
 
 static CBrush brush(RGB(110,220,120));
 static CBrush brush2(RGB(221,221,221));
@@ -591,12 +546,14 @@ HBRUSH CMainDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
   return hbr;
 }
 
+//on detruit la fenetre => on detruit les fenetres child
 BOOL CMainDlg::DestroyWindow()
 {
-  KillAll();  //  :-)
+  KillAll(); 
   return CDialog::DestroyWindow();
 }
-// Load a bitmap from the resources in the button, the bitmap has to have 3 buttonsstates next to each other: Up/Down/Hover
+
+// Load a bitmap
 BOOL CMainDlg::LoadBitmap(UINT bitmapid)
 {
 	mybitmap.Attach(::LoadImage(::AfxGetInstanceHandle(),MAKEINTRESOURCE(bitmapid), IMAGE_BITMAP,0,0,LR_LOADMAP3DCOLORS));
@@ -610,77 +567,64 @@ BOOL CMainDlg::OnEraseBkgnd(CDC* pDC)
 	CDC * pMemDC = new CDC;
 	pMemDC -> CreateCompatibleDC(pDC);
   
-  //CRect r;
-	//GetClientRect(&r);
-
-
-
   ::CBitmap * pOldBitmap;
 	pOldBitmap = pMemDC -> SelectObject(&mybitmap);
 	
   BITMAP	bitmapbits;
 	mybitmap.GetBitmap(&bitmapbits);
 
-	//CPoint point(0,0);	
-	pDC->SetStretchBltMode(HALFTONE);
-  pDC->BitBlt(0,0,bitmapbits.bmWidth/* getWidth()*/,bitmapbits.bmHeight,pMemDC,0,0,SRCCOPY);
-
+	//pDC->SetStretchBltMode(HALFTONE);
+  pDC->BitBlt(0,0,bitmapbits.bmWidth,bitmapbits.bmHeight,pMemDC,0,0,SRCCOPY);
 
 	// clean up
 	pMemDC -> SelectObject(pOldBitmap);
 	delete pMemDC;
 
+  //dessine la fin de la fenetre si elle est plus grande que la bitmap
   if(WinRect.Width() > bitmapbits.bmWidth)
   {
-    pDC->FillSolidRect(bitmapbits.bmWidth,0,WinRect.Width()-bitmapbits.bmWidth,27,RGB(255,153,0));
-    pDC->FillSolidRect(bitmapbits.bmWidth,27,WinRect.Width()-bitmapbits.bmWidth,18,RGB(239,205,69));
-    pDC->FillSolidRect(bitmapbits.bmWidth,45,WinRect.Width()-bitmapbits.bmWidth,19,RGB(113,153,175));
+    pDC->FillSolidRect(bitmapbits.bmWidth,0,WinRect.Width()-bitmapbits.bmWidth,27,RGB(247,150,16));
+    pDC->FillSolidRect(bitmapbits.bmWidth,27,WinRect.Width()-bitmapbits.bmWidth,18,RGB(231,199,74));
+    pDC->FillSolidRect(bitmapbits.bmWidth,45,WinRect.Width()-bitmapbits.bmWidth,19,RGB(107,150,173));
   }
-  pDC->FillSolidRect(0,OFFSETY,WinRect.Width(),WinRect.Height()-OFFSETY,RGB(204,204,255));
-  return TRUE;
 
+  pDC->FillSolidRect(0,OFFSETY,WinRect.Width(),WinRect.Height()-OFFSETY,RGB(175,10,14));
+  return TRUE;
 }
 
-
+//on change d'effet
 void CMainDlg::OnBnClickedBtneffup()
 {
-  if(nbeff < 1)return;
-  nbeff--;
+  if(nbeffstk < 1)return;
+  nbeffstk--;
 
   //met a jour la list d'effet (la selection)
   //la selection => met a jour le text dans main
-  APP->pChain->m_listvst.EnsureVisible(nbeff,TRUE);
-  APP->pChain->m_listvst.SetItemState(nbeff,LVIS_SELECTED,LVIS_SELECTED);
+  APP->pChain->m_listvst.EnsureVisible(nbeffstk,TRUE);
+  APP->pChain->m_listvst.SetItemState(nbeffstk,LVIS_SELECTED,LVIS_SELECTED);
   
-  //SetEffect(nbeff);
-
   if(APP->pEffEditDlg == pActiv || APP->pEffParmDlg == pActiv)
-    OpenEffect(APP->current_chaine,nbeff);
-
+    OpenEffect(APP->current_chaine,nbeffstk);
 
   //else on fait rien car,tt est deja fait!
-
-
 }
 
 void CMainDlg::OnBnClickedBtneffdown()
 {
-  if(nbeff >= APP->chaine_eff->get_count(APP->current_chaine)-1)return;
-  nbeff++;
+  if(nbeffstk >= APP->chaine_eff->get_count(APP->current_chaine)-1)return;
+  nbeffstk++;
 
   //met a jour la list d'effet (la selection)
   //la selection => met a jour le text dans main
-  APP->pChain->m_listvst.EnsureVisible(nbeff,TRUE);
-  APP->pChain->m_listvst.SetItemState(nbeff,LVIS_SELECTED,LVIS_SELECTED);
+  APP->pChain->m_listvst.EnsureVisible(nbeffstk,TRUE);
+  APP->pChain->m_listvst.SetItemState(nbeffstk,LVIS_SELECTED,LVIS_SELECTED);
   //SetEffect(nbeff);
 
   if(APP->pEffEditDlg == pActiv || APP->pEffParmDlg == pActiv)
-    OpenEffect(APP->current_chaine,nbeff);
-
-
-
+    OpenEffect(APP->current_chaine,nbeffstk);
 }
 
+// on remplit un popup avec chaque program d'un effet
 void CMainDlg::FillPopup(CMenu* pPopupMenu, int nEffect)
 {
 
@@ -736,23 +680,23 @@ if ((pEffect) &&
   }
 }
 
+// initialise le popup program
 void CMainDlg::OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu)
 {
   CDialog::OnInitMenuPopup(pPopupMenu, nIndex, bSysMenu);
 
   if ((pPopupMenu->GetMenuItemCount() > 0) &&
     (pPopupMenu->GetMenuItemID(pPopupMenu->GetMenuItemCount()-1) == IDM_EFF_PROGRAM_0))
-  if(nbef>=0)
-    FillPopup(pPopupMenu,nbef);
-
+  if(nbeff>=0)
+    FillPopup(pPopupMenu,nbeff);
 }
 
+
+//ajoute un effet VST
 void CMainDlg::OnBnClickedButton5()
 {
-
   ::CRect r;
   GetDlgItem(IDC_BUTTON5)->GetWindowRect(&r);
-
 
     if (mnu1.GetSafeHmenu() != NULL)
           mnu1.DestroyMenu();
@@ -761,13 +705,11 @@ void CMainDlg::OnBnClickedButton5()
     CMenu  * mnu = mnu1.GetSubMenu(0);
     if(mnu)
       mnu->TrackPopupMenu(TPM_LEFTALIGN |TPM_RIGHTBUTTON, r.left , r.bottom , this);
-
-
-  // TODO : ajoutez ici le code de votre gestionnaire de notification de contrôle
 }
+
 void CMainDlg::SaveBank(CString sName)
 {
-CSmpEffect *pEffect = (CSmpEffect *)APP->host->GetAt(nbef);
+CSmpEffect *pEffect = (CSmpEffect *)APP->host->GetAt(nbeff);
 if (!pEffect)
   return;
 
@@ -820,12 +762,11 @@ if (b.SaveBank((char *)(LPCSTR)sName))
   }
 else
   MessageBox("Impossible de sauvegarder la bank", NULL, MB_ICONERROR);
-
-
 }
+
 void CMainDlg::SavePreset(CString sName)
 {
-CSmpEffect *pEffect = (CSmpEffect *)APP->host->GetAt(nbef);
+CSmpEffect *pEffect = (CSmpEffect *)APP->host->GetAt(nbeff);
 if (!pEffect)
   return;
 
@@ -883,9 +824,10 @@ else
 
 }
 
+
 void CMainDlg::OnFxbSavebank()
 {
-CSmpEffect *pEffect = (CSmpEffect *)APP->host->GetAt(nbef);
+CSmpEffect *pEffect = (CSmpEffect *)APP->host->GetAt(nbeff);
 if (!pEffect)
   return;
 
@@ -898,7 +840,7 @@ if (dlg.DoModal() == IDOK)
 
 void CMainDlg::OnFxbLoadbank()
 {
-CSmpEffect *pEffect = (CSmpEffect *)APP->host->GetAt(nbef);
+CSmpEffect *pEffect = (CSmpEffect *)APP->host->GetAt(nbeff);
 if(!pEffect)return;
 CFileDialog dlg(TRUE,"fxb", pEffect->GetChunkFile(),OFN_ENABLESIZING | OFN_NOCHANGEDIR,
                 "Effect Bank Files (.fxb)|*.fxb|All Files|*.*||");
@@ -947,24 +889,47 @@ else
   MessageBox("Impossible de charger la banque", "Erreur de chargement", MB_ICONERROR);
 }
 
+
 void CMainDlg::OnUpdate()
 {
   if(!pActiv) return;
 
+  ChangeChaine(APP->current_chaine);
+  SetEffect(0);
+
+  if(pActiv == APP->pControleur ||pActiv == APP->pAboutDlg )
+  {
+
+  }
+  //pas d'effete a ouvrir donc on remet la fenetre main
+  else if((APP->chaine_eff->get_count(APP->current_chaine) == 0) && (pActiv != (CWnd *)APP->pChain) )
+  {
+      APP->pMainDlg->ChildNotify(APP->pChain);
+  }
+  else
+  {
+    if(APP->pMainDlg->pActiv == (CWnd *)APP->pEffEditDlg)
+    { 
+      OpenEffect(APP->current_chaine,0);
+    }
+    else if (pActiv == (CWnd *)APP->pEffParmDlg)
+    {
+      OpenEffectTxT(APP->current_chaine,0);
+    }
+  }
+
+/*
   if(pActiv ==  APP->pEffEditDlg)
      APP->pEffEditDlg->Update();
   else if(pActiv ==  APP->pEffParmDlg)
      APP->pEffParmDlg->Update();
   else if(pActiv == APP->pControleur)
-     APP->pControleur->Update();
-
-  //case APP->pChain    : APP->pChain->Up
-  
+     APP->pControleur->Update();  */
 }
 
 void CMainDlg::OnFxbLoadfxp()
 {
-CSmpEffect *pEffect = (CSmpEffect *)APP->host->GetAt(nbef);
+CSmpEffect *pEffect = (CSmpEffect *)APP->host->GetAt(nbeff);
 if(!pEffect)return;
 CFileDialog dlg(TRUE,"fxp", pEffect->GetChunkFilePreset(),OFN_ENABLESIZING | OFN_NOCHANGEDIR,
                 "Effect Preset Files (.fxp)|*.fxp|All Files|*.*||");
@@ -1012,7 +977,7 @@ else
 
 void CMainDlg::OnFxbSavefxp()
 {
-CSmpEffect *pEffect = (CSmpEffect *)APP->host->GetAt(nbef);
+CSmpEffect *pEffect = (CSmpEffect *)APP->host->GetAt(nbeff);
 if (!pEffect)
   return;
 
@@ -1025,6 +990,7 @@ if (dlg.DoModal() == IDOK)
 
 
 
+
 void CMainDlg::OnSize(UINT nType, int cx, int cy)
 {
   CDialog::OnSize(nType, cx, cy);
@@ -1033,6 +999,7 @@ void CMainDlg::OnSize(UINT nType, int cx, int cy)
   Invalidate();
   UpdateWindow();
 }
+
 
 void CMainDlg::OnBnDoubleclickedButton3()
 {
@@ -1052,25 +1019,18 @@ void CMainDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
   CDialog::OnHScroll(nSBCode, nPos, pScrollBar);
 }
 
+//chaine précedente
 void CMainDlg::OnBnClickedBtnchmoins()
 {
-
   if(APP->current_chaine > 0)
-  {
-     //APP->current_chaine--;
      APP->effect->setParameterAutomated(0,NBChaine2float(APP->current_chaine-1));
-  }
 }
 
+//chaine suivante
 void CMainDlg::OnBnClickedBtnchplus()
 {
-
   if(APP->current_chaine < 127)
-  {
-   //APP->current_chaine++;
    APP->effect->setParameterAutomated(0,NBChaine2float(APP->current_chaine+1));
-  }
-
 }
 
 void CMainDlg::OnBnDoubleclickedBtnchplus()
@@ -1095,74 +1055,69 @@ void CMainDlg::OnBnDoubleclickedBtneffdown()
 }
 
 
-
-
-
-void CMainDlg::OnShowWindow(BOOL bShow, UINT nStatus)
+//met a jour les boutons de chaines
+void CMainDlg::UpdateBouton(int btn)
 {
-  CDialog::OnShowWindow(bShow, nStatus);
+  switch(btn)
+  {
+  case WD_ABOUT:
+    m_btnabout.SetValue(true);
+    m_btncontroleur.SetValue(false);
+    m_btnchaine.SetValue(false);
+    m_btneffect2.SetValue(false);
+    m_btneff.SetValue(false);
+    break;
+  case WD_CHAIN:
+    m_btnchaine.SetValue(true);
+    m_btncontroleur.SetValue(false);
+    m_btneffect2.SetValue(false);
+    m_btneff.SetValue(false);
+    m_btnabout.SetValue(false);
+    break;
+  case WD_CONTROLER:
+    m_btncontroleur.SetValue(true);
+    m_btnchaine.SetValue(false);
+    m_btneffect2.SetValue(false);
+    m_btneff.SetValue(false);
+    m_btnabout.SetValue(false);
+    break;
+  case WD_EFFET:
+    m_btneff.SetValue(true);
+    m_btncontroleur.SetValue(false);
+    m_btnchaine.SetValue(false);
+    m_btneffect2.SetValue(false);
+    m_btnabout.SetValue(false);
+    break;
+  case WD_EFFET2:
+    m_btneffect2.SetValue(true);
+    m_btncontroleur.SetValue(false);
+    m_btnchaine.SetValue(false);
+    m_btneff.SetValue(false);
+    m_btnabout.SetValue(false);
+    break;
+  default:
+    m_btneffect2.SetValue(false);
+    m_btncontroleur.SetValue(false);
+    m_btnchaine.SetValue(false);
+    m_btneff.SetValue(false);
+    m_btnabout.SetValue(false);
+  }
 
-  // TODO : ajoutez ici le code de votre gestionnaire de messages
 }
 
-void CMainDlg::OnBnDoubleclickedButton2()
+void CMainDlg::OnBnClickedBtnbypass()
 {
-  // TODO : ajoutez ici le code de votre gestionnaire de notification de contrôle
+  bool bypass = APP->chaine_eff->GetByPass(APP->current_chaine,nbeffstk);
+  APP->chaine_eff->SetByPass(APP->current_chaine,nbeffstk,!bypass);
 }
 
-
-
-
-//void CMainDlg::OnEffectsShellplug()
+//void CMainDlg::OnBnClickedBtneffecttxt2()
 //{
-//  // TODO : ajoutez ici le code de votre gestionnaire de commande
+//  //ViewWindow(
 //}
 
-void CMainDlg::OnNMCustomdrawSldchaine(NMHDR *pNMHDR, LRESULT *pResult)
+void CMainDlg::OnBnClickedBtnabout()
 {
-  LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
-  // TODO : ajoutez ici le code de votre gestionnaire de notification de contrôle
-  *pResult = 0;
-}
-
-LRESULT CMainDlg::OnBoutonUserMsg(WPARAM wParam ,LPARAM lParam)
-{
- if(wParam == 1)
- {
-   if(((CHoverButton *) lParam) == &m_btncontroleur)
-   { m_btncontroleur.SetValue(true);
-     m_btnchaine.SetValue(false);
-     m_btneffect2.SetValue(false);
-     m_btneff.SetValue(false);
-     m_btnabout.SetValue(false);
-   }else if(((CHoverButton *) lParam) == &m_btnchaine)
-   { m_btnchaine.SetValue(true);
-     m_btncontroleur.SetValue(false);
-     m_btneffect2.SetValue(false);
-     m_btneff.SetValue(false);
-     m_btnabout.SetValue(false);
-   }else if(((CHoverButton *) lParam) == &m_btneffect2)
-   { m_btneffect2.SetValue(true);
-     m_btncontroleur.SetValue(false);
-     m_btnchaine.SetValue(false);
-     m_btneff.SetValue(false);
-     m_btnabout.SetValue(false);
-   }else if(((CHoverButton *) lParam) == &m_btneff)
-   { m_btneff.SetValue(true);
-     m_btncontroleur.SetValue(false);
-     m_btnchaine.SetValue(false);
-     m_btneffect2.SetValue(false);
-     m_btnabout.SetValue(false);
-   }else  if(((CHoverButton *) lParam) == &m_btnabout)
-   { m_btnabout.SetValue(true);
-     m_btncontroleur.SetValue(false);
-     m_btnchaine.SetValue(false);
-     m_btneffect2.SetValue(false);
-     m_btneff.SetValue(false);
-   }
-
- }
-  // TODO : ajoutez ici le code de votre gestionnaire de messages et/ou les paramètres par défaut des appels
-  return 0;
- 
+  ChildNotify(APP->pAboutDlg);
+  
 }

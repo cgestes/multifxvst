@@ -54,40 +54,36 @@ END
 
 IDD_Chain DIALOGEX 0, 0, 400, 240
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_VISIBLE
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
+FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
-    CONTROL         "Up",IDC_BTNUP,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,284,7,52,9
-    CONTROL         "Down",IDC_BTNDOWN,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,284,18,52,9
-    CONTROL         "Add",IDC_BTNADD,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,284,29,52,9
-    CONTROL         "Del",IDC_BTNSUPPR,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,284,40,52,9
-    CONTROL         "Save All",IDC_BTNSAVE,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,342,17,52,9
-    CONTROL         "Load All",IDC_BTNLOAD,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,342,7,52,9
-    CONTROL         "Save Chain",IDC_BTNSAVE2,"Button",BS_OWNERDRAW | 
-                    BS_FLAT | WS_TABSTOP,342,40,52,9
-    CONTROL         "Load Chain",IDC_BTNLOAD2,"Button",BS_OWNERDRAW | 
-                    BS_FLAT | WS_TABSTOP,342,28,52,9
+    CONTROL         "",IDC_BTNUP,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,287,11,37,12
+    CONTROL         "",IDC_BTNDOWN,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,287,25,37,12
+    CONTROL         "",IDC_BTNADD,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,287,39,37,12
+    CONTROL         "",IDC_BTNSUPPR,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,287,53,37,12
+    CONTROL         "",IDC_BTNSAVE,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,299,125,37,12
+    CONTROL         "",IDC_BTNLOAD,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,299,111,37,12
+    CONTROL         "",IDC_BTNSAVE2,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,299,96,37,12
+    CONTROL         "",IDC_BTNLOAD2,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,299,82,37,12
     CONTROL         "",IDC_LISTVST,"SysListView32",LVS_REPORT | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | 
-                    WS_TABSTOP,7,7,260,215
-    CONTROL         10001,IDC_STATIC,"Static",SS_BITMAP,284,150,82,31
-    CONTROL         "Copy chain",IDC_BTNCOPIETO,"Button",BS_OWNERDRAW | 
-                    BS_FLAT | WS_TABSTOP,342,69,52,9
-    CONTROL         "Clear chain",IDC_BTNCLRCHAIN,"Button",BS_OWNERDRAW | 
-                    BS_FLAT | WS_TABSTOP,342,57,52,9
-    LTEXT           "Total plug-ins :",IDC_STATIC,284,109,52,10,SS_SUNKEN
-    LTEXT           "0",IDC_TXTUSED,342,109,52,10,SS_SUNKEN
-    CONTROL         "Paste chain",IDC_BTNPASTETO,"Button",BS_OWNERDRAW | 
-                    BS_FLAT | WS_TABSTOP,342,81,52,9
-    LTEXT           "Copied chain :",IDC_STATIC,284,121,52,10,SS_SUNKEN
-    LTEXT           "",IDC_TXTCOPIED,342,121,52,10,SS_SUNKEN
-    LTEXT           "MultifxVST version 0.7.4\nCTAF Audio - Cédric GESTES\nctaf.bob@laposte.net\nGO TO: http://www.ctaf.free.fr",
-                    IDC_TXTINFOCTAF,284,195,110,33,SS_NOTIFY | NOT WS_GROUP
+                    WS_TABSTOP,7,5,259,220
+    CONTROL         "",IDC_BTNCOPIETO,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,299,157,37,12
+    CONTROL         "",IDC_BTNCLRCHAIN,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,299,143,37,12
+    CTEXT           "127",IDC_TXTUSED,287,217,12,8,SS_CENTERIMAGE
+    CONTROL         "",IDC_BTNPASTETO,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,299,171,37,12
+    CTEXT           "127",IDC_TXTCOPIED,373,217,12,8,SS_CENTERIMAGE
+    RTEXT           "0.7.5",IDC_STATIC,378,230,18,8,0,WS_EX_TRANSPARENT
 END
 
 IDD_PARMS DIALOGEX 0, 0, 400, 240
@@ -151,32 +147,45 @@ IDD_MAIN DIALOGEX 0, 0, 400, 68
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    CONTROL         "Chain",IDC_BUTTON1,"Button",BS_OWNERDRAW | BS_FLAT | 
+    CONTROL         "",IDC_BUTTON1,"Button",BS_OWNERDRAW | BS_FLAT | 
                     WS_TABSTOP,0,28,80,11
-    CONTROL         "Controler",IDC_BUTTON2,"Button",BS_OWNERDRAW | BS_FLAT | 
+    CONTROL         "",IDC_BUTTON2,"Button",BS_OWNERDRAW | BS_FLAT | 
                     WS_TABSTOP,80,28,80,11
-    CONTROL         "Effect",IDC_BUTTON3,"Button",BS_OWNERDRAW | BS_FLAT | 
+    CONTROL         "",IDC_BUTTON3,"Button",BS_OWNERDRAW | BS_FLAT | 
                     WS_TABSTOP,160,28,80,11
     CONTROL         "Effect",IDC_TXTEFF,"Static",SS_LEFTNOWORDWRAP | 
-                    SS_ENDELLIPSIS | WS_GROUP,82,18,95,8,WS_EX_TRANSPARENT
+                    SS_ENDELLIPSIS | WS_GROUP,85,18,95,8,WS_EX_TRANSPARENT
     CONTROL         "",IDC_BTNEFFUP,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,72,17,8,10
+                    WS_TABSTOP,74,17,8,10
     CONTROL         "",IDC_BTNEFFDOWN,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,179,17,8,10
+                    WS_TABSTOP,180,17,8,10
     CONTROL         "",IDC_BUTTON5,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,332,18,47,10
+                    WS_TABSTOP,201,17,47,10
     CONTROL         "",IDC_SLDCHAINE,"msctls_trackbar32",TBS_TOOLTIPS | 
                     WS_TABSTOP,79,4,16,8,WS_EX_TRANSPARENT
-    CONTROL         "<",IDC_BTNCHMOINS,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,63,4,9,9
-    CONTROL         ">",IDC_BTNCHPLUS,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,100,4,9,9
+    CONTROL         "",IDC_BTNCHMOINS,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,69,4,9,9
+    CONTROL         "",IDC_BTNCHPLUS,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,96,4,9,9
     CONTROL         "",IDC_BTNBYPASS,"Button",BS_OWNERDRAW | BS_FLAT | 
-                    WS_TABSTOP,5,18,12,10
-    CONTROL         "Effect 2",IDC_BTNEFFECTTXT,"Button",BS_OWNERDRAW | 
-                    BS_FLAT | WS_TABSTOP,240,28,80,11
-    CONTROL         "About",IDC_BTNEFFECTTXT2,"Button",BS_OWNERDRAW | 
-                    BS_FLAT | WS_TABSTOP,320,28,80,11
+                    WS_TABSTOP,5,16,12,11
+    CONTROL         "",IDC_BTNEFFECTTXT,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,240,28,80,11
+    CONTROL         "",IDC_BTNABOUT,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,320,28,80,11
+END
+
+IDD_ABOUT DIALOGEX 0, 0, 400, 240
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
+FONT 8, "MS Shell Dlg", 400, 0, 0x0
+BEGIN
+    RTEXT           "0.7.5",IDC_STATIC,378,230,18,8,0,WS_EX_TRANSPARENT
+    LTEXT           "MultifxVST - CTAF Audio\nhttp://www.ctaf.free.fr\n\nProgrammation : Cédric GESTES\nDesign : Valery HERLAUD",
+                    IDC_STATIC,17,17,367,46
+    GROUPBOX        "Configuration",IDC_STATIC,7,74,389,127,BS_FLAT,
+                    WS_EX_TRANSPARENT
+    LTEXT           "Fade Time (ms):",IDC_STATIC,19,94,44,8
+    EDITTEXT        IDC_FADETIME,78,92,62,12,ES_AUTOHSCROLL
 END
 
 
@@ -191,14 +200,16 @@ BEGIN
     IDD_Chain, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 394
-        VERTGUIDE, 284
+        RIGHTMARGIN, 396
+        VERTGUIDE, 287
+        VERTGUIDE, 299
         VERTGUIDE, 342
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 233
+        VERTGUIDE, 373
+        TOPMARGIN, 5
+        BOTTOMMARGIN, 238
         HORZGUIDE, 7
-        HORZGUIDE, 222
-        HORZGUIDE, 228
+        HORZGUIDE, 11
+        HORZGUIDE, 225
     END
 
     IDD_PARMS, DIALOG
@@ -231,6 +242,14 @@ BEGIN
         TOPMARGIN, 4
         BOTTOMMARGIN, 60
     END
+
+    IDD_ABOUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 396
+        TOPMARGIN, 5
+        BOTTOMMARGIN, 238
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -254,16 +273,32 @@ IDB_VERTICLE_SCROLLBAR_SPAN BITMAP                  "Skin\\ListCtrlSkin\\Verticl
 IDB_VERTICLE_SCROLLBAR_THUMB BITMAP                  "Skin\\ListCtrlSkin\\VerticleScrollBarThumb.bmp"
 IDB_VERTICLE_SCROLLBAR_TOP BITMAP                  "Skin\\ListCtrlSkin\\VerticleScrollbarTop.bmp"
 IDB_VERTICLE_SCROLLBAR_UPARROW BITMAP                  "Skin\\ListCtrlSkin\\VerticleScrollBarUpArrow.bmp"
-IDB_CBN                 BITMAP                  "skinslider\\track_ticksel.bmp"
-IDB_CBH                 BITMAP                  "skinslider\\track_tick.bmp"
-IDB_CBBAR               BITMAP                  "skinslider\\track_back.bmp"
 10001                   BITMAP                  "res\\bmp10001.bmp"
 IDB_WINDOWS_BUTTON      BITMAP                  "Artwork\\windows_button.bmp"
 IDB_MAIN                BITMAP                  "Artwork\\main.bmp"
-IDB_BYPASS              BITMAP                  "Artwork\\bypass.bmp"
+IDB_BYPASS              BITMAP                  "Artwork\\Plug-in - (on-off).bmp"
 IDB_PRESET              BITMAP                  "Artwork\\preset_button.bmp"
-IDB_RIGHT_ARROW_EFFECT  BITMAP                  "Artwork\\right_fleche_effet.bmp"
-IDB_LEFT_ARROW_EFFECT   BITMAP                  "Artwork\\left_fleche_effet.bmp"
+IDB_RIGHT_ARROW_EFFECT  BITMAP                  "Artwork\\Plug-in - flèche droite.bmp"
+IDB_LEFT_ARROW_EFFECT   BITMAP                  "Artwork\\Plug-in - flèche gauche.bmp"
+IDB_CHAIN_UP            BITMAP                  "Artwork\\Page CHAIN - bouton UP.bmp"
+IDB_CHAIN_CLEAR         BITMAP                  "Artwork\\Page CHAIN - bouton CLEAR.bmp"
+IDB_CHAIN_COPY          BITMAP                  "Artwork\\Page CHAIN - bouton COPY.bmp"
+IDB_CHAIN_DEL           BITMAP                  "Artwork\\Page CHAIN - bouton DEL.bmp"
+IDB_CHAIN_DOWN          BITMAP                  "Artwork\\Page CHAIN - bouton DOWN.bmp"
+IDB_CHAIN_LOADALL       BITMAP                  "Artwork\\Page CHAIN - bouton LOAD ALL.bmp"
+IDB_CHAIN_LOAD          BITMAP                  "Artwork\\Page CHAIN - bouton LOAD.bmp"
+IDB_CHAIN_PASTE         BITMAP                  "Artwork\\Page CHAIN - bouton PASTE.bmp"
+IDB_CHAIN_SAVEALL       BITMAP                  "Artwork\\Page CHAIN - bouton SAVE ALL.bmp"
+IDB_CHAIN_SAVE          BITMAP                  "Artwork\\Page CHAIN - bouton Save.bmp"
+IDB_CHAIN_ADD           BITMAP                  "Artwork\\Page CHAIN - bouton ADD.bmp"
+IDB_CHAIN               BITMAP                  "Artwork\\Page CHAIN.bmp"
+IDB_BTN_CHAIN           BITMAP                  "Artwork\\Boutons pages - CHAIN copie.bmp"
+IDB_BTN_CONTROLER       BITMAP                  "Artwork\\Boutons pages - CONTROLER copie.bmp"
+IDB_BTN_EFF             BITMAP                  "Artwork\\Boutons pages - EFFET copie.bmp"
+IDB_BTN_EFF2            BITMAP                  "Artwork\\Boutons pages - EFFET2 copie.bmp"
+IDB_CHAIN_RIGHT         BITMAP                  "Artwork\\Chain - compteur - flèche droite copie.bmp"
+IDB_CHAIN_LEFT          BITMAP                  "Artwork\\Chain - compteur - flèche gauche copie.bmp"
+IDB_BTN_ABOUT           BITMAP                  "Artwork\\Boutons pages - about copie.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "SkinList.h"
+
 #include "SkinVerticleScrollbar.h"
 #include "../resource.h"
 #ifdef _DEBUG
@@ -13,6 +13,10 @@ static char THIS_FILE[] = __FILE__;
 
 /////////////////////////////////////////////////////////////////////////////
 // CSkinVerticleScrollbar
+#define T_ARROW    19
+#define T_CARREBAS 11
+#define T_CURSOR   7
+#define LARGEUR    9
 
 CSkinVerticleScrollbar::CSkinVerticleScrollbar()
 {
@@ -21,7 +25,7 @@ CSkinVerticleScrollbar::CSkinVerticleScrollbar()
 	bMouseDownArrowDown = false;
 	bDragging = false;
 
-	nThumbTop = 36;
+	nThumbTop = T_ARROW - 1;
 	dbThumbInterval = 0.000000;
 	pList = NULL;
 
@@ -57,12 +61,12 @@ void CSkinVerticleScrollbar::OnLButtonDown(UINT nFlags, CPoint point)
 	CRect clientRect;
 	GetClientRect(&clientRect);
 
-	int nHeight = clientRect.Height() - 37;
+	int nHeight = clientRect.Height() - T_ARROW - T_CARREBAS;
 	
 
-	CRect rectUpArrow(0,11,12,37);
-	CRect rectDownArrow(0,nHeight,12,nHeight+26);
-	CRect rectThumb(0,nThumbTop,12,nThumbTop+26);
+	CRect rectUpArrow(0,0,LARGEUR,T_ARROW);
+	CRect rectDownArrow(0,nHeight,LARGEUR,nHeight+T_ARROW);
+	CRect rectThumb(0,nThumbTop,LARGEUR,nThumbTop+T_CURSOR);
 
 	if(rectThumb.PtInRect(point))
 	{
@@ -94,10 +98,10 @@ void CSkinVerticleScrollbar::OnLButtonUp(UINT nFlags, CPoint point)
 
 	CRect clientRect;
 	GetClientRect(&clientRect);
-	int nHeight = clientRect.Height() - 37;
-	CRect rectUpArrow(0,11,12,37);
-	CRect rectDownArrow(0,nHeight,12,nHeight+26);
-	CRect rectThumb(0,nThumbTop,12,nThumbTop+26);
+	int nHeight = clientRect.Height()  - T_ARROW - T_CARREBAS;;
+	CRect rectUpArrow(0,0,LARGEUR,T_ARROW);
+	CRect rectDownArrow(0,nHeight,LARGEUR,nHeight+T_ARROW);
+	CRect rectThumb(0,nThumbTop,LARGEUR,nThumbTop+T_CURSOR);
 
 
 
@@ -145,18 +149,18 @@ void CSkinVerticleScrollbar::OnMouseMove(UINT nFlags, CPoint point)
 
 	if(bMouseDown)
 	{
-		nThumbTop = point.y-13; //-13 so mouse is in middle of thumb
+		nThumbTop = point.y-(T_CURSOR >> 1); //-13 so mouse is in middle of thumb
 		
 		double nMax = pList->GetScrollLimit(SB_VERT);
 		int nPos = pList->GetScrollPos(SB_VERT);
 
-		double nHeight = clientRect.Height()-98;
+		double nHeight = clientRect.Height()-(((T_ARROW - 1)<<1)+(T_CURSOR -1)+ T_CARREBAS) ;
 		double nVar = nMax;
 		dbThumbInterval = nHeight/nVar;
 
 		//figure out how many times to scroll total from top
 		//then minus the current position from it
-		int nScrollTimes = (int)((nThumbTop-36)/dbThumbInterval)-nPos;
+		int nScrollTimes = (int)((nThumbTop-(T_ARROW - 1))/dbThumbInterval)-nPos;
 
 		//grab the row height dynamically
 		//so if the font size or type changes
@@ -249,7 +253,7 @@ void CSkinVerticleScrollbar::UpdateThumbPosition()
 
 	double nPos = pList->GetScrollPos(SB_VERT);
 	double nMax = pList->GetScrollLimit(SB_VERT);
-	double nHeight = (clientRect.Height()-98);
+	double nHeight = (clientRect.Height()-(((T_ARROW - 1)<<1)+(T_CURSOR -1)+ T_CARREBAS) );
 	double nVar = nMax;
 
 	dbThumbInterval = nHeight/nVar;
@@ -258,12 +262,13 @@ void CSkinVerticleScrollbar::UpdateThumbPosition()
 	int nNewValue = (int)nNewdbValue;
 
 
-	nThumbTop = 36+nNewValue;
+	nThumbTop = (T_ARROW - 1)+nNewValue;
 
 	LimitThumbPosition();
 
 	Draw();
 }
+
 
 
 void CSkinVerticleScrollbar::Draw()
@@ -278,16 +283,18 @@ void CSkinVerticleScrollbar::Draw()
 	bitmapDC.CreateCompatibleDC(&dc);
 
 	CBitmap bitmap;
+  CBitmap* pOldBitmap;
+  /*
 	bitmap.LoadBitmap(IDB_VERTICLE_SCROLLBAR_TOP);
-	CBitmap* pOldBitmap = bitmapDC.SelectObject(&bitmap);
+	pOldBitmap = bitmapDC.SelectObject(&bitmap);
 	memDC.BitBlt(clientRect.left,clientRect.top,12,11,&bitmapDC,0,0,SRCCOPY);
 	bitmapDC.SelectObject(pOldBitmap);
 	bitmap.DeleteObject();
-	pOldBitmap = NULL;
+	pOldBitmap = NULL;*/
 
 	bitmap.LoadBitmap(IDB_VERTICLE_SCROLLBAR_UPARROW);
 	pOldBitmap = bitmapDC.SelectObject(&bitmap);
-	memDC.BitBlt(clientRect.left,clientRect.top+11,12,26,&bitmapDC,0,0,SRCCOPY);
+	memDC.BitBlt(clientRect.left,clientRect.top/*+11*/,LARGEUR,T_ARROW,&bitmapDC,0,0,SRCCOPY);
 	bitmapDC.SelectObject(pOldBitmap);
 	bitmap.DeleteObject();
 	pOldBitmap = NULL;
@@ -295,9 +302,9 @@ void CSkinVerticleScrollbar::Draw()
 	//draw the background (span)
 	bitmap.LoadBitmap(IDB_VERTICLE_SCROLLBAR_SPAN);
 	pOldBitmap = bitmapDC.SelectObject(&bitmap);
-	int nHeight = clientRect.Height() - 37;
+	int nHeight = clientRect.Height() - (T_ARROW + T_CARREBAS - 3)/*37*/;
 
-	memDC.StretchBlt(clientRect.left, clientRect.top+37, 12,nHeight,&bitmapDC, 0,0, 12, 1, SRCCOPY);
+	memDC.StretchBlt(clientRect.left, clientRect.top+T_ARROW, LARGEUR,nHeight,&bitmapDC, 0,0, LARGEUR, 1, SRCCOPY);
 
 	bitmapDC.SelectObject(pOldBitmap);
 	bitmap.DeleteObject();
@@ -306,7 +313,7 @@ void CSkinVerticleScrollbar::Draw()
 	//draw the down arrow of the scrollbar
 	bitmap.LoadBitmap(IDB_VERTICLE_SCROLLBAR_DOWNARROW);
 	pOldBitmap = bitmapDC.SelectObject(&bitmap);
-	memDC.BitBlt(clientRect.left,nHeight,12,26,&bitmapDC,0,0,SRCCOPY);
+	memDC.BitBlt(clientRect.left,nHeight,LARGEUR,T_ARROW,&bitmapDC,0,0,SRCCOPY);
 	bitmapDC.SelectObject(pOldBitmap);
 	bitmap.DeleteObject();
 	pOldBitmap = NULL;
@@ -314,7 +321,7 @@ void CSkinVerticleScrollbar::Draw()
 		//draw the down arrow of the scrollbar
 	bitmap.LoadBitmap(IDB_VERTICLE_SCROLLBAR_BOTTOM);
 	pOldBitmap = bitmapDC.SelectObject(&bitmap);
-	memDC.BitBlt(clientRect.left+1,nHeight+26,11,11,&bitmapDC,0,0,SRCCOPY);
+	memDC.BitBlt(clientRect.left+1,nHeight+T_ARROW,LARGEUR-1,T_CARREBAS,&bitmapDC,0,0,SRCCOPY);
 	bitmapDC.SelectObject(pOldBitmap);
 	bitmap.DeleteObject();
 	pOldBitmap = NULL;
@@ -326,7 +333,7 @@ void CSkinVerticleScrollbar::Draw()
 		//draw the thumb control
 		bitmap.LoadBitmap(IDB_VERTICLE_SCROLLBAR_THUMB);
 		pOldBitmap = bitmapDC.SelectObject(&bitmap);
-		memDC.BitBlt(clientRect.left,clientRect.top+nThumbTop,12,26,&bitmapDC,0,0,SRCCOPY);
+		memDC.BitBlt(clientRect.left,clientRect.top+nThumbTop,LARGEUR,T_CURSOR,&bitmapDC,0,0,SRCCOPY);
 		bitmapDC.SelectObject(pOldBitmap);
 		bitmap.DeleteObject();
 		pOldBitmap = NULL;
@@ -340,14 +347,14 @@ void CSkinVerticleScrollbar::LimitThumbPosition()
 	CRect clientRect;
 	GetClientRect(&clientRect);
 
-	if(nThumbTop+26 > (clientRect.Height()-37))
+	if(nThumbTop+T_CURSOR > (clientRect.Height()-T_ARROW - T_CARREBAS))
 	{
-		nThumbTop = clientRect.Height()-62;
+		nThumbTop = clientRect.Height()-T_ARROW - (T_CARREBAS+T_CURSOR-1) ;
 	}
 
-	if(nThumbTop < (clientRect.top+36))
+	if(nThumbTop < (clientRect.top+T_ARROW -1))
 	{
-		nThumbTop = clientRect.top+36;
+		nThumbTop = clientRect.top+T_ARROW -1;
 	}
 }
 

@@ -41,7 +41,7 @@ protected:
 
 // Implementation
 public:
-	BOOL LoadBitmap(UINT bitmapid,bool OnOff = false);
+	BOOL LoadBitmap(UINT bitmapid,bool OnOff = false,int x = 0 ,int y = 0);
 	virtual ~CHoverButton();
 
 	// Generated message map functions
