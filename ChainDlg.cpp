@@ -10,7 +10,7 @@
 #include "multifxVSTEditor.h"
 
 //#include "vsthost/CVSThost.h"
-#include "vsthost/smpvsthost.h"
+#include "vsthost/SmpEffect.h"
 #include "effectwnd.h"
 #include "EffectTxTDlg.h"
 #include "multifxVST.h"

@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "multifxVST.h"
 #include "multifxVSTmain.h"
-#include "vsthost/smpvsthost.h"
+#include "vsthost/SmpEffect.h"
 #include "CCVSThost.h"
 #include "EffectTxTDlg.h"
 #include ".\EffectTxTDlg.h"

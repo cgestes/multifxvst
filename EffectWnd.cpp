@@ -10,7 +10,7 @@
 #include "CCVSThost.h"
 #include "MAinDlg.h"
 
-#include "vsthost/smpvsthost.h"
+#include "vsthost/SmpEffect.h"
 
 
 #include "EffectWnd.h"

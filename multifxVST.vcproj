@@ -281,64 +281,10 @@
 			Name="Source Files"
 			Filter="">
 			<File
-				RelativePath=".\CCVSTHost.cpp">
-				<FileConfiguration
-					Name="Debug Dyn|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug Stat|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\CCVSTHost.h">
-			</File>
-			<File
-				RelativePath=".\ChainDlg.cpp">
-			</File>
-			<File
-				RelativePath=".\ChainDlg.h">
-			</File>
-			<File
-				RelativePath=".\ControleurDlg.cpp">
-			</File>
-			<File
-				RelativePath=".\ControleurDlg.h">
-			</File>
-			<File
 				RelativePath=".\ControleurLst.cpp">
 			</File>
 			<File
 				RelativePath=".\ControleurLst.h">
-			</File>
-			<File
-				RelativePath=".\MainDlg.cpp">
-			</File>
-			<File
-				RelativePath=".\MainDlg.h">
-			</File>
-			<File
-				RelativePath=".\multifxVST.cpp">
-			</File>
-			<File
-				RelativePath=".\multifxVST.h">
-			</File>
-			<File
-				RelativePath=".\multifxVSTeditor.cpp">
-			</File>
-			<File
-				RelativePath=".\multifxVSTeditor.h">
-			</File>
-			<File
-				RelativePath=".\multifxVSTmain.cpp">
-			</File>
-			<File
-				RelativePath=".\multifxVSTmain.h">
 			</File>
 			<File
 				RelativePath=".\resource.h">
@@ -381,99 +327,20 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="VST Files"
-			Filter="">
-			<File
-				RelativePath=".\AEffect.h">
-			</File>
-			<File
-				RelativePath=".\aeffectx.h">
-			</File>
-			<File
-				RelativePath=".\vstsdk2.3\vstsdk2.3\source\common\AEffEditor.hpp">
-			</File>
-			<File
-				RelativePath=".\aeffguieditor.cpp">
-				<FileConfiguration
-					Name="Debug Dyn|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug Stat|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\aeffguieditor.h">
-			</File>
-			<File
-				RelativePath=".\AudioEffect.cpp">
-				<FileConfiguration
-					Name="Debug Dyn|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug Stat|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\AudioEffect.hpp">
-			</File>
-			<File
-				RelativePath=".\audioeffectx.cpp">
-				<FileConfiguration
-					Name="Debug Dyn|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug Stat|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\audioeffectx.h">
-			</File>
-			<File
-				RelativePath=".\vstcontrols.cpp">
-				<FileConfiguration
-					Name="Debug Dyn|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug Stat|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\vstcontrols.h">
-			</File>
-			<File
-				RelativePath=".\vstgui.cpp">
-			</File>
-			<File
-				RelativePath=".\vstgui.h">
-			</File>
-		</Filter>
-		<Filter
 			Name="Fenetre VST"
 			Filter="">
+			<File
+				RelativePath=".\ChainDlg.cpp">
+			</File>
+			<File
+				RelativePath=".\ChainDlg.h">
+			</File>
+			<File
+				RelativePath=".\ControleurDlg.cpp">
+			</File>
+			<File
+				RelativePath=".\ControleurDlg.h">
+			</File>
 			<File
 				RelativePath=".\EffectTxTDlg.cpp">
 			</File>
@@ -498,45 +365,11 @@
 			<File
 				RelativePath=".\EffectWnd.h">
 			</File>
-		</Filter>
-		<Filter
-			Name="VSTHost"
-			Filter="">
 			<File
-				RelativePath=".\vsthost\CVSTHost.cpp">
-				<FileConfiguration
-					Name="Debug Dyn|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug Stat|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
+				RelativePath=".\MainDlg.cpp">
 			</File>
 			<File
-				RelativePath=".\vsthost\CVSTHost.h">
-			</File>
-			<File
-				RelativePath=".\vsthost\SmpVSTHost.cpp">
-				<FileConfiguration
-					Name="Debug Dyn|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug Stat|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\vsthost\SmpVSTHost.h">
+				RelativePath=".\MainDlg.h">
 			</File>
 		</Filter>
 		<Filter
@@ -556,18 +389,6 @@
 				RelativePath=".\res\bmp10001.bmp">
 			</File>
 			<File
-				RelativePath=".\res\bmp10002.bmp">
-			</File>
-			<File
-				RelativePath=".\res\bmp10004.bmp">
-			</File>
-			<File
-				RelativePath=".\res\bmp10010.bmp">
-			</File>
-			<File
-				RelativePath=".\res\bmp10016.bmp">
-			</File>
-			<File
 				RelativePath=".\Skin\ListCtrlSkin\ColumnHeaderEnd.bmp">
 			</File>
 			<File
@@ -575,6 +396,9 @@
 			</File>
 			<File
 				RelativePath=".\Skin\ListCtrlSkin\ColumnHeaderStart.bmp">
+			</File>
+			<File
+				RelativePath=".\res\cursor1.cur">
 			</File>
 			<File
 				RelativePath=".\Skin\ListCtrlSkin\HorizontalScrollBarLeftArrow.bmp">
@@ -755,9 +579,165 @@
 				RelativePath=".\skinslider\ZipSliderCtl.h">
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\res\cursor1.cur">
-		</File>
+		<Filter
+			Name="MultifxVST"
+			Filter="">
+			<File
+				RelativePath=".\multifxVST.cpp">
+			</File>
+			<File
+				RelativePath=".\multifxVST.h">
+			</File>
+			<File
+				RelativePath=".\multifxVSTeditor.cpp">
+			</File>
+			<File
+				RelativePath=".\multifxVSTeditor.h">
+			</File>
+			<File
+				RelativePath=".\multifxVSTmain.cpp">
+			</File>
+			<File
+				RelativePath=".\multifxVSTmain.h">
+			</File>
+			<Filter
+				Name="VST Files"
+				Filter="">
+				<File
+					RelativePath=".\AEffect.h">
+				</File>
+				<File
+					RelativePath=".\aeffectx.h">
+				</File>
+				<File
+					RelativePath=".\vstsdk2.3\vstsdk2.3\source\common\AEffEditor.hpp">
+				</File>
+				<File
+					RelativePath=".\aeffguieditor.cpp">
+					<FileConfiguration
+						Name="Debug Dyn|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BasicRuntimeChecks="3"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Stat|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BasicRuntimeChecks="3"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\aeffguieditor.h">
+				</File>
+				<File
+					RelativePath=".\AudioEffect.cpp">
+					<FileConfiguration
+						Name="Debug Dyn|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BasicRuntimeChecks="3"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Stat|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BasicRuntimeChecks="3"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\AudioEffect.hpp">
+				</File>
+				<File
+					RelativePath=".\audioeffectx.cpp">
+					<FileConfiguration
+						Name="Debug Dyn|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BasicRuntimeChecks="3"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Stat|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BasicRuntimeChecks="3"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\audioeffectx.h">
+				</File>
+				<File
+					RelativePath=".\vstcontrols.cpp">
+					<FileConfiguration
+						Name="Debug Dyn|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BasicRuntimeChecks="3"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Stat|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BasicRuntimeChecks="3"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\vstcontrols.h">
+				</File>
+				<File
+					RelativePath=".\vstgui.cpp">
+				</File>
+				<File
+					RelativePath=".\vstgui.h">
+				</File>
+			</Filter>
+			<Filter
+				Name="VSTHost"
+				Filter="">
+				<File
+					RelativePath=".\CCVSTHost.cpp">
+					<FileConfiguration
+						Name="Debug Dyn|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BasicRuntimeChecks="3"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Stat|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BasicRuntimeChecks="3"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\CCVSTHost.h">
+				</File>
+				<File
+					RelativePath=".\vsthost\CVSTHost.cpp">
+					<FileConfiguration
+						Name="Debug Dyn|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BasicRuntimeChecks="3"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Stat|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BasicRuntimeChecks="3"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\vsthost\CVSTHost.h">
+				</File>
+				<File
+					RelativePath=".\vsthost\SmpEffect.cpp">
+				</File>
+				<File
+					RelativePath=".\vsthost\SmpEffect.h">
+				</File>
+			</Filter>
+		</Filter>
 	</Files>
 	<Globals>
 		<Global

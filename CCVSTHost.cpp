@@ -3,7 +3,7 @@
 #include "CCVSThost.h"
 #include "multifxVST.h"
 #include "stockeffet.h"
-#include "vsthost/smpVSTHost.h"
+#include "vsthost/SmpEffect.h"
 
 
 

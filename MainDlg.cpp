@@ -13,7 +13,7 @@
 #include "CCVSThost.h"
 #include "ChainDlg.h"
 #include "multifxVSTEditor.h"
-#include "vsthost/smpvsthost.h"
+#include "vsthost/SmpEffect.h"
 #include "effectwnd.h"
 #include "EffectTxTDlg.h"
 #include "Chaindlg.h"
