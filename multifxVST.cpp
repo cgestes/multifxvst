@@ -292,12 +292,13 @@ float multifxVST::getParameter (long index)
 {
 	float v = 1.0;
 
-	switch (index)
-	{
-	case kSliderHTag :
+	if (index == kSliderHTag )
 		v = NBChaine2float(APP.current_chaine);
-		break;
-	}
+  else
+  {
+    v = APP.parameter->getParameter(index-kNumParams);
+    //APP.parameter->setParameter(index-kNumParams,value);
+  }
 
 	return v;
 }
@@ -305,17 +306,11 @@ float multifxVST::getParameter (long index)
 //-----------------------------------------------------------------------------
 void multifxVST::getParameterDisplay (long index, char *text)
 {
-	switch (index)
-	{
-	case kSliderHTag :
+	if (index == kSliderHTag )
 		sprintf (text, "%d",APP.current_chaine);
-		break;
+  else
+		sprintf (text, "%f",getParameter(index));
 
-	default :
-		strcpy (text, "0");
-	}
-  
-  //strcpy (text, "0");
 }
 
 //-----------------------------------------------------------------------------
@@ -336,14 +331,11 @@ void multifxVST::getParameterLabel (long index, char *text)
 //-----------------------------------------------------------------------------
 void multifxVST::getParameterName (long index, char *text)
 {
-	switch (index)
-	{
-	case kSliderHTag :
+	if (index == kSliderHTag)
 		strcpy (text, "Chain number");
-		break;
-	default :
-		strcpy (text, "-");
-	}
+  else
+		sprintf (text, "Parameter %d",index - kNumParams +1);
+	
   	//	strcpy (text, "-");
 }
 

@@ -7,10 +7,16 @@
 
 float NBChaine2float(int nbchaine)
 {
-  return  nbchaine / 125.5f;
+  float nb = nbchaine / 126.5f;
+  if(nb < 0.0f)nb = 0.0f;
+  if(nb > 1.0f)nb = 1.0f;
+  return  nb;
 }
 
 int float2NBChaine(float flot)
 {
-  return int(flot * 126.0f);
+  int nb = int(flot * 127.0f);
+  if(nb < 0)nb = 0;
+  if(nb > 127)nb = 127;
+  return nb;
 }

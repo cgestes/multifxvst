@@ -21,17 +21,34 @@ void CControleurParam::SupprParam(int nbeffstk,int nparam)
 
 }
 
+CParameterLst::~CParameterLst()
+{
+  for(int i = 0;i<nb_controleur;i++)
+    delete controleur_value[i];
+
+  delete controleur_value;
+  controleur_value = NULL;
+
+}
 
 void CParameterLst::Init(int nbcontroleur)
 {
   nb_controleur = nbcontroleur;
-  controleur_value.SetSize(nbcontroleur);
+  controleur_value = new CControleurParam * [nbcontroleur];
+  for (int i = 0;i < nbcontroleur;i++)
+    controleur_value[i] = new CControleurParam;
+  //controleur_value.SetSize(nbcontroleur);
 }
 
 void CParameterLst::setParameter(long index, float value)
 {
-  int val = int( value *127);
+  int val = float2NBChaine(value);
   controleur_value[index]->Set(val);
+}
+
+float CParameterLst::getParameter(long index)
+{
+  return NBChaine2float(controleur_value[index]->Get());
 }
 
 //-------#############################################-------//

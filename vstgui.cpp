@@ -2430,7 +2430,9 @@ COffscreenContext::COffscreenContext (CFrame *pFrame, long width, long height, c
 	}
 #endif
 }
+
 #define DEBUG _DEBUG
+
 //-----------------------------------------------------------------------------
 COffscreenContext::~COffscreenContext ()
 {

@@ -382,7 +382,7 @@ BOOL CMainDlg::OnInitDialog()
   m_btnpreset.SetToolTipText(&text);
 
 
-  m_sld.SetRange(0,126);
+  m_sld.SetRange(0,127);
 
   m_sld.SetPageSize(10);
   m_sld.SetLineSize(1);
@@ -1014,7 +1014,7 @@ void CMainDlg::OnBnClickedBtnchmoins()
 void CMainDlg::OnBnClickedBtnchplus()
 {
 
-  if(APP->current_chaine < 126)
+  if(APP->current_chaine < 127)
   {
    //APP->current_chaine++;
    APP->effect->setParameterAutomated(0,NBChaine2float(APP->current_chaine+1));

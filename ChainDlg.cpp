@@ -34,6 +34,7 @@ CChainDlg::CChainDlg( CWnd* pParent)
 
 void CChainDlg::OnUpdate(int nb)
 {
+
   APP->chaine_eff->ViewChaine(APP->current_chaine,m_listvst,nb);
   UpdateData();
     m_used = APP->chaine_eff->nb_effect_used;

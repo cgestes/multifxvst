@@ -4,7 +4,7 @@ MultifxVST est un plug-ins VST qui permet de gérer des chaines d'effets.
 
 Principales caractéristiques :
  - gestion d'un nombre infini de plug-ins (limitation de la machine hein!)
- - jusqu'a 127 chaine possible
+ - jusqu'a 127 chaines possibles
  - réutilise les effets entre les chaines
  - gestion des fxp et fxb
  - gestion de la compensation du delay
