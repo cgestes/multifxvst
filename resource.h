@@ -45,9 +45,11 @@
 #define IDC_TXTCONTROLEUR_NOTE          1009
 #define IDC_TXTCHAINE                   1010
 #define IDC_BTNCOPIETO                  1010
+#define IDC_TXTINCREMENT                1010
 #define IDC_BTNSAVE                     1011
 #define IDC_BUTTON2                     1012
 #define IDC_BTNLOAD                     1012
+#define IDC_TXTCONTROLEUR_NOTE2         1012
 #define IDC_BTNSAVE2                    1013
 #define IDC_BTNLOAD2                    1014
 #define IDC_LISTVST                     1015
@@ -73,6 +75,7 @@
 #define IDC_BTNVALIDATE                 1030
 #define IDC_CBACTION                    1033
 #define IDC_BTNLOADMIDI                 1034
+#define IDC_CHECK1                      1035
 #define IDC_PARMLIST                    1100
 #define IDC_PARMVAL                     1101
 #define IDC_PARMTEXT                    1102
@@ -95,7 +98,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        146
 #define _APS_NEXT_COMMAND_VALUE         40012
-#define _APS_NEXT_CONTROL_VALUE         1035
+#define _APS_NEXT_CONTROL_VALUE         1036
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

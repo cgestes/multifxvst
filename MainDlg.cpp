@@ -251,6 +251,9 @@ void CMainDlg::Init()
 
   APP->pGratomatic->SetAPP(APP);
   APP->pMainDlg->ChangeChaine(float2NBChaine( APP->effect->getParameter(0)),FALSE);
+  APP->pControleur->Update();
+
+
   APP->pGratomatic->ShowWindow(SW_SHOW);
   ChildNotify(APP->pGratomatic);
 }

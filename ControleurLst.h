@@ -53,7 +53,7 @@ public:
   void Save();
   CControleurStk * Get(int n);
   void ProcessEvent(VstEvent * event);
-  void ViewControleur(CListCtrl & lst);
+  void ViewControleur(CListCtrl & lst,int nbsel = 0);
   void Add(int chaine,int index);
   void Suppr(int chaine,int index);
   CArray <CControleurStk, CControleurStk&  > m_lstcontroleur;

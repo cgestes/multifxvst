@@ -1,6 +1,11 @@
 //####################################################################
 //########### HISTORY ################################################
 //####################################################################
+//-- 06/05/2004
+     - improve : passage du projet sous SVN (facilité de maintenance des versions)
+     - improve : gestionnaire de controleur(midi) 
+     - ajout : interface controleur(midi)
+     
 //-- 03/05/2004
      - ajout : affichage "used plug-ins"
      - ajout : fenetre "Controleur" + gestionnaire de controleur(base)

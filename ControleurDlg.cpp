@@ -16,17 +16,25 @@ CControleurDlg::CControleurDlg(CWnd* pParent /*=NULL*/)
   , m_channel(0)
   , m_controleur(0)
   , m_action(0)
+  , nbsel(0)
 {
 }
 
 CControleurDlg::~CControleurDlg()
 {
+
+}
+
+void CControleurDlg::Update()
+{
+    APP->controleur->ViewControleur(m_lstcontroleur,nbsel);
 }
 
 void CControleurDlg::SetAPP(CAppPointer * m_APP)
 {
   APP = m_APP;
 }
+
 void CControleurDlg::DoDataExchange(CDataExchange* pDX)
 {
   CDialog::DoDataExchange(pDX);
@@ -37,7 +45,6 @@ void CControleurDlg::DoDataExchange(CDataExchange* pDX)
   DDX_CBIndex(pDX, IDC_CBACTION, m_action);
 }
 
-
 BEGIN_MESSAGE_MAP(CControleurDlg, CDialog)
   ON_WM_CTLCOLOR()
   ON_BN_CLICKED(IDC_BTNVALIDATE, OnBnClickedBtnvalidate)
@@ -46,23 +53,18 @@ BEGIN_MESSAGE_MAP(CControleurDlg, CDialog)
 ON_NOTIFY(NM_CLICK, IDC_LSTCONTROLER, OnNMClickLstcontroler)
 END_MESSAGE_MAP()
 
-
 // Gestionnaires de messages CControleurDlg
-
 void CControleurDlg::PostNcDestroy()
 {
 	CDialog::PostNcDestroy();
   APP->pControleur  = NULL;
 	delete this;
   //CString buf;buf.Format("PostNcDestroy :: CControleurDlg(%d) \n", this);  TRACE(buf);
-
 }
 
 BOOL CControleurDlg::OnInitDialog()
 {
   CDialog::OnInitDialog();
-
-  
     //INITIALISE LA LISTE
   m_lstcontroleur.Init();
 	m_lstcontroleur.g_MyClrFgHi = RGB(35,12,200);
@@ -89,10 +91,7 @@ BOOL CControleurDlg::OnInitDialog()
 	m_lstcontroleur.InsertColumn(7, "Max", LVCFMT_LEFT, 60);
 	m_lstcontroleur.InsertColumn(9, "Controleur value", LVCFMT_LEFT, 60);
 
-
 	ListView_SetExtendedListViewStyle(m_lstcontroleur.m_hWnd, LVS_EX_FULLROWSELECT  | LVS_EX_HEADERDRAGDROP);
-	
-
   return TRUE;  // return TRUE unless you set the focus to a control
   // EXCEPTION : les pages de propriétés OCX devraient retourner FALSE
 }
@@ -117,7 +116,6 @@ void CControleurDlg::OnBnClickedBtnvalidate()
   CControleurStk * param;
   if(n<0)
   {
-    APP->controleur->ViewControleur(m_lstcontroleur);
     return ;
   }
   
@@ -128,7 +126,7 @@ void CControleurDlg::OnBnClickedBtnvalidate()
    param->midi_controleur = m_controleur;
    param->action = m_action ;
 
-  APP->controleur->ViewControleur(m_lstcontroleur);
+  APP->controleur->ViewControleur(m_lstcontroleur,n);
 }
 
 void CControleurDlg::OnCbnSelchangeCbaction()
@@ -145,6 +143,7 @@ void CControleurDlg::OnNMClickLstcontroler(NMHDR *pNMHDR, LRESULT *pResult)
   if(n<0)return ;
   
   UpdateData();
+   nbsel = n;
    param = APP->controleur->Get(n);
    m_channel = param->midi_channel;
    m_controleur = param->midi_controleur;

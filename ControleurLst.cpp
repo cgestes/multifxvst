@@ -62,6 +62,7 @@ CControleurStk::CControleurStk(CControleurStk & controleur)
 //affiche l'ensemble des controleurs dans une liste
 void CControleurStk::ViewControleur(CListCtrl & lst,int pos)
 {
+
   CString buf;
   buf.Format("%d",pos);
   int nItem = lst.InsertItem(pos,buf);
@@ -127,15 +128,30 @@ void CControleurLst::ProcessEvent(VstEvent * event)
 }
 
 //affiche l'ensemble des controleurs dans une liste
-void CControleurLst::ViewControleur(CListCtrl & lst)
+void CControleurLst::ViewControleur(CListCtrl & lst,int nbsel)
 {
+  lst.SetRedraw(FALSE);
+
   lst.DeleteAllItems();
 
   int i,j = m_lstcontroleur.GetCount(); 
+
+  if(nbsel>(j-1))
+    nbsel = j-1;
+
+  if(nbsel<0)
+    nbsel = 0;
+
   for (i=0;i<j;i++)
   {
     m_lstcontroleur[i].ViewControleur(lst,i);
   }
+
+  lst.EnsureVisible(nbsel,TRUE);
+  lst.SetItemState(nbsel, LVIS_SELECTED, LVIS_SELECTED);
+
+  lst.SetRedraw(TRUE);
+
 }
 
 CControleurStk * CControleurLst::Get(int n)

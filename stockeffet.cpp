@@ -282,11 +282,13 @@ void CStockEffetLst::ViewChaine(int chaine,CListCtrl & lst,int nbsel)
   CString nb;
   CEffectStk  * eff;
   if(!VCH(chaine))return ;
-  
+
+  lst.SetRedraw(FALSE);
+
   lst.DeleteAllItems();
 
   CString sFile;
-	lst.SetRedraw(FALSE);
+
 
 	int i=0,j = get_count(chaine);
   

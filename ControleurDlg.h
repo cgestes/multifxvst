@@ -25,6 +25,7 @@ protected:
   CAppPointer * APP;
 public:
   ::CFont font;
+  void Update();
   virtual BOOL OnInitDialog();
   CSkinListCtrl m_lstcontroleur;
   afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
@@ -35,4 +36,5 @@ public:
   int m_channel;
   long m_controleur;
   int m_action;
+  int nbsel;
 };
